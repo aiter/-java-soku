@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+
+	<package name="soku-test" namespace="/" extends="soku-default">
+
+		<action name="Welcome" class="com.youku.soku.manage.index.WelcomeAction">
+			<result>/soku/manage/welcome.jsp</result>
+			<interceptor-ref name="user" />
+		</action>
+
+		<action name="Login_*" method="{1}"
+			class="com.youku.soku.manage.admin.AdminAction">
+			<result name="input">/soku/manage/login.jsp</result>
+			<result name="shield" type="redirectAction">ShieldWord_list</result>
+			<result type="redirectAction">VideoInfo_list</result>
+			<interceptor-ref name="guest" />
+		</action>
+
+		<action name="index" class="com.youku.soku.manage.index.IndexAction">
+			<result>/soku/manage/index.jsp</result>
+			<interceptor-ref name="guest" />
+		</action>
+
+		<action name="Logout" method="leave"
+			class="com.youku.soku.manage.admin.UserAction">
+			<result name="input">/soku/manage/login.jsp</result>
+			<interceptor-ref name="guest" />
+		</action>
+
+		<action name="Item_*" method="{1}"
+			class="com.youku.soku.manage.admin.ItemAction">
+			<result name="input">/soku/manage/Item.jsp</result>
+			<result name="list">/soku/manage/ItemList.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">Item_list</param>
+				<param name="namespace">/</param>
+				<param name="searchWord">${searchWord}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<interceptor-ref name="itemmanage" />
+		</action>
+
+		<action name="Video_*" method="{1}"
+			class="com.youku.soku.manage.admin.VideoAction">
+			<result name="input">/soku/manage/Video.jsp</result>
+			<result name="list">/soku/manage/VideoList.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">Video_list</param>
+				<param name="namespace">/</param>
+				<param name="searchWord">${searchWord}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<interceptor-ref name="videomanage" />
+		</action>
+
+		<action name="Hotword_*" method="{1}"
+			class="com.youku.soku.manage.admin.HotwordAction">
+			<result name="input">/soku/manage/Hotword.jsp</result>
+			<result name="list">/soku/manage/HotwordList.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">Hotword_list</param>
+				<param name="namespace">/</param>
+				<param name="searchWord">${searchWord}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<interceptor-ref name="hotwordmanage" />
+		</action>
+
+		<action name="Correction_*" method="{1}"
+                        class="com.youku.soku.manage.admin.CorrectionAction">
+                        <result name="input">/soku/manage/correction/Correction.jsp</result>
+                        <result name="list">/soku/manage/correction/CorrectionList.jsp</result>
+			<result name="volumeAdd">/soku/manage/correction/VolumeCorrection.jsp</result>
+                        <result type="redirectAction">
+                               <param name="actionName">Correction_list</param>
+                               <param name="namespace">/</param>
+                               <param name="searchWord">${searchWord}</param>
+			       <param name="status">${status}</param>
+                               <param name="pageNumber">${pageNumber}</param>
+                        </result>
+																                        <interceptor-ref name="correctionmanage" />
+                 </action>
+		
+		<action name="User_*" method="{1}"
+			class="com.youku.soku.manage.admin.UserAction">
+			<result name="input">/soku/manage/User.jsp</result>
+			<result name="list">/soku/manage/UserList.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">User_list</param>
+				<param name="namespace">/</param>
+				<param name="searchWord">${searchWord}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<interceptor-ref name="usermanage" />
+		</action>
+
+		<action name="User_changepwd" method="changePassword"
+			class="com.youku.soku.manage.admin.UserAction">
+			<result name="input">/soku/manage/changepwd.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">User_list</param>
+				<param name="namespace">/</param>
+				<param name="searchWord">${searchWord}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<interceptor-ref name="guest" />
+		</action>
+
+		<action name="KeywordInterven_*" method="{1}"
+			class="com.youku.soku.manage.admin.KeywordIntervenAction">
+			<result name="input">/soku/manage/KeywordInterven.jsp</result>
+			<result name="list">/soku/manage/KeywordIntervenList.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">KeywordInterven_list</param>
+				<param name="namespace">/</param>
+				<param name="searchWord">${searchWord}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<interceptor-ref name="intervenKeywordmanage" />
+		</action>
+
+		<action name="KeywordIntervenVideo_*" method="{1}"
+			class="com.youku.soku.manage.admin.KeywordIntervenVideoAction">
+			<result name="input">/soku/manage/KeywordIntervenVideo.jsp</result>
+			<result name="list">/soku/manage/KeywordIntervenVideoList.jsp
+			</result>
+			<result type="redirectAction">
+				<param name="actionName">KeywordIntervenVideo_list</param>
+				<param name="namespace">/</param>
+				<param name="keywordId">${keywordId}</param>
+				<param name="searchWord">${searchWord}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<interceptor-ref name="intervenKeywordVideomanage" />
+		</action>
+
+		<action name="Series_*" method="{1}"
+			class="com.youku.soku.manage.admin.library.SeriesAction">
+			<result name="input">/soku/manage/Names.jsp</result>
+			<result name="list">/soku/manage/NamesList.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">VideoInfo_list</param>
+				<param name="namespace">/</param>
+				<param name="searchWord">${searchWord}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<interceptor-ref name="libnamesmanage" />
+		</action>
+
+		
+
+		<action name="VideoInfo_*" method="{1}"
+			class="com.youku.soku.manage.admin.library.VideoInfoAction">
+			<result name="input">/soku/manage/VideoInfo.jsp</result>
+			<result name="list">/soku/manage/VideoInfoList.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">VideoInfo_list</param>
+				<param name="namespace">/</param>
+				<param name="searchWord">${searchWord}</param>
+				<param name="latestUpdate">${latestUpdate}</param>
+				<param name="categoryFilter">${categoryFilter}</param>
+				<param name="accuratelyMatched">${accuratelyMatched}</param>
+				<param name="statusFilter">${statusFilter}</param>
+				<param name="concernLevel">${concernLevel}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<interceptor-ref name="libpersonmanage" />
+		</action>
+
+
+		<action name="DeleteVideo_*" method="{1}"
+			class="com.youku.soku.manage.admin.DeleteVideoAction">
+			<result name="input">/soku/manage/DeleteVideo.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">DeleteVideo_input</param>
+				<param name="namespace">/</param>
+
+			</result>
+			<interceptor-ref name="deletevideo" />
+		</action>
+
+
+		<action name="Feedback_*" method="{1}"
+			class="com.youku.soku.manage.admin.FeedbackAction">
+			<result name="input">/soku/manage/Feedback.jsp</result>
+			<result name="list">/soku/manage/FeedbackList.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">Feedback_list</param>
+				<param name="namespace">/</param>
+				<param name="startDate">${startDate}</param>
+				<param name="endDate">${endDate}</param>
+			</result>
+			<interceptor-ref name="feedbackmanage" />
+		</action>
+
+
+		<action name="ProtocolSite_*" method="{1}"
+			class="com.youku.soku.manage.admin.ProtocolSiteAction">
+			<result name="input">/soku/manage/ProcotolSite.jsp</result>
+			<result name="list">/soku/manage/ProcotolSiteList.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">ProtocolSite_list</param>
+				<param name="namespace">/</param>
+			</result>
+			<interceptor-ref name="prositemanage" />
+		</action>
+
+		<action name="SiteWeight_*" method="{1}"
+			class="com.youku.soku.manage.admin.SiteWeightAction">
+			<result name="list">/soku/manage/SiteWeight.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">SiteWeight_list</param>
+				<param name="namespace">/</param>
+			</result>
+			<interceptor-ref name="siteweightmanage" />
+		</action>
+		
+
+		<action name="MajorTerm_*" method="{1}"
+			class="com.youku.soku.manage.admin.MajorTermAction">
+			<result name="input">/soku/manage/MajorTerm.jsp</result>
+			<result name="preview">/soku/manage/HtmlContentPreview.jsp</result>
+			<result name="list">/soku/manage/MajorTermList.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">MajorTerm_list</param>
+				<param name="namespace">/</param>
+				<param name="searchWord">${searchWord}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<interceptor-ref name="majorTermmanage" />
+		</action>
+
+		<action name="ShieldWord_*" method="{1}"
+			class="com.youku.soku.manage.shield.WordsAction">
+			<result name="input">/soku/manage/ShieldWord.jsp</result>
+			<result name="list">/soku/manage/ShieldWordList.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">ShieldWord_list</param>
+				<param name="namespace">/</param>
+				<param name="searchWord">${searchWord}</param>
+				<param name="searchParameter.type">${searchParameter.type}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<interceptor-ref name="shieldwordmanage" />
+		</action>
+
+		<action name="ShieldChannel_*" method="{1}"
+			class="com.youku.soku.manage.shield.ShieldChannelAction">
+			<result name="input">/soku/manage/ShieldChannel.jsp</result>
+			<result name="list">/soku/manage/ShieldChannelList.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">ShieldChannel_list</param>
+				<param name="namespace">/</param>
+				<param name="searchWord">${searchWord}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<interceptor-ref name="shieldwordmanage" />
+		</action>
+
+		<action name="ShieldCategory_*" method="{1}"
+			class="com.youku.soku.manage.shield.ShieldCategoryAction">
+			<result name="input">/soku/manage/ShieldCategory.jsp</result>
+			<result name="list">/soku/manage/ShieldCategoryList.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">ShieldCategory_list</param>
+				<param name="namespace">/</param>
+				<param name="searchWord">${searchWord}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<interceptor-ref name="shieldwordmanage" />
+		</action>
+		
+		<action name="ShieldSite_*" method="{1}"
+			class="com.youku.soku.manage.shield.ShieldSiteAction">
+			<result name="input">/soku/manage/ShieldSite.jsp</result>
+			<result name="list">/soku/manage/ShieldSiteList.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">ShieldSite_list</param>
+				<param name="namespace">/</param>
+				<param name="searchWord">${searchWord}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<interceptor-ref name="shieldwordmanage" />
+		</action>
+				
+		<action name="ShieldVideo_*" method="{1}"
+			class="com.youku.soku.manage.shield.ShieldVideoAction">
+			<result name="input">/soku/manage/ShieldVideoList.jsp</result>
+			<result name="list">/soku/manage/ShieldVideoList.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">ShieldVideo_list</param>
+				<param name="namespace">/</param>
+				<param name="searchWord">${searchWord}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<interceptor-ref name="shieldwordmanage" />
+		</action>
+		
+		<action name="ShieldMailSetting_*" method="{1}"
+			class="com.youku.soku.manage.shield.ShieldMailSettingAction">
+			<result name="input">/soku/manage/ShieldMailSetting.jsp</result>
+			<result name="list">/soku/manage/ShieldMailSettingList.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">ShieldMailSetting_list</param>
+				<param name="namespace">/</param>
+				<param name="searchWord">${searchWord}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<interceptor-ref name="shieldwordmanage" />
+		</action>
+		
+		<action name="SearchLogView" method="list" class="com.youku.soku.manage.shield.SingleDayViewAction">
+			<result>/soku/manage/SingleDayLogList.jsp</result>
+			<interceptor-ref name="test" />
+		</action>
+		
+		<action name="Programme_*" method="{1}"
+			class="com.youku.soku.manage.admin.library.ProgrammeAction">
+			<result>/soku/manage/ProgrammePlainList.jsp</result>
+			<interceptor-ref name="libteleplaymanage" />
+		</action>
+		
+		<action name="ProgrammeSite_*" method="{1}"
+			class="com.youku.soku.manage.admin.library.ProgrammeSiteAction">
+			<result name="input">/soku/manage/ProgrammeSite.jsp</result>
+			<result name="list">/soku/manage/ProgrammeSiteList.jsp</result>
+			<result name="episode" type="redirectAction">
+				<param name="actionName">ProgrammeEpisode_list</param>
+				<param name="namespace">/</param>
+				<param name="programmeSiteId">${programmeSiteId}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<result type="redirectAction">
+				<param name="actionName">ProgrammeSite_list</param>
+				<param name="namespace">/</param>
+				<param name="programmeId">${programmeId}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<result name="syn" type="redirectAction">
+				<param name="actionName">VideoInfo_list</param>
+				<param name="namespace">/</param>
+			</result>
+			<interceptor-ref name="libteleplaymanage" />
+		</action>
+		
+		<action name="ProgrammeEpisode_*" method="{1}"
+			class="com.youku.soku.manage.admin.library.ProgrammeEpisodeAction">
+			<result name="input">/soku/manage/ProgrammeEpisode.jsp</result>
+			<result name="list">/soku/manage/ProgrammeEpisodeList.jsp</result>
+			<result name="detail">/soku/manage/EpisodeDetail.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">ProgrammeEpisode_list</param>
+				<param name="namespace">/</param>
+				<param name="programmeSiteVersionId">${programmeSiteVersionId}</param>
+				<param name="searchWord">${searchWord}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<result name="syn" type="redirectAction">
+				<param name="actionName">VideoInfo_list</param>
+				<param name="namespace">/</param>
+			</result>
+			<interceptor-ref name="libteleplaymanage" />
+		</action>
+		
+		<action name="KnowledgeColumn_*" method="{1}"
+			class="com.youku.soku.manage.admin.library.KnowledgeColumnAction">
+			<result name="input">/soku/manage/KnowledgeColumn.jsp</result>
+			<result name="list">/soku/manage/KnowledgeColumnList.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">KnowledgeColumn_list</param>
+				<param name="namespace">/</param>
+				<param name="searchWord">${searchWord}</param>
+				<param name="parentId">${parentId}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<interceptor-ref name="knowledgeColumnManage" />
+		</action>
+
+		<action name="ProgrammeForwardWord_*" method="{1}"
+			class="com.youku.soku.manage.admin.library.ForwardWordAction">
+			<result name="input">/soku/manage/ForwardWord.jsp</result>
+			<result name="list">/soku/manage/ForwardWordList.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">ProgrammeForwardWord_list</param>
+				<param name="namespace">/</param>
+				<param name="searchWord">${searchWord}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<interceptor-ref name="forwardWordManage" />
+		</action>
+
+		<action name="EpisodeLog_*" method="{1}"  class="com.youku.soku.manage.admin.library.EpisodeLogAction">
+		<result name="list">/soku/manage/EpisodeLogList.jsp</result>
+		<interceptor-ref name="libteleplaymanage" />
+		</action>
+
+		<action name="NewProgramme_*" method="{1}"
+			class="com.youku.soku.manage.admin.library.NewProgrammeAction">
+			<result name="list">/soku/manage/NewProgrammeList.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">NewProgramme_list</param>
+				<param name="namespace">/</param>
+				<param name="searchWord">${searchWord}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<interceptor-ref name="guest" />
+		</action>
+		
+		<action name="EpisodeDetail_*" method="{1}"
+			class="com.youku.soku.manage.admin.library.ProgrammeEpisodeAction">
+			<result name="input">/soku/manage/ProgrammeEpisode.jsp</result>
+			<result name="list">/soku/manage/EpisodeDetail.jsp</result>
+			<result name="detail">/soku/manage/EpisodeDetail.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">Programme_list</param>
+				<param name="namespace">/</param>
+				<param name="programmeSiteVersionId">${programmeSiteVersionId}</param>
+				<param name="searchWord">${searchWord}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<interceptor-ref name="libteleplaymanage" />
+		</action>
+
+		
+		<action name="SokuIndexPic_*" method="{1}"
+			class="com.youku.soku.manage.admin.library.SokuIndexPicAction">
+			<result name="list">/soku/manage/SokuIndexPicList.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">SokuIndexPic_list</param>
+				<param name="namespace">/</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<interceptor-ref name="indexpicmanage" />
+		</action>
+		
+		<action name="AuditEpisodeLog_*" method="{1}"
+			class="com.youku.soku.manage.admin.library.AuditEpisodeLogAction">
+			<result name="input">/soku/manage/EpisodeAuditLogList.jsp</result>
+			<result name="list">/soku/manage/EpisodeAuditLogList.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">AuditEpisodeLog_list</param>
+				<param name="namespace">/</param>
+				<param name="searchWord">${searchWord}</param>
+				<param name="accuratelyMatched">${accuratelyMatched}</param>
+				<param name="concernLevel">${concernLevel}</param>
+				<param name="siteId">${siteId}</param>
+				<param name="categoryFilter">${categoryFilter}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+			<interceptor-ref name="libauditmanage" />
+		</action>
+
+		<action name="TopWords_*" method="{1}"  class="com.youku.soku.manage.admin.paihangbang.TopWordsAction">
+                        <result name="list">/soku/manage/paihangbang/TopWordsVOList.jsp</result>
+                     <interceptor-ref name="newtopmanage" />
+               </action>
+			
+                 <action name="SokuFeedBack_*" method="{1}"  class="com.youku.soku.manage.admin.SokuFeedBackAction">
+	        	<result name="list">/soku/manage/sokufeedback/SokuFeedbackList.jsp</result>
+	      		<result type="stream">
+	            	<param name="contentType">application/vnd.ms-excel</param>
+    			<param name="inputName">inputStream</param>
+    			<param name="contentDisposition">attachment;filename="${downfilename}"</param>
+			<param name="bufferSize">4096</param>
+			</result>			
+            		<interceptor-ref name="sokufeedback" />
+                 </action>
+                 <action name="SokuFeedbackUnion_*" method="{1}"  class="com.youku.soku.manage.admin.SokuFeedBackUnionAction">
+                        <result name="list">/soku/manage/sokufeedback/SokuFeedbackUnion.jsp</result>
+	                <interceptor-ref name="sokufeedback" />
+                </action>
+
+		<action name="DeadLinkReport_*" method="{1}"  class="com.youku.soku.manage.admin.library.DeadLinkReportAction">
+			<result name="list">/soku/manage/DeadLinkReportList.jsp</result>
+			<result type="redirectAction">
+				<param name="actionName">DeadLinkReport_list</param>
+				<param name="namespace">/</param>
+				<param name="startDate">${startDate}</param>
+				<param name="endDate">${endDate}</param>
+				<param name="pageNumber">${pageNumber}</param>
+			</result>
+
+			<interceptor-ref name="libteleplaymanage" />
+		</action>
+		
+														
+	<!--
+		<action name="EpisodeDouban_*" method="{1}"
+                        class="com.youku.soku.manage.admin.library.ProgrammeDoubanAction">
+                        <result name="list">/soku/manage/ProgrammeDoubanMoreList.jsp</result>
+                        <result name="listdouban">/soku/manage/ProgrammeDoubanList.jsp</result>
+                        <result type="redirectAction">
+                                <param name="actionName">EpisodeDouban_list</param>
+                                <param name="namespace">/</param>
+                                <param name="page">${page}</param>
+                        </result>
+                        <result type="redirectAction" name="rec_listdouban">
+                                <param name="actionName">EpisodeDouban_listdouban</param>
+                                <param name="namespace">/</param>
+                                <param name="page">${page}</param>
+                        </result>
+                        <interceptor-ref name="libteleplaymanage" />
+               </action>-->
+
+	</package>
+
+
+
+	<package name="soku-testjson" namespace="/" extends="soku-default">
+		<action name="FileUpload" class="com.youku.soku.manage.common.FileUploadAction">
+
+			<interceptor-ref name="guest" />
+		</action>
+	</package>
+	
+	<package name="survey" namespace="/" extends="struts-default">
+		<action name="Survey_*" method="{1}"  class="com.youku.soku.manage.questionnaire.action.SurveyAction">
+			<interceptor-ref name="defaultStack">  
+	        </interceptor-ref>  
+	        <interceptor-ref name="token">  
+	          	<param name="includeMethods">save</param>  
+         	</interceptor-ref>
+			<result name="input">/soku/survey/survey.jsp</result>
+			<result name="thanks">/soku/survey/survey_success.jsp</result>
+			<result name="list">/soku/survey/survey_result.jsp</result>
+			<result name="invalid.token">/soku/survey/survey_repeat.jsp</result> 
+			<result type="redirectAction">
+				<param name="actionName">Survey_thanks</param>
+			</result>
+			
+		</action>
+	</package>
+
+</struts>

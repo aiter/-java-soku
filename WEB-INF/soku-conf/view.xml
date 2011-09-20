@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<indexconfig>
+<!--1 search 2 index manager-->
+<server>1</server>
+
+
+<control_server>
+	10.102.23.31,10.102.23.32
+</control_server>
+
+<auto_complete_servers>
+	10.102.23.51,10.102.23.52
+</auto_complete_servers>
+
+</indexconfig>

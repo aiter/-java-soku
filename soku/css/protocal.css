@@ -1,0 +1,51 @@
+@charset "utf-8";
+.window{_margin-left:960px;}
+.screen{_margin-left:-960px;}
+.wrap{min-width:930px;width:930px;padding:0 15px;margin:0 auto;}
+
+.topbar{height:45px;padding-top:20px;}
+.topbar .logo{float:left;}
+.topbar .title{float:right;width:741px;background:#e5ecf9;height:24px;}
+.topbar .title h1{font-family:'simsun';font-size:16px;line-height:22px;padding-left:10px;}
+
+.tree{float:left;width:150px;padding-left:20px;}
+.tree a{font-size:14px;text-decoration:underline;}
+.tree ul{margin-left:1em;margin-top:5px;}
+.tree li{margin-bottom:5px;}
+.tree .links{border:1px solid #e5e5e5;padding:5px 0;margin-top:20px;margin-left:-20px;padding-left:20px;}
+.tree .links a{font-size:14px;line-height:22px;}
+
+.protocal{float:right;width:740px;border-left:1px solid #ccc;}
+.protocal .title{background:#f5f9fc;border-bottom:1px solid #e5ecf9;height:24px;line-height:24px;padding-left:10px;margin-bottom:20px;}
+.protocal .entry{padding-left:20px;padding-bottom:20px;}
+.protocal .entry, .protocal .entry *{font-size:14px;line-height:24px;word-break:normal;}
+.protocal .entry h4{font-size:14px;font-weight:bold;margin:5px 0;}
+.protocal .entry p{clear:both;font-size:14px;line-height:22px;margin-bottom:10px;text-indent:2em;}
+.protocal .entry table{table-layout:fixed;margin-bottom:10px;margin-top:10px;}
+.protocal .entry td{border:1px solid #ccc;padding:5px 10px 4px 10px;vertical-align:top;}
+.protocal .entry table.bborder{border:4px solid #eee;border-left:none;border-right:none;}
+.protocal .entry table.bborder td{border:none;border-bottom:1px solid #eee;padding-left:0;}
+.protocal .entry table.noborder td{border:none;padding-left:0;}
+.protocal .entry thead td{font-weight:bold;background:#eee;}
+.protocal .entry td p{margin-bottom:10px;} 
+.protocal .entry ul{list-style-type:disc;list-style-position:outside;margin-left:1.1em;margin-bottom:10px;}
+.protocal .entry ol{list-style-type:decimal;list-style-position:outside;margin-left:1.6em;margin-bottom:10px;}
+.protocal .entry li{margin-bottom:5px;}
+.protocal .entry img{margin:0 10px 10px 0;}
+.protocal .entry input{line-height:18px;}
+.protocal .entry textarea{line-height:20px;}
+.protocal .entry button{height:28px;}
+.protocal .entry big{font-size:16px;}
+.protocal .entry small{font-size:12px;}
+.protocal .entry .tagb{color:#00f;font-family:verdana;font-style:normal;}
+.protocal .entry .tagxml{color:#930;font-family:verdana;font-style:normal;}
+.protocal .entry .need{color:#c00;font-family:verdana;}
+.protocal .entry .chec{color:#fff;}
+.protocal .entry .notice{color:#f00;}
+.protocal .entry .tip{color:#909090;font-size:12px;}
+.protocal .entry .QA{ list-style:none;list-style-position:outside;margin-left:0;}
+.protocal .entry .QA li{margin-bottom:5px;}
+.protocal .entry .QA .Q{color:#014ccc;text-decoration:underline;cursor:pointer;margin-bottom:5px;}
+.protocal .entry .QA .A{display:none;margin-bottom:10px;padding-left:2em;}
+.protocal .entry .QA .A,.protocal .QA .A *{font-size:12px;line-height:18px;}
+.protocal .entry .QA .A p{margin-bottom:8px;text-indent:0;line-height:18px;}

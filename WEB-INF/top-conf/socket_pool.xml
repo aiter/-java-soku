@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<socketpoolconfig>
+<servers>
+	<video>
+		<start>1</start>
+		<server ip="10.101.168.101" port="8080" />
+		<server ip="10.101.168.102" port="8080" />
+		<server ip="10.101.168.106" port="8080" />
+		<server ip="10.101.168.107" port="8080" />
+		<server ip="10.101.168.108" port="8080" />
+    </video>
+    <folder>
+		<start>1</start>
+		<server ip="10.101.168.109" port="8080" />
+    </folder>
+    <bar>
+		<start>1</start>
+		<server ip="10.101.168.110" port="8080" />
+    </bar>
+    <pk>
+		<start>1</start>
+		<server ip="10.101.168.110" port="8080" />
+    </pk>
+    <user>
+		<start>1</start>
+		<server ip="10.101.168.110" port="8080" />
+    </user>
+</servers>
+</socketpoolconfig>

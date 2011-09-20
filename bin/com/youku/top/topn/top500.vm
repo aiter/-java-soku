@@ -1,0 +1,328 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="cache-control" content="no-cache">
+		<title>搜索TOP500关键词统计</title>
+		<style type="text/css">
+<!--
+.STYLE1 {
+	color: #CC3399
+}
+
+.STYLE2 {
+	color: #0000FF
+}
+-->
+</style>
+<script language="javascript" type="text/javascript">
+	function show(k){
+	var d = document.getElementById(k);
+	if(null==d)return;
+	var s = d.style.display;
+	if(s=='')
+		s='none';
+	else s='';
+		 d.style.display=s;
+	}
+</script>
+	</head>
+
+	<body>
+		<p align="center" class="STYLE2">
+			搜索TOP500关键词统计(${uniondate})
+		</p>
+		<table cellSpacing="1" cellPadding="3" width="95%" bgcolor="#999999"
+			align="center">
+			<tr align="left" bgcolor="#A4D6FF">
+				<td colspan=13>
+					排序字段:max(站内搜索数,站外搜索数)
+				</td>
+			</tr>
+			<tr bgcolor="#A4D6FF">
+				<td width="3%">
+					序号
+				</td>
+				<td width="15%">
+					关键词
+				</td>
+				<td width="8%">
+					站内搜索数
+				</td>
+				<td width="8%">
+					站内搜索上升率
+				</td>
+				<td width="8%">
+					站内结果(估)
+				</td>
+				#if($isExistOutQuery)
+				<td width="8%">
+					站外搜索数
+				</td>
+				#if($isExistBeforeDateOutQuery)
+				<td width="8%">
+					站外搜索上升率
+				</td>
+				#end
+				<td width="7%">
+					站外搜索/站内搜索
+				</td>
+				#if($isExistOutClick)
+				<td width="7%">
+					站外点击数
+				</td>
+				<td width="7%">
+					站外点击/站外搜索
+				</td>
+				#if($isExistBeforeDateOutClick)
+				<td width="7%">
+					站外点击上升率
+				</td>
+				#end
+				#end
+				#end
+			</tr>
+			#set($i = 0)
+			#foreach($item in $keywordList)
+			#set($i = $i +1)
+ 				<tr align="left" bgcolor="#FFFFFF"
+				onmouseover="this.style.background='#FFCC00'"
+				onmouseout="this.style.background='#F3F3F3'" onclick="show(${i})">
+				<td>
+					$i
+				</td>
+				<td>
+					$item.getKeyword()
+				</td>
+				<td bgcolor="#99CC99">
+					$item.getInsearchs()
+				</td>
+				<td bgcolor="#A7D1C0">
+				#if($item.isIsrateIsIncre())
+					<Font color="red">$item.getIsrate()</Font>%
+				#else
+					<Font color="green">$item.getIsrate()</Font>%
+				#end
+				</td>
+				<td bgcolor="#FF9966">
+					$item.getInavg()
+				</td>
+				#if($isExistOutQuery)
+				<td bgcolor="#99CC99">
+					$item.getOutsearchs()
+				</td>
+				#if($isExistBeforeDateOutQuery)
+				<td bgcolor="#A7D1C0">
+				#if($item.isOsrateIsIncre())
+					<Font color="red">$item.getOsrate()</Font>%
+				#else
+					<Font color="green">$item.getOsrate()</Font>%
+				#end
+				</td>
+				#end
+				<td bgcolor="#99FF66">
+					$item.getOisrate()%
+				</td>
+				#if($isExistOutClick)
+				<td bgcolor="#CFFF66">
+					$item.getOutclicks()
+				</td>
+				<td bgcolor="#FFCCCC">
+					$item.getOcsrate()%
+				</td>
+				#if($isExistBeforeDateOutClick)
+				<td bgcolor="#DFCCCC">
+				#if($item.isOcrateIsIncre())
+					<Font color="red">$item.getOcrate()</Font>%
+				#else
+					<Font color="green">$item.getOcrate()</Font>%
+				#end
+				</td>
+				#end
+				#end
+				#end
+			</tr>
+			#set($kcvos = $item.getKeywords() )
+			#if($kcvos.size()>1)
+			<tr id="${i}" style="display: none">
+				<td colspan=13>
+					<table width="100%" bgcolor="#66FF99" align="center" leftmargin=0 topmargin=0>
+						<tr>
+							<td width="3%">
+
+							</td>
+							<td width="15%">
+								组合
+							</td>
+							<td width="8%">
+								占该词站内搜索比
+							</td>
+							<td width="8%">
+								站内搜索上升率
+							</td>
+							<td width="8%">
+								站内结果(估)
+							</td>
+							#if($isExistOutQuery)
+							<td width="8%">
+								占该词站外搜索比
+							</td>
+							#if($isExistBeforeDateOutQuery)
+							<td width="8%">
+								站外搜索上升率
+							</td>
+							#end
+							<td width="7%">
+								
+							</td>
+							#if($isExistOutClick)
+							<td width="7%">
+								站外点击数
+							</td>
+							<td width="7%">
+								站外点击率/站外搜索数
+							</td>
+							#if($isExistBeforeDateOutClick)
+							<td width="7%">
+								站外点击上升率
+							</td>
+							#end
+							#end
+							#end
+						</tr>
+						#set($j = 0 )
+						#set($temp = "a"+${i}+"_"+${j} )
+						#foreach($key in $kcvos.keySet())
+							#set($kcvo = $kcvos.get($key) )
+							<tr  align="left" bgcolor="#FFFFFF" onmouseover="this.style.background='#FFCC00'" onmouseout="this.style.background='#F3F3F3'" onclick="show('$temp')">
+								<td>
+	
+								</td>
+								<td>
+									$kcvo.getKeyword()
+								</td>
+								<td>
+									$kcvo.getUisrate()%
+								</td>
+								<td>
+								#if($kcvo.isIsrateIsIncre())
+									<Font color="red">$kcvo.getIsrate()</Font>%
+								#else
+									<Font color="green">$kcvo.getIsrate()</Font>%
+								#end
+								</td>
+								<td>
+									$kcvo.getInavg()
+								</td>
+								#if($isExistOutQuery)
+								<td>
+									$kcvo.getUosrate()%
+								</td>
+								#if($isExistBeforeDateOutQuery)
+								<td>
+								#if($kcvo.isOsrateIsIncre())
+									<Font color="red">$kcvo.getOsrate()</Font>%
+								#else
+									<Font color="green">$kcvo.getOsrate()</Font>%
+								#end
+								</td>
+								#end
+								<td>
+									
+								</td>
+								#if($isExistOutClick)
+								<td>
+									$kcvo.getOutclicks()
+								</td>
+								<td>
+									$kcvo.getUocrate()%
+								</td>
+								#if($isExistBeforeDateOutClick)
+								<td>
+								#if($kcvo.isOcrateIsIncre())
+									<Font color="red">$kcvo.getOcrate()</Font>%
+								#else
+									<Font color="green">$kcvo.getOcrate()</Font>%
+								#end
+								</td>
+								#end
+								#end
+								#end
+							</tr>
+							#set($kqvos = $kcvo.getKeywords() )
+							#if($kqvos.size()>0)
+								<tr id="$temp" style="display: none">
+								<td colspan=13>
+								<table width="100%" bgcolor="#66FF99" align="center" leftmargin=0 topmargin=0>
+									#foreach($kqvo in $kqvos)
+										<tr>
+											<td width="3%">
+	
+											</td>
+											<td width="15%">
+												$kqvo.getKeyword()
+											</td>
+											<td width="8%">
+												$kqvo.getUisrate()%
+											</td>
+											<td width="8%">
+											#if($kqvo.isIsrateIsIncre())
+												<Font color="red">$kqvo.getIsrate()</Font>%
+											#else
+												<Font color="green">$kqvo.getIsrate()</Font>%
+											#end
+											</td>
+											<td width="8%">
+												$kqvo.getInavg()
+											</td>
+											#if($isExistOutQuery)
+											<td width="8%">
+												$kqvo.getUosrate()%
+											</td>
+											#if($isExistBeforeDateOutQuery)
+											<td width="8%">
+											#if($kqvo.isOsrateIsIncre())
+												<Font color="red">$kqvo.getOsrate()</Font>%
+											#else
+												<Font color="green">$kqvo.getOsrate()</Font>%
+											#end
+											</td>
+											#end
+											<td width="7%">
+												
+											</td>
+											#if($isExistOutClick)
+											<td width="7%">
+												$kqvo.getOutclicks()
+											</td>
+											<td width="7%">
+												$kqvo.getUocrate()%
+											</td>
+											#if($isExistBeforeDateOutClick)
+											<td width="7%">
+											#if($kqvo.isOcrateIsIncre())
+												<Font color="red">$kqvo.getOcrate()</Font>%
+											#else
+												<Font color="green">$kqvo.getOcrate()</Font>%
+											#end
+											</td>
+											#end
+											#end
+											#end
+										</tr>
+									#end
+								</table>
+								</td>
+								</tr>
+							#end
+							#set($j = ${j}+1 )
+							#set($temp = "a"+${i}+"_"+${j} )
+						#end
+					</table>
+				</td>
+				</tr>
+			#end
+		#end
+		</table>
+	</body>
+</html>

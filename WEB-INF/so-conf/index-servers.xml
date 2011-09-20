@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<groups>
+		<group num="1">
+			<server ip="10.101.8.116">
+				<pool_port>8080</pool_port>
+			</server>
+			<server ip="10.101.8.117">
+				<pool_port>8080</pool_port>
+			</server>
+			<server ip="10.101.8.118">
+				<pool_port>8080</pool_port>
+			</server>
+			<server ip="10.101.8.119">
+				<pool_port>8080</pool_port>
+			</server>
+			<server ip="10.101.8.120">
+				<pool_port>8080</pool_port>
+			</server>
+			<server ip="10.101.8.121">
+				<pool_port>8080</pool_port>
+			</server>
+			<server ip="10.101.8.122">
+				<pool_port>8080</pool_port>
+			</server>
+			<server ip="10.101.8.123">
+				<pool_port>8080</pool_port>
+			</server>
+			<server ip="10.101.8.124">
+				<pool_port>8080</pool_port>
+			</server>
+			<server ip="10.101.8.125">
+				<pool_port>8080</pool_port>
+			</server>
+			<server ip="10.101.8.126">
+				<pool_port>8080</pool_port>
+			</server>
+			<server ip="10.101.8.127">
+				<pool_port>8080</pool_port>
+			</server>
+			<server ip="10.101.8.128">
+				<pool_port>8080</pool_port>
+			</server>
+			<server ip="10.101.8.129">
+				<pool_port>8080</pool_port>
+			</server>
+			<server ip="10.101.8.130">
+				<pool_port>8080</pool_port>
+			</server>
+		</group>
+	</groups>
+</config>

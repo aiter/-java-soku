@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<groups>
+		<group num="1">
+			<server ip="10.101.8.114" type="log" order ="1">
+				<pool_port>8080</pool_port>
+				<manager>2</manager>
+			</server>
+			<server ip="10.101.8.114" type="quick" order ="1">
+                                <pool_port>8080</pool_port>
+                                <manager>2</manager>
+                        </server>
+		</group>
+	</groups>
+	<indexpath>
+	        <log>/opt/index/log/console/</log>
+		<logquick>/opt/index/log/web/</logquick>
+	</indexpath>
+</config>

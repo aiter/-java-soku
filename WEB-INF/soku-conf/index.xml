@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<indexconfig>
+<!--1 search 2 index manager-->
+<server>1</server>
+
+
+<analyzer>
+	<server>
+		/opt/search/WEB-INF/soku-conf/memcache.tok
+	</server>
+</analyzer>
+
+<indexpath>
+	<video>/opt/index/video/online/</video>
+	<word>/opt/index/word/online/</word>
+	<library>/opt/index/library/online/</library>
+</indexpath>
+
+</indexconfig>

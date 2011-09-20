@@ -1,0 +1,46 @@
+@charset "utf-8";
+
+html,body{width:100%;height:100%;overflow:hidden;}
+
+.listArea{position:absolute;height:100%;top:0;left:0;width:150px;border-right:1px solid #ababab;}
+.playArea{padding-left:151px;height:100%;}
+
+.listArea .handle{position:absolute;top:48%;right:-10px;width:10px;height:43px;background:url(http://www.soku.com/img/bg_listhandle.gif) no-repeat 0 -125px;cursor:pointer;}
+.listArea .handle_hide{background-position:0 -175px;}
+
+.listArea .logo{height:37px;border-bottom:1px solid #c6c6c6;margin-bottom:10px;text-align:center;}
+.listArea .logo a{display:block;width:100%;height:100%;text-align:center;}
+.listArea .logo img{margin-top:5px;}
+
+.listArea .pack{padding:0 12px;margin-bottom:10px;}
+.listArea .pack a{font-size:14px;font-weight:bold;text-decoration:underline;}
+.listArea .pack span{color:#909090;white-space:nowrap;}
+
+.listArea .playing{position:relative;top:0;left:0;width:126px;height:135px;margin:0 auto;background:#6a9bc0;margin-bottom:15px;}
+.listArea .playing .item{width:122px;height:106px;margin:0 auto;border:2px solid #6a9bc0;text-align:center;font-weight:bold;cursor:default;background:#fff;margin-bottom:2px;overflow:hidden;}
+.listArea .playing .item .thumb{display:block;width:100px;height:75px;margin:0 auto;margin-top:10px;}
+.listArea .playing .change{text-align:center;}
+.listArea .playing .change a{color:#fff;text-decoration:underline;}
+.listArea .playing .mark{position:absolute;top:50px;right:-6px;width:6px;height:11px;overflow:hidden;background:url(../img/bg_listhandle.gif) no-repeat 0 -100px;}
+
+.listArea .list{margin:0 auto;width:140px;background:#d7e5f0;}
+.listArea .list .up{height:16px;overflow:hidden;border:1px solid #bddaf0;background:#fff;cursor:pointer;margin-bottom:5px;}
+.listArea .list .up a{display:block;width:100%;height:100%;background:url(../img/bg_listhandle.gif) no-repeat center 3px;}
+.listArea .list .up a:hover{background-color:#edf9fc;}
+.listArea .list .updisable{border:1px solid #c6c6c6;cursor:default;}
+.listArea .list .updisable a{background-color:#f3f3f3;background-position:center -22px;outline:none;cursor:default;}
+.listArea .list .updisable a:hover{background-color:#f3f3f3;}
+.listArea .list .down{height:16px;overflow:hidden;border:1px solid #bddaf0;background:#fff;cursor:pointer;margin-top:5px;}
+.listArea .list .down a{display:block;width:100%;height:100%;background:url(../img/bg_listhandle.gif) no-repeat center -46px;}
+.listArea .list .down a:hover{background-color:#edf9fc;}
+.listArea .list .downdisable{border:1px solid #c6c6c6;cursor:default;}
+.listArea .list .downdisable a{background-color:#f3f3f3;background-position:center -71px;outline:none;cursor:default;}
+.listArea .list .downdisable a:hover{background-color:#f3f3f3;}
+.listArea .list .items{overflow:auto;height:300px;text-align:center;outline:none;}
+.listArea .list .item{display:inline-block;display:block/9;*display:block;width:118px;height:107px;margin:0 auto;margin-bottom:5px;border:1px solid #a4a7ae;background:#fff;cursor:pointer;}
+.listArea .list .item a{display:block;text-align:center;padding-top:9px;height:98px;}
+.listArea .list .item a:hover{background:#edf9fc;}
+.listArea .list .item .thumb{display:block;width:100px;height:75px;margin:0 auto;}
+.listArea .list .current{width:116px;height:105px;border:2px solid #6a9bc0;}
+.listArea .list .current a{padding-top:8px;height:96px;cursor:default;outline:none;}
+.listArea .list .current a:hover{background:#fff;text-decoration:none;}

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="STDLOG" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/opt/logs/stdout.log"/>
+		<param name="Append" value="true"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%F:%L) - %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="INDEXLOG" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/opt/logs/index.log"/>
+		<param name="Append" value="true"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%F:%L) - %m%n"/>
+		</layout>
+	</appender>	
+	
+	<appender name="ConsoleAppender" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%c:%L) - %m%n"/>
+		</layout>
+	</appender>	
+	
+	<category name="STDLOG" additivity="true">
+		<priority value="INFO"/>
+		<appender-ref ref="STDLOG"/>
+	</category>
+	<category name="INDEXLOG" additivity="true">
+		<priority value="INFO"/>
+		<appender-ref ref="INDEXLOG"/>
+	</category>
+	
+	<root>
+		<!--
+		<priority value="DEBUG"/>
+		<priority value="INFO"/>
+		<priority value="ERROR"/>
+		-->
+
+		<priority value="INFO"/>
+		<appender-ref ref="ConsoleAppender"/>
+	</root>
+
+</log4j:configuration>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="STDOUTLOG" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/opt/logs/stdout.log" />
+		<param name="Append" value="true" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%F:%L) - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="INDEXLOG" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/opt/logs/index.log" />
+		<param name="Append" value="true" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%F:%L) - %m%n" />
+		</layout>
+	</appender>
+	<appender name="OPERATELOG" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/opt/logs/operate.log" />
+		<param name="Append" value="true" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%c:%L) - %m%n" />
+		</layout>
+	</appender>
+	<appender name="EPISODEVIDEOLOG" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/opt/logs/episodevideo.log" />
+		<param name="Append" value="true" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%c:%L) - %m%n" />
+		</layout>
+	</appender>
+	<appender name="ConsoleAppender" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%c:%L) - %m%n" />
+		</layout>
+	</appender>
+	<appender name="ServerStateLog" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/opt/logs/serverState.log" />
+		<param name="Append" value="true" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%F:%L) - %m%n" />
+		</layout>
+	</appender>
+	<appender name="ServerStatInfo" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/opt/logs/serverStatInfo.log" />
+		<param name="Append" value="true" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%F:%L) - %m%n" />
+		</layout>
+	</appender>
+
+	<category name="STDOUTLOG" additivity="true">
+		<priority value="INFO" />
+		<appender-ref ref="STDOUTLOG" />
+	</category>
+	<category name="INDEXLOG" additivity="true">
+		<priority value="INFO" />
+		<appender-ref ref="INDEXLOG" />
+	</category>
+	<category name="OPERATELOG" additivity="true">
+		<priority value="INFO" />
+		<appender-ref ref="OPERATELOG" />
+	</category>
+	<category name="EPISODEVIDEOLOG" additivity="true">
+		<priority value="INFO" />
+		<appender-ref ref="EPISODEVIDEOLOG" />
+	</category>
+	<category name="com.youku" additivity="true">
+		<!--
+			<priority value="DEBUG"/> <priority value="INFO"/> <priority
+			value="ERROR"/>
+		-->
+
+		<priority value="INFO" />
+		<appender-ref ref="STDOUTLOG" />
+		
+		<!-- 
+		<priority value="INFO" />
+		<appender-ref ref="ConsoleAppender" />
+		 -->
+	</category>
+	<category name="ServerStateLog" additivity="true">
+		<priority value="INFO" />
+		<appender-ref ref="ServerStateLog" />
+	</category>
+	<category name="ServerStatInfo" additivity="true">
+		<priority value="INFO" />
+		<appender-ref ref="ServerStatInfo" />
+	</category>
+	
+
+</log4j:configuration>

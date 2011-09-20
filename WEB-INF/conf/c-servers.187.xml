@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<groups>
+	    <group num="1" defaultPort="2425">
+	      <md5Server id="32768" ip="10.103.49.179" port="2425"/>
+	      <server id="10000">
+	        <major ip="10.103.8.69" port="2425"/>
+	        <minor ip="10.103.8.69" port="2425"/>
+	      </server>
+	    </group>
+	</groups>
+	
+	<changeServerFiles>
+		<startFlag>/opt/sokuproc/data/StartUpdateService.dat</startFlag>
+		<endFlag>/opt/sokuproc/data/EndUpdateService.dat</endFlag>
+		<changeList>/opt/sokuproc/data/WorkServer_0.dat</changeList>
+	</changeServerFiles>
+	
+</config>

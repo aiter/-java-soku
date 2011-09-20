@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="STDOUTLOG" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/opt/logs/stdout.log"/>
+		<param name="Append" value="true"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%F:%L) - %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="INDEXLOG" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/opt/logs/index.log"/>
+		<param name="Append" value="true"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%F:%L) - %m%n"/>
+		</layout>
+	</appender>
+	<appender name="OPERATELOG" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/opt/logs/operate.log"/>
+		<param name="Append" value="true"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%c:%L) - %m%n"/>
+		</layout>
+	</appender>
+	
+	<appender name="ConsoleAppender" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%c:%L) - %m%n"/>
+		</layout>
+	</appender>
+	
+	<appender name="TOTALCOUNTLOG" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="/opt/logs/totalcount.log" />
+		<param name="Append" value="true" />
+		<param name="MaxBackupIndex" value="2" />
+		<param name="MaxFileSize" value="10MB" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%c:%L) - %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="RECOMENDLOG" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="/opt/logs/searchrecomend.log" />
+		<param name="Append" value="true" />
+		<param name="MaxBackupIndex" value="2" />
+		<param name="MaxFileSize" value="10MB" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%c:%L) - %m%n"/>
+		</layout>
+	</appender>
+	
+	<category name="STDOUTLOG" additivity="true">
+		<priority value="INFO"/>
+		<appender-ref ref="STDOUTLOG"/>
+	</category>
+	<category name="INDEXLOG" additivity="true">
+		<priority value="INFO"/>
+		<appender-ref ref="INDEXLOG"/>
+	</category>
+	<category name="TOTALCOUNTLOG" additivity="true">
+		<priority value="INFO"/>
+		<appender-ref ref="TOTALCOUNTLOG"/>
+	</category>
+	<category name="RECOMENDLOG" additivity="true">
+		<priority value="INFO"/>
+		<appender-ref ref="RECOMENDLOG"/>
+	</category>
+	<category name="OPERATELOG" additivity="true">
+		<priority value="INFO"/>
+		<appender-ref ref="OPERATELOG"/>
+	</category>
+	<category name="com.youku" additivity="true">
+		<!--
+		<priority value="DEBUG"/>
+		<priority value="INFO"/>
+		<priority value="ERROR"/>
+		-->
+
+		<priority value="INFO"/>
+		<appender-ref ref="ConsoleAppender"/>
+	</category>
+
+</log4j:configuration>

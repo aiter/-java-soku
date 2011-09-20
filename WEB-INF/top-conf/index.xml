@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<indexconfig>
+<!--1 search 2 index manager-->
+<server>1</server>
+
+
+<analyzer>
+	<server>
+		/opt/search/WEB-INF/top-conf/memcache.tok
+	</server>
+</analyzer>
+
+<indexpath>
+	<log>/opt/index/log/console/</log>
+	<logquick>/opt/index/log/web/</logquick>
+</indexpath>
+
+</indexconfig>

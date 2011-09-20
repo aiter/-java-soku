@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<sortconfig>
+
+<!--
+  this configuration is only used in sorting machines
+
+  cache_timeout(second): cache timeout for result page of one query, if timeout, will re-compute for result page and cache it again
+  category_torque: the torquery name in Torque.properties, we request the database for the category name of category id in initializing of servlet
+  recommend_torque: the torquery name in Torque.properties, we request the database for the man-made recommend of search result at intervals
+  filter_torque: the torquery name in Torque.properties, we request the database for the prohibiting words often
+  filter_status: filter switch, 0: disable     1: enable
+  filter_update_frequency(second): a regular frequecy to request the database for the prohibiting words
+  folder_number_embeded_video_search: the number of folders in video search result to present
+  duplicate_status: the md5 duplicate switch, 0: disbale    1: enable
+  recommend_status: the switch to switch recommend of search result   0: disable    1: enable
+  suggestion_status: the pinyin correcting in search result page switch:  0: disable  1: enable
+  relevant_word_status: the relevant word in search result page switch: 0: disable   1:enable
+  pic_infos_status: the picture infos in search result page switch: 0: disable   1:enable
+-->
+<cache_timeout>600</cache_timeout>
+<category_torque>category</category_torque>
+<recommend_torque>recommend</recommend_torque>
+<filter_torque>filter</filter_torque>
+<filter_status>0</filter_status>
+<filter_update_frequency>600</filter_update_frequency>
+<folder_number_embeded_video_search>3</folder_number_embeded_video_search>
+<duplicate_status>1</duplicate_status>
+<recommend_status>1</recommend_status>
+<suggestion_status>1</suggestion_status>
+<relevant_word_status>1</relevant_word_status>
+<pic_infos_status>1</pic_infos_status>
+<ip_file>ip.csv</ip_file>
+<speed_file>data.csv</speed_file>
+</sortconfig>

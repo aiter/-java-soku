@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<groups>
+	    <group num="1" defaultPort="2425">
+		  <md5Server id="32768" ip="10.103.8.70" port="2425"/>	    
+	      <server id="10000">
+	        <major ip="10.103.8.69" port="2425"/>
+	        <minor ip="10.103.8.69" port="2425"/>
+	      </server>
+	      <server id="0">
+	        <major ip="10.103.8.73" port="2425"/>
+	        <minor ip="10.103.49.167" port="2425"/>
+	      </server>
+	      <server id="1">
+	        <major ip="10.103.8.74" port="2425"/>
+	        <minor ip="10.103.49.168" port="2425"/>
+	      </server>
+	      <server id="2">
+	        <major ip="10.103.49.177" port="2425"/>
+	        <minor ip="10.103.49.166" port="2425"/>
+	      </server>
+	      <server id="3">
+	        <major ip="10.103.8.62" port="2425"/>
+	        <minor ip="10.103.49.169" port="2425"/>
+	      </server>
+	      <server id="4">
+	        <major ip="10.103.49.178" port="2425"/>
+	        <minor ip="10.103.49.170" port="2425"/>
+	      </server>
+	      <server id="5">
+	        <major ip="10.103.8.75" port="2425"/>
+	        <minor ip="10.103.49.171" port="2425"/>
+	      </server>
+	      <server id="6">
+	        <major ip="10.103.49.172" port="2425"/>
+	        <minor ip="10.103.8.184" port="2425"/>
+	      </server>
+	      <server id="7">
+	        <major ip="10.103.49.173" port="2425"/>
+	        <minor ip="10.103.8.185" port="2425"/>
+	      </server>
+	    </group>
+	</groups>
+	
+	<changeServerFiles>
+		<startFlag>/opt/sokuproc/data/StartUpdateService.dat</startFlag>
+		<endFlag>/opt/sokuproc/data/EndUpdateService.dat</endFlag>
+		<changeList>/opt/sokuproc/data/WorkServer_0.dat</changeList>
+	</changeServerFiles>
+	
+</config>

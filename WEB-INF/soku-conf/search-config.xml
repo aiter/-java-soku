@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<searchconfig>
+	<host>
+		<youku>
+			<server>10.103.88.151</server>
+		</youku>
+		<soku>
+			<server>10.103.8.131</server>
+			<server>10.103.8.132</server>
+			<server>10.103.8.133</server>
+			<server>10.103.8.134</server>
+		</soku>
+		
+		<middle-tier-online>
+			<server>10.103.88.54</server>
+		</middle-tier-online>
+		
+		<middle-tier-offline>
+			<server>10.103.12.72</server>
+		</middle-tier-offline>
+	</host>
+</searchconfig>

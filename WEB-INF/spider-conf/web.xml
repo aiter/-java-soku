@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE web-app
+  PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"   "http://java.sun.com/j2ee/dtds/web-app_2_2.dtd">
+
+<web-app >
+  <display-name>youku spider System</display-name>
+
+    <!-- init: log4j...  -->
+	<servlet>
+        <servlet-name>spiderInitServlet</servlet-name>
+        <servlet-class>com.youku.spider.SpiderInitServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+	<!-- task request -->
+	<servlet>
+        <servlet-name>taskRequest</servlet-name>
+        <servlet-class>com.youku.spider.core.server.TaskRequestServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>taskRequest</servlet-name>
+		<url-pattern>/task/request</url-pattern>
+	</servlet-mapping>
+
+
+	<!-- task submit -->
+	<servlet>
+        <servlet-name>taskSubmit</servlet-name>
+        <servlet-class>com.youku.spider.core.server.TaskSubmitServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>taskSubmit</servlet-name>
+		<url-pattern>/task/submit</url-pattern>
+	</servlet-mapping>
+
+
+</web-app>

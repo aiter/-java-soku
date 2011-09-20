@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<configuration>
+  <xml fileName="index.xml"/>
+  <xml fileName="sort.xml"/>
+  <xml fileName="view.xml"/>
+  <xml fileName="server-config.xml"/>
+  <xml fileName="search-config.xml"/>
+</configuration>

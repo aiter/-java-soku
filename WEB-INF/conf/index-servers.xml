@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<groups>
+		<group num="1">
+			<server ip="10.103.8.21" type="video" order="1">
+				<pool_port>8080</pool_port>
+				<start>1</start>
+				<end>8500000</end>
+				<manager>1</manager>
+			</server>
+			<server ip="10.103.8.22" type="video" order="2">
+				<pool_port>8080</pool_port>
+				<start>8500000</start>
+				<end>16500000</end>
+				<manager>1</manager>
+			</server>
+			<server ip="10.103.8.23" type="video" order="3">
+				<pool_port>8080</pool_port>
+				<start>16500000</start>
+				<end>24000000</end>
+				<manager>1</manager>
+			</server>
+			<server ip="10.103.8.24" type="video" order="4">
+				<pool_port>8080</pool_port>
+				<start>24000000</start>
+				<end>31250000</end>
+				<manager>2</manager>
+			</server>
+			<server ip="10.103.8.25" type="video" order="5">
+				<pool_port>8080</pool_port>
+				<start>31250000</start>
+				<end>38337500</end>
+				<manager>2</manager>
+				</server>
+			<server ip="10.103.8.26" type="video" order="6">
+				<pool_port>8080</pool_port>
+				<start>38337500</start>
+				<end>45125000</end>
+				<manager>2</manager>
+			</server>
+			<server ip="10.103.8.27" type="video" order="7">
+				<pool_port>8080</pool_port>
+				<start>45125000</start>
+				<end>52812500</end>
+				<manager>3</manager>
+			</server>
+
+			
+			<server ip="10.103.8.31" type="video" order="8">
+				<pool_port>8080</pool_port>
+				<start>52812500</start>
+				<end>60000000</end>
+				<manager>3</manager>
+			</server>
+			
+			<server ip="10.103.8.32" type="video" order="9">
+				<pool_port>8080</pool_port>
+				<start>60000000</start>
+				<end>99999999</end>
+				<manager>3</manager>
+			</server>
+			<server ip="10.103.8.28" type="folder" order="1">
+				<pool_port>8080</pool_port>
+				<start>1</start>
+				<end>4000000</end>
+				<manager>1</manager>
+			</server>
+			<server ip="10.103.8.29" type="folder" order="2">
+				<pool_port>8080</pool_port>
+				<start>4000000</start>
+				<end>9990000</end>
+				<manager>3</manager>
+			</server>
+			<server ip="10.103.8.30" type="bar" order="1">
+				<pool_port>8080</pool_port>
+				<start>1</start>
+				<end>99999999</end>
+				<manager>2</manager>
+			</server>
+
+			<server ip="10.103.8.28" type="user" order="1">
+				<pool_port>8080</pool_port>
+				<start>1</start>
+				<end>20500000</end>
+				<manager>2</manager>
+			</server>
+			<server ip="10.103.8.29" type="user" order="2">
+				<pool_port>8080</pool_port>
+				<start>20500000</start>
+				<end>41000000</end>
+				<manager>2</manager>
+			</server>
+			<server ip="10.103.8.33" type="user" order="3">
+				<pool_port>8080</pool_port>
+				<start>41000000</start>
+				<end>61500000</end>
+				<manager>2</manager>
+			</server>
+			<server ip="10.103.8.30" type="user" order="4">
+				<pool_port>8080</pool_port>
+				<start>61500000</start>
+				<end>99999999</end>
+				<manager>2</manager>
+			</server>
+			<server ip="10.103.8.30" type="stat" order="1">
+				<pool_port>8080</pool_port>
+				<manager>3</manager>
+			</server>
+		</group>
+		<group num="2">
+			<server ip="10.103.8.101" type="video" order="1">
+				<pool_port>8080</pool_port>
+				<start>1</start>
+				<end>8500000</end>
+				<manager>1</manager>
+			</server>
+			<server ip="10.103.8.102" type="video" order="2">
+				<pool_port>8080</pool_port>
+				<start>8500000</start>
+				<end>16500000</end>
+				<manager>1</manager>
+			</server>
+			<server ip="10.103.8.103" type="video" order="3">
+				<pool_port>8080</pool_port>
+				<start>16500000</start>
+				<end>24000000</end>
+				<manager>1</manager>
+			</server>
+			<server ip="10.103.8.104" type="video" order="4">
+				<pool_port>8080</pool_port>
+				<start>24000000</start>
+				<end>31250000</end>
+				<manager>1</manager>
+			</server>
+			<server ip="10.103.8.105" type="video" order="5">
+				<pool_port>8080</pool_port>
+				<start>31250000</start>
+				<end>38337500</end>
+				<manager>2</manager>
+				</server>
+			<server ip="10.103.8.106" type="video" order="6">
+				<pool_port>8080</pool_port>
+				<start>38337500</start>
+				<end>45125000</end>
+				<manager>2</manager>
+			</server>
+			<server ip="10.103.8.107" type="video" order="7">
+				<pool_port>8080</pool_port>
+				<start>45125000</start>
+				<end>52812500</end>
+				<manager>2</manager>
+			</server>
+		
+			<server ip="10.103.8.111" type="video" order="8">
+				<pool_port>8080</pool_port>
+				<start>52812500</start>
+				<end>60000000</end>
+				<manager>2</manager>
+			</server>
+			
+			<server ip="10.103.8.112" type="video" order="9">
+				<pool_port>8080</pool_port>
+				<start>60000000</start>
+				<end>99999999</end>
+				<manager>2</manager>
+			</server>
+
+			<server ip="10.103.8.108" type="folder" order="1">
+				<pool_port>8080</pool_port>
+				<start>1</start>
+				<end>4000000</end>
+				<manager>1</manager>
+			</server>
+			<server ip="10.103.8.109" type="folder" order="2">
+				<pool_port>8080</pool_port>
+				<start>4000000</start>
+				<end>99990000</end>
+				<manager>2</manager>
+			</server>
+			<server ip="10.103.8.110" type="bar" order="1">
+				<pool_port>8080</pool_port>
+				<start>1</start>
+				<end>99999999</end>
+				<manager>1</manager>
+			</server>
+			
+			<server ip="10.103.8.108" type="user" order="1">
+				<pool_port>8080</pool_port>
+				<start>1</start>
+				<end>20500000</end>
+				<manager>1</manager>
+			</server>
+			<server ip="10.103.8.109" type="user" order="2">
+				<pool_port>8080</pool_port>
+				<start>20500000</start>
+				<end>41000000</end>
+				<manager>1</manager>
+			</server>
+			<server ip="10.103.8.113" type="user" order="3">
+				<pool_port>8080</pool_port>
+				<start>41000000</start>
+				<end>61500000</end>
+				<manager>1</manager>
+			</server>
+			<server ip="10.103.8.110" type="user" order="4">
+				<pool_port>8080</pool_port>
+				<start>61500000</start>
+				<end>99999999</end>
+				<manager>1</manager>
+			</server>
+			<server ip="10.103.8.110" type="stat" order="1">
+				<pool_port>8080</pool_port>
+				<manager>2</manager>
+			</server>
+		</group>
+		<group num="3">
+			<server ip="10.103.8.181" type="video" order="1">
+				<pool_port>8080</pool_port>
+				<start>1</start>
+				<end>3000000</end>
+				<manager>1</manager>
+			</server>
+			<server ip="10.103.8.182" type="video" order="2">
+				<pool_port>8080</pool_port>
+				<start>3000000</start>
+				<end>5500000</end>
+				<manager>1</manager>
+			</server>
+			<server ip="10.103.8.183" type="video" order="3">
+				<pool_port>8080</pool_port>
+				<start>5500000</start>
+				<end>8000000</end>
+				<manager>1</manager>
+			</server>
+			<server ip="10.103.8.184" type="video" order="4">
+				<pool_port>8080</pool_port>
+				<start>8000000</start>
+				<end>10500000</end>
+				<manager>2</manager>
+			</server>
+			<server ip="10.103.8.185" type="video" order="5">
+				<pool_port>8080</pool_port>
+				<start>10500000</start>
+				<end>13000000</end>
+				<manager>2</manager>
+				</server>
+			<server ip="10.103.8.186" type="video" order="6">
+				<pool_port>8080</pool_port>
+				<start>13000000</start>
+				<end>15500000</end>
+				<manager>2</manager>
+			</server>
+			<server ip="10.103.8.187" type="video" order="7">
+				<pool_port>8080</pool_port>
+				<start>15500000</start>
+				<end>18000000</end>
+				<manager>2</manager>
+			</server>
+		
+			<server ip="10.103.8.191" type="video" order="8">
+				<pool_port>8080</pool_port>
+				<start>18000000</start>
+				<end>99999999</end>
+				<manager>2</manager>
+			</server>
+			
+			<server ip="10.103.8.192" type="video" order="9">
+				<pool_port>8080</pool_port>
+				<start>21000000</start>
+				<end>99999999</end>
+				<manager>2</manager>
+			</server>
+
+			<server ip="10.103.8.188" type="folder" order="1">
+				<pool_port>8080</pool_port>
+				<start>1</start>
+				<end>2000000</end>
+				<manager>1</manager>
+			</server>
+			<server ip="10.103.8.189" type="folder" order="2">
+				<pool_port>8080</pool_port>
+				<start>2000000</start>
+				<end>9990000</end>
+				<manager>2</manager>
+			</server>
+			<server ip="10.103.8.190" type="bar" order="1">
+				<pool_port>8080</pool_port>
+				<start>1</start>
+				<end>99999999</end>
+				<manager>1</manager>
+			</server>
+			<server ip="10.103.8.188" type="user" order="1">
+				<pool_port>8080</pool_port>
+				<start>1</start>
+				<end>13000000</end>
+				<manager>1</manager>
+			</server>
+			<server ip="10.103.8.189" type="user" order="2">
+				<pool_port>8080</pool_port>
+				<start>13000000</start>
+				<end>26000000</end>
+				<manager>1</manager>
+			</server>
+			<server ip="10.103.8.193" type="user" order="3">
+				<pool_port>8080</pool_port>
+				<start>26000000</start>
+				<end>39000000</end>
+				<manager>1</manager>
+			</server>
+			<server ip="10.103.8.190" type="user" order="4">
+				<pool_port>8080</pool_port>
+				<start>39000000</start>
+				<end>99999999</end>
+				<manager>1</manager>
+			</server>
+			<server ip="10.103.8.190" type="stat" order="1">
+				<pool_port>8080</pool_port>
+				<manager>2</manager>
+			</server>
+		</group>
+		
+	</groups>
+	<managers>
+		<server ip="10.103.8.1" order="1" />
+		<server ip="10.103.8.2" order="2" />
+		<server ip="10.103.8.3" order="2" />
+	</managers>
+	<indexpath>
+		<video>/opt/index/video/online/</video>
+		<folder>/opt/index/folder/online/</folder>
+		<user>/opt/index/user/online/</user>
+		<pk>/opt/index/pk/online/</pk>
+		<barpost>/opt/index/barpost/online/</barpost>
+		<bar>/opt/index/bar/online/</bar>
+		<stat>/opt/index/stat/online/</stat>
+		<ring>/opt/index/ring/online/</ring>
+		
+	</indexpath>
+</config>

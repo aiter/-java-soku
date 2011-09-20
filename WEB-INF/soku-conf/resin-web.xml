@@ -1,0 +1,8 @@
+<web-app xmlns="http://caucho.com/ns/resin">
+
+ <rewrite-dispatch>
+     <import path='WEB-INF/rewrite.xml'/>
+</rewrite-dispatch>
+
+</web-app>
+

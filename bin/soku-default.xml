@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+    <package name="soku-default" namespace="/" extends="struts-default">
+
+        <interceptors>
+			
+            <interceptor name="authentication"
+                         class="com.youku.soku.manage.interceptor.AuthenticationInterceptor"/>
+                         
+            <interceptor name="itemManageAuthentication"
+                         class="com.youku.soku.manage.interceptor.ManageItemAuthenticationInterceptor"/>
+			
+			<interceptor name="videoManageAuthentication"
+                         class="com.youku.soku.manage.interceptor.ManageVideoAuthenticationInterceptor"/>
+			
+			<interceptor name="hotwordManageAuthentication"
+                         class="com.youku.soku.manage.interceptor.ManageHotWordAuthenticationInterceptor"/>
+			
+			<interceptor name="userManageAuthentication"
+                         class="com.youku.soku.manage.interceptor.ManageUserAuthenticationInterceptor"/>
+			
+			<interceptor name="intervenKeywordManageAuthentication"
+                         class="com.youku.soku.manage.interceptor.ManageItervenKeywordAuthInterceptor"/>
+			
+			<interceptor name="intervenKeywordVideoManageAuthentication"
+                         class="com.youku.soku.manage.interceptor.ManageItervenKeywordVideoAuthInterceptor"/>
+                         
+            <interceptor name="libCategoryManageAuth"
+                         class="com.youku.soku.manage.interceptor.ManageLibCategoryAuthInterceptor"/>
+                         
+            <interceptor name="libNamesManageAuth"
+                         class="com.youku.soku.manage.interceptor.ManageLibNamesAuthInterceptor"/>
+                         
+            <interceptor name="libTeleplayManageAuth"
+                         class="com.youku.soku.manage.interceptor.ManageLibTeleplayAuthInterceptor"/>
+                         
+            <interceptor name="libMovieManageAuth"
+                         class="com.youku.soku.manage.interceptor.ManageLibMovieAuthInterceptor"/>
+                         
+            <interceptor name="libAnimeManageAuth"
+                         class="com.youku.soku.manage.interceptor.ManageLibAnimeAuthInterceptor"/>
+                         
+            <interceptor name="libVarietyManageAuth"
+                         class="com.youku.soku.manage.interceptor.ManageLibVarietyAuthInterceptor"/>
+                         
+            <interceptor name="libPersonManageAuth"
+                         class="com.youku.soku.manage.interceptor.ManageLibPersonAuthInterceptor"/>
+			
+			<interceptor name="connectionManage"
+                         class="com.youku.soku.manage.interceptor.ConnectionManageInterceptor"/>
+                  
+            <interceptor name="sokulibconnManage"
+                         class="com.youku.soku.manage.interceptor.SokuLibConnMgrInterceptor"/>
+             
+             <interceptor name="deleteVideoMange"
+                         class="com.youku.soku.manage.interceptor.DeleteVideoAuthInterceptor"/>
+                   
+             <interceptor name="feedbackManage"
+                         class="com.youku.soku.manage.interceptor.ManageFeedbackAuthInterceptor"/>
+                         
+             <interceptor name="libAudit"
+                         class="com.youku.soku.manage.interceptor.ManageAuditAuthenticationInterceptor"/>           
+              
+             <interceptor name="topWordManage"
+                         class="com.youku.soku.manage.interceptor.ManageTopWordAuthInterceptor"/>
+                         
+             <interceptor name="topWordBlock"
+                         class="com.youku.soku.manage.interceptor.BlockTopWordAuthInterceptor"/>             
+              
+			<interceptor name="proSiteManage"
+                         class="com.youku.soku.manage.interceptor.ManageProSiteAuthInterceptor"/> 
+                         
+            <interceptor name="siteWeightManage"
+                         class="com.youku.soku.manage.interceptor.ManageSiteWeightInterceptor"/> 
+                  
+            <interceptor name="majorTermManage"
+                         class="com.youku.soku.manage.interceptor.ManageMajorTermAuthInterceptor"/> 
+           
+           <interceptor name="shieldWordManage"
+                         class="com.youku.soku.manage.interceptor.ManageShieldWordInterceptor"/>              
+                         
+            <interceptor name="CorrectionKeywordManage"
+	                             class="com.youku.soku.manage.interceptor.CorrectionAuthenticationInterceptor"/>
+								 
+	    <interceptor name="manageKnowledgeColumn"
+	                             class="com.youku.soku.manage.interceptor.ManageKnowledgeColumnAuthInterceptor"/>
+	    
+	    <interceptor name="manageForwardWord"
+	                             class="com.youku.soku.manage.interceptor.ManageForwardWordAuthInterceptor"/>
+	    <interceptor name="NewTopWordsManage"  class="com.youku.soku.manage.interceptor.TopWordsAuthenticationInterceptor"/>
+	
+           <interceptor name="SokuFeedback"  class="com.youku.soku.manage.interceptor.SokuFeedBackAuthenticationInterceptor"/>
+
+           <interceptor name="indexPicManage"  class="com.youku.soku.manage.interceptor.ManageIndexPicInterceptor"/>
+ 	     
+            <interceptor-stack name="user" >
+            	<interceptor-ref name="connectionManage" />
+                <interceptor-ref name="authentication" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            <interceptor-stack name="itemmanage" >
+            	<interceptor-ref name="connectionManage" />
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="itemManageAuthentication" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            <interceptor-stack name="videomanage" >
+            	<interceptor-ref name="connectionManage" />
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="videoManageAuthentication" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            <interceptor-stack name="hotwordmanage" >
+            	<interceptor-ref name="connectionManage" />
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="hotwordManageAuthentication" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+	   <interceptor-stack name="correctionmanage" >
+                <interceptor-ref name="connectionManage" />
+                <interceptor-ref name="authentication" />
+                <interceptor-ref name="CorrectionKeywordManage" />
+                <interceptor-ref name="defaultStack"/>
+           </interceptor-stack>
+		
+	 <interceptor-stack name="newtopmanage" >
+                <interceptor-ref name="connectionManage" />
+                <interceptor-ref name="authentication" />
+                <interceptor-ref name="NewTopWordsManage" />
+                <interceptor-ref name="defaultStack"/>
+           </interceptor-stack>
+	   
+	<interceptor-stack name="sokufeedback" >
+               <interceptor-ref name="connectionManage" />
+               <interceptor-ref name="authentication" />
+               <interceptor-ref name="SokuFeedback" />
+                <interceptor-ref name="defaultStack"/>
+          </interceptor-stack>
+	   
+            <interceptor-stack name="usermanage" >
+            	<interceptor-ref name="connectionManage" />
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="userManageAuthentication" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            <interceptor-stack name="intervenKeywordmanage" >
+            	<interceptor-ref name="connectionManage" />
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="intervenKeywordManageAuthentication" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            <interceptor-stack name="intervenKeywordVideomanage" >
+            	<interceptor-ref name="connectionManage" />
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="intervenKeywordVideoManageAuthentication" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+
+            <interceptor-stack name="user-submit" >
+            	<interceptor-ref name="connectionManage" />
+            	<interceptor-ref name="authentication" />
+                <interceptor-ref name="tokenSession" />
+                <interceptor-ref name="user"/>
+            </interceptor-stack>
+
+            <interceptor-stack name="guest" >
+            	<interceptor-ref name="connectionManage" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            <interceptor-stack name="libcategorymanage" >
+            	<interceptor-ref name="sokulibconnManage" />
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="libCategoryManageAuth" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            <interceptor-stack name="libnamesmanage" >
+            	<interceptor-ref name="sokulibconnManage" />
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="libNamesManageAuth" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            <interceptor-stack name="libteleplaymanage" >
+            	<interceptor-ref name="sokulibconnManage" />
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="libTeleplayManageAuth" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            <interceptor-stack name="libmoviemanage" >
+            	<interceptor-ref name="sokulibconnManage" />
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="libMovieManageAuth" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            <interceptor-stack name="libanimemanage" >
+            	<interceptor-ref name="sokulibconnManage" />
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="libAnimeManageAuth" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            <interceptor-stack name="libvarietymanage" >
+            	<interceptor-ref name="sokulibconnManage" />
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="libVarietyManageAuth" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            <interceptor-stack name="libpersonmanage" >
+            	<interceptor-ref name="sokulibconnManage" />
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="libPersonManageAuth" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            
+            <interceptor-stack name="libauditmanage" >
+            	<interceptor-ref name="sokulibconnManage" />
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="libAudit" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            <interceptor-stack name="sokulib" >
+            	<interceptor-ref name="sokulibconnManage" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            <interceptor-stack name="test" >
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            <interceptor-stack name="deletevideo" >
+           	    <interceptor-ref name="authentication" />
+            	<interceptor-ref name="deleteVideoMange" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            <interceptor-stack name="feedbackmanage" >
+            	<interceptor-ref name="connectionManage" />
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="feedbackManage" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            <interceptor-stack name="topwordmanage" >
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="topWordManage" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            <interceptor-stack name="topwordblock" >
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="topWordBlock" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            <interceptor-stack name="prositemanage" >
+            	<interceptor-ref name="connectionManage" />
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="proSiteManage" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            <interceptor-stack name="siteweightmanage" >
+            	<interceptor-ref name="connectionManage" />
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="siteWeightManage" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            <interceptor-stack name="majorTermmanage" >
+            	<interceptor-ref name="connectionManage" />
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="majorTermManage" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+			
+			
+	    <interceptor-stack name="knowledgeColumnManage" >
+            	<interceptor-ref name="connectionManage" />
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="manageKnowledgeColumn" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+	    
+	    <interceptor-stack name="forwardWordManage" >
+            	<interceptor-ref name="connectionManage" />
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="manageForwardWord" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            
+            <!-- Shield Word Start-->
+            <interceptor-stack name="shieldwordmanage" >
+            	<interceptor-ref name="connectionManage" />
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="shieldWordManage" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            <!-- Shield Word End -->
+
+
+            <interceptor-stack name="indexpicmanage" >
+            	<interceptor-ref name="connectionManage" />
+            	<interceptor-ref name="authentication" />
+            	<interceptor-ref name="indexPicManage" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+
+        </interceptors>
+
+        <default-interceptor-ref name="user"/>
+
+        <global-results>
+        	<result name="denied">/soku/manage/permissiondenied.jsp</result>
+            <result name="error">/soku/manage/error.jsp</result>
+            <result name="PageNotFoundException">/soku/manage/404.jsp</result>
+            <result name="DbOperationException">/soku/manage/dberror.jsp</result>
+            <result name="PersonNotExistException">/soku/manage/dberror.jsp</result>
+            <result name="invalid.token">/soku/manage/error.jsp</result>
+            <result name="login" type="redirectAction">Login_input</result>
+        </global-results>
+
+        <global-exception-mappings>
+            <exception-mapping
+                    result="error"
+                    exception="java.lang.Throwable"/>
+            <exception-mapping 
+            		exception="com.youku.soku.manage.exception.PageNotFoundException" 
+            		result="PageNotFoundException"/>
+            <exception-mapping 
+            		exception="com.youku.soku.manage.exception.DbOperationException" 
+            		result="DbOperationException"/>
+            <exception-mapping 
+            		exception="com.youku.soku.manage.exception.PersonNotExistException" 
+            		result="PersonNotExistException"/>
+                    
+        </global-exception-mappings>
+        
+
+    </package>
+    
+
+</struts>

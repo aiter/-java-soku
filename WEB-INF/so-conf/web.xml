@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app
+  PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"   "http://java.sun.com/j2ee/dtds/web-app_2_2.dtd">
+
+<web-app >
+  <display-name>AdCast System</display-name>
+
+  <servlet>
+    <servlet-name>StartupServlet</servlet-name>
+    <display-name>Startup Servlet</display-name>
+    <description>Creates component manager, does not service requests.</description>
+    <servlet-class>com.youku.so.InitServlet</servlet-class>
+	<init-param>
+		<param-name>config_home</param-name>
+		<param-value>WEB-INF/so-conf/</param-value>
+	</init-param>
+    <init-param>
+        <param-name>torque</param-name>
+        <param-value>WEB-INF/so-conf/Torque.properties</param-value>
+    </init-param>
+    <init-param>
+        <param-name>memcached</param-name>
+        <param-value>WEB-INF/so-conf/memcached.properties</param-value>
+    </init-param>
+	<init-param>
+        <param-name>start_logger</param-name>
+		<param-value>click_log,query_log,youku_click_log</param-value>
+    </init-param>
+	<init-param>
+        <param-name>click_log</param-name>
+        <param-value>10.101.168.106:6666:6766</param-value>
+        <description>remoteip:remoteport:localport</description>
+    </init-param>
+	<init-param>
+        <param-name>query_log</param-name>
+        <param-value>10.101.168.106:6667:6767</param-value>
+        <description>remoteip:remoteport:localport</description>
+    </init-param>
+	<init-param>
+        <param-name>youku_click_log</param-name>
+        <param-value>10.101.8.244:6669:6769</param-value>
+        <description>remoteip:remoteport:localport</description>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+
+<!-- crossdomain servlet -->
+<!--
+	<servlet>
+		<servlet-name>crossdomain</servlet-name>
+		<servlet-class>com.youku.ad.servlet.CrossDomain</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>crossdomain</servlet-name>
+		<url-pattern>/crossdomain.xml</url-pattern>
+	</servlet-mapping>
+	-->
+
+
+  <servlet>
+      <servlet-name>SearchSort</servlet-name>
+      <servlet-class>com.youku.so.sort.SearcherServlet</servlet-class>
+      <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+		<servlet-name>SearchSort</servlet-name>
+		<url-pattern>/search</url-pattern>
+  </servlet-mapping>
+
+
+
+  <servlet>
+      <servlet-name>clickLogServlet</servlet-name>
+      <servlet-class>com.youku.so.sort.servlet.ClickLogServlet</servlet-class>
+      <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+        <servlet-name>clickLogServlet</servlet-name>
+		<url-pattern>/click</url-pattern>
+  </servlet-mapping>
+
+
+
+	<!-- Pool status -->
+	<servlet>
+        <servlet-name>PoolStatus</servlet-name>
+        <servlet-class>com.youku.search.pool.api.PoolSatusServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+		<servlet-name>PoolStatus</servlet-name>
+		<url-pattern>/pool/status</url-pattern>
+	</servlet-mapping>
+
+
+</web-app>

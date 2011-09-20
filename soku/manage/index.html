@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+    <script type="text/javascript" src="../manage/js/jquery-1.3.2.js"></script>
+    
+    <script type="text/javascript">
+    	$(function() {
+			var rowNumber = 1;
+			var personRoleId = 100;
+			var personRoleName = "rolename";
+			var personName = "personname";
+        	
+    		var hiddenHtml = '<input type="hidden" id="Movie_save_movie_perSubList_' + rowNumber + '__fkRoleId" value="' + personRoleId+ '" name="movie.perSubList[' + rowNumber + '].fkRoleId">'
+			var tdhtml = '<input type="text" id="Movie_save_movie_perSubList_' + rowNumber + '__personName" value="' + personName + '" name="movie.perSubList[' + rowNumber + '].personName">';
+			$("table.form tr:last").after("<tr>" + hiddenHtml + "<td>" + personRoleName + "</td><td>" + tdhtml + "</td></tr>");
+        	$("#div1").html(hiddenHtml);
+    	});
+    </script>	
+</head>
+
+<body>
+<table class="form">
+	<tr>
+		<td>test</td>
+		<td>22</td>
+	</tr>
+</table>
+
+<div id="div1"></div>
+</body>
+</html>

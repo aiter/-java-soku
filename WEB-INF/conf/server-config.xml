@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<serverconfig>
+<!--server configuration ,it will not be covered -->
+<!--1 index 2 sort 3 index manager 4 console 5 commend -->
+<server_type>2</server_type>
+<index_type>1</index_type>
+<!-- group number, corresponding to servers in index-servers.xml -->
+<group>1</group>
+<!-- isresot, 1-on 0-off -->
+<resort_type>1</resort_type>
+</serverconfig>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app
+  PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"   "http://java.sun.com/j2ee/dtds/web-app_2_2.dtd">
+
+<web-app >
+  <display-name>AdCast System</display-name>
+
+  <servlet>
+    <servlet-name>StartupServlet</servlet-name>
+    <display-name>Startup Servlet</display-name>
+    <description>Creates component manager, does not service requests.</description>
+    <servlet-class>com.youku.top.InitServlet</servlet-class>
+	<init-param>
+		<param-name>config_home</param-name>
+		<param-value>WEB-INF/top-conf/</param-value>
+	</init-param>
+    <init-param>
+        <param-name>torque</param-name>
+        <param-value>/WEB-INF/top-conf/Torque.properties</param-value>
+    </init-param>
+    <init-param>
+        <param-name>memcached</param-name>
+        <param-value>/WEB-INF/top-conf/memcached.properties</param-value>
+    </init-param>
+	<init-param>
+        <param-name>start_logger</param-name>
+		<param-value>query_log</param-value>
+    </init-param>
+	<init-param>
+        <param-name>query_log</param-name>
+        <param-value>10.101.168.106:6667:6767</param-value>
+        <description>remoteip:remoteport:localport</description>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet>
+  <servlet-name>SearchSort</servlet-name>
+  <servlet-class>com.youku.search.sort.SearchSort</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+<!-- crossdomain servlet -->
+	<servlet>
+		<servlet-name>index_smartbox</servlet-name>
+		<servlet-class>com.youku.top.recomend.JsRecomendServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>index_smartbox</servlet-name>
+		<url-pattern>/index_box</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>SearchSort</servlet-name>
+		<url-pattern>/search</url-pattern>
+	</servlet-mapping>
+
+
+	<!-- Pool status -->
+	<servlet>
+        <servlet-name>PoolStatus</servlet-name>
+        <servlet-class>com.youku.search.pool.api.PoolSatusServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+		<servlet-name>PoolStatus</servlet-name>
+		<url-pattern>/pool/status</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+	        <servlet-name>filedown</servlet-name>
+	        <servlet-class>com.youku.top.index.FileDownloadServlet</servlet-class>
+        </servlet>
+        <servlet-mapping>
+                <servlet-name>filedown</servlet-name>
+                <url-pattern>/index/filedownload</url-pattern>
+        </servlet-mapping>
+
+	
+</web-app>

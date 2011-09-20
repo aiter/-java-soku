@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="STDOUTLOG" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/opt/logs/stdout.log"/>
+		<param name="Append" value="true"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%F:%L) - %m%n"/>
+		</layout>
+	</appender>
+	<appender name="UPDATEOPERATELOG" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/opt/logs/update.log"/>
+		<param name="Append" value="true"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%F:%L) - %m%n"/>
+		</layout>
+	</appender>
+	<appender name="INDEXLOG" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/opt/logs/index.log"/>
+		<param name="Append" value="true"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%F:%L) - %m%n"/>
+		</layout>
+	</appender>
+	<appender name="COPYOPERATELOG" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/opt/logs/copy_operate.log"/>
+		<param name="Append" value="true"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%c:%L) - %m%n"/>
+		</layout>
+	</appender>
+	<appender name="JUJIOPERATELOG" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/opt/logs/juji_operate.log"/>
+		<param name="Append" value="true"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%c:%L) - %m%n"/>
+		</layout>
+	</appender>
+	<appender name="AUTOOPERATELOG" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/opt/logs/auto_operate.log"/>
+		<param name="Append" value="true"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%c:%L) - %m%n"/>
+		</layout>
+	</appender>
+	<appender name="INSERTSITEVERSION" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/opt/logs/siteversion_operate.log"/>
+		<param name="Append" value="true"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%c:%L) - %m%n"/>
+		</layout>
+	</appender>
+	<appender name="ConsoleAppender" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p [%t] (%c:%L) - %m%n"/>
+		</layout>
+	</appender>
+	
+	<category name="STDOUTLOG" additivity="true">
+		<priority value="INFO"/>
+		<appender-ref ref="STDOUTLOG"/>
+	</category>
+	<category name="INDEXLOG" additivity="true">
+		<priority value="INFO"/>
+		<appender-ref ref="INDEXLOG"/>
+	</category>
+	<category name="COPYOPERATELOG" additivity="true">
+		<priority value="INFO"/>
+		<appender-ref ref="COPYOPERATELOG"/>
+	</category>
+	<category name="AUTOOPERATELOG" additivity="true">
+		<priority value="INFO"/>
+		<appender-ref ref="AUTOOPERATELOG"/>
+	</category>
+	<category name="JUJIOPERATELOG" additivity="true">
+		<priority value="INFO"/>
+		<appender-ref ref="JUJIOPERATELOG"/>
+	</category>
+	<category name="UPDATEOPERATELOG" additivity="true">
+		<priority value="INFO"/>
+		<appender-ref ref="UPDATEOPERATELOG"/>
+	</category>
+	<category name="INSERTSITEVERSION" additivity="true">
+		<priority value="INFO"/>
+		<appender-ref ref="INSERTSITEVERSION"/>
+	</category>
+	<category name="com.youku" additivity="true">
+		<!--
+		<priority value="DEBUG"/>
+		<priority value="INFO"/>
+		<priority value="ERROR"/>
+		-->
+
+		<priority value="INFO"/>
+		<appender-ref ref="ConsoleAppender"/>
+	</category>
+
+</log4j:configuration>

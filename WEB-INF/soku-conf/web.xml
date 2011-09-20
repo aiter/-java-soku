@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app
+  PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"   "http://java.sun.com/j2ee/dtds/web-app_2_2.dtd">
+
+<web-app>
+	<display-name>AdCast System</display-name>
+
+	
+	<filter filter-name="gzip" filter-class="com.caucho.filters.GzipFilter">
+		<init>
+			<use-vary>true</use-vary>
+		</init>
+	</filter>
+
+	<filter-mapping filter-name="gzip">
+		<url-pattern>
+			<include-pattern>/v</include-pattern>
+		</url-pattern>
+	</filter-mapping>
+
+	<servlet>
+		<servlet-name>StartupServlet</servlet-name>
+		<display-name>Startup Servlet</display-name>
+		<description>Creates component manager, does not service requests.</description>
+		<servlet-class>com.youku.soku.InitServlet</servlet-class>
+		<init-param>
+			<param-name>config_home</param-name>
+			<param-value>WEB-INF/soku-conf/</param-value>
+		</init-param>
+		<init-param>
+			<param-name>torque</param-name>
+			<param-value>WEB-INF/soku-conf/Torque.properties</param-value>
+		</init-param>
+		<init-param>
+			<param-name>memcached</param-name>
+			<param-value>WEB-INF/soku-conf/memcached.properties</param-value>
+		</init-param>
+		<init-param>
+			<param-name>memcached-pic</param-name>
+			<param-value>WEB-INF/soku-conf/mem_pic_store.properties</param-value>
+		</init-param>
+
+		<init-param>
+			<param-name>start_logger</param-name>
+			<param-value>click_log,query_log,youku_click_log</param-value>
+		</init-param>
+		<init-param>
+			<param-name>click_log</param-name>
+			<param-value>10.103.8.224:6666:6766</param-value>
+			<description>remoteip:remoteport:localport</description>
+		</init-param>
+		<init-param>
+			<param-name>query_log</param-name>
+			<param-value>10.103.8.224:6667:6767</param-value>
+			<description>remoteip:remoteport:localport</description>
+		</init-param>
+		<init-param>
+			<param-name>youku_click_log</param-name>
+			<param-value>10.103.8.223:6669:6769</param-value>
+			<description>remoteip:remoteport:localport</description>
+		</init-param>
+
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+
+	<!--点击日志记录 -->
+	<servlet>
+		<servlet-name>clickLogServlet</servlet-name>
+		<servlet-class>com.youku.soku.sort.servlet.ClickLogServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>clickLogServlet</servlet-name>
+		<url-pattern>/click</url-pattern>
+	</servlet-mapping>
+
+	<!--搜索入口 -->
+
+	<servlet>
+		<servlet-name>v</servlet-name>
+		<servlet-class>com.youku.soku.servlet.Search</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>v</servlet-name>
+		<url-pattern>/v</url-pattern>
+	</servlet-mapping>
+
+
+	<!--专辑搜索 -->
+	<servlet>
+		<servlet-name>SearchAlbum</servlet-name>
+		<servlet-class>com.youku.soku.servlet.SearchAlbum</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SearchAlbum</servlet-name>
+		<url-pattern>/a</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>SearcherServlet</servlet-name>
+		<servlet-class>com.youku.soku.sort.SearcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SearcherServlet</servlet-name>
+		<url-pattern>/9/5/2/7/search</url-pattern>
+	</servlet-mapping>
+
+	<!--节目详情 -->
+	<servlet>
+		<servlet-name>ProgrammeServlet</servlet-name>
+		<servlet-class>com.youku.soku.sort.ProgrammeServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ProgrammeServlet</servlet-name>
+		<url-pattern>/detail</url-pattern>
+	</servlet-mapping>
+
+
+	<!--kubox -->
+	<servlet>
+		<servlet-name>search_keys</servlet-name>
+		<servlet-class>com.youku.soku.suggest.JsRecomendServlet</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>search_keys</servlet-name>
+		<url-pattern>/search_keys</url-pattern>
+	</servlet-mapping>
+
+	<!--反馈提交 -->
+	<servlet>
+		<servlet-name>feedback</servlet-name>
+		<servlet-class>com.youku.soku.servlet.Feedback</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>feedback</servlet-name>
+		<url-pattern>/service/feedback</url-pattern>
+	</servlet-mapping>
+
+	<!--开放协议提交 -->
+	<servlet>
+		<servlet-name>add_video_map</servlet-name>
+		<servlet-class>com.youku.soku.servlet.AddVideoMap</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>add_video_map</servlet-name>
+		<url-pattern>/service/add_video_map</url-pattern>
+	</servlet-mapping>
+
+	<!--首页图片 -->
+	<servlet>
+		<servlet-name>index_pic</servlet-name>
+		<servlet-class>com.youku.soku.servlet.SokuIndexPic</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>index_pic</servlet-name>
+		<url-pattern>/img/videowall</url-pattern>
+	</servlet-mapping>
+
+
+	<!-- Pool status -->
+	<servlet>
+		<servlet-name>PoolStatus</servlet-name>
+		<servlet-class>com.youku.search.pool.api.PoolSatusServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PoolStatus</servlet-name>
+		<url-pattern>/pool/status</url-pattern>
+	</servlet-mapping>
+
+
+</web-app>

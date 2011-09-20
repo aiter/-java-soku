@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<runner>
+	</runner>
+    
+    <!--所有leader的默认属性-->
+	<leader-default>
+		<root>/tmp/spider</root>
+		<delay>30</delay>
+	</leader-default>
+    
+    <!--使用默认属性的leader列表-->
+	<leaders>
+		<source>
+			tudou, ku6, room6, com56, hupo, joy, vodone, sohu, sina, cctv, openv,
+			ifeng, zol, cntv, m1905, letv, xiaoyinmu<!--
+            tudou, ku6, room6, com56, hupo, joy, vodone, sohu, sina, cctv, openv, ifeng, zol
+            -->
+		</source>
+	</leaders>
+</configuration>

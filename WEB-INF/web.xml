@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE web-app
+  PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"   "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app >
+  <display-name>AdCast System</display-name>
+
+  <servlet>
+    <servlet-name>StartupServlet</servlet-name>
+    <display-name>Startup Servlet</display-name>
+    <description>Creates component manager, does not service requests.</description>
+    <servlet-class>com.youku.search.servlet.InitServlet</servlet-class>
+    <init-param>
+        <param-name>config_home</param-name>
+        <param-value>WEB-INF/conf/</param-value>
+    </init-param>
+    <init-param>
+        <param-name>torque</param-name>
+        <param-value>/WEB-INF/conf/Torque.properties</param-value>
+    </init-param>
+     <init-param>
+        <param-name>analyzed</param-name>
+        <param-value>/WEB-INF/conf/memcache.tok</param-value>
+    </init-param>
+    <init-param>
+        <param-name>memcached</param-name>
+        <param-value>/WEB-INF/conf/memcached.properties</param-value>
+    </init-param>
+    <init-param>
+        <param-name>start_logger</param-name>
+        <param-value>query_log,debug_log,test_log</param-value>
+    </init-param>
+    <init-param>
+        <param-name>query_log</param-name>
+        <param-value>10.103.8.223:6666:6766</param-value>
+        <description>remoteip:remoteport:localport</description>
+    </init-param>
+    <init-param>
+        <param-name>debug_log</param-name>
+        <param-value>10.103.8.223:6667:6767</param-value>
+        <description>remoteip:remoteport:localport</description>
+    </init-param>
+   
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet>
+  <servlet-name>SearchSort</servlet-name>
+  <servlet-class>com.youku.search.sort.SearchSort</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+<servlet>
+      <servlet-name>search_keys</servlet-name>
+      <servlet-class>com.youku.search.recomend.JsRecomendServlet</servlet-class>
+      <load-on-startup>2</load-on-startup>
+ </servlet>
+ <servlet-mapping>
+     <servlet-name>search_keys</servlet-name>
+     <url-pattern>/search_keys</url-pattern>
+ </servlet-mapping>
+
+<!-- crossdomain servlet -->
+<!--
+    <servlet>
+        <servlet-name>crossdomain</servlet-name>
+        <servlet-class>com.youku.ad.servlet.CrossDomain</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>crossdomain</servlet-name>
+        <url-pattern>/crossdomain.xml</url-pattern>
+    </servlet-mapping>
+    -->
+
+    <servlet-mapping>
+        <servlet-name>SearchSort</servlet-name>
+        <url-pattern>/search</url-pattern>
+    </servlet-mapping>
+
+
+    <!-- Pool status -->
+    <servlet>
+        <servlet-name>PoolStatus</servlet-name>
+        <servlet-class>com.youku.search.pool.api.PoolSatusServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PoolStatus</servlet-name>
+        <url-pattern>/pool/status</url-pattern>
+    </servlet-mapping>
+
+    <!-- change config -->
+    <servlet>
+                <servlet-name>ChangeConfig</servlet-name>
+                <servlet-class>com.youku.search.sort.servlet.ChangeConfigServlet</servlet-class>
+        </servlet>
+        <servlet-mapping>
+        <servlet-name>ChangeConfig</servlet-name>
+        <url-pattern>/changeconfig</url-pattern>
+                <!--
+                     取消备用服务器： /changeconfig?group=1&back=0
+                     启用备用服务器： /changeconfig?group=1&back=1
+                -->
+    </servlet-mapping>
+
+    <!-- youku search -->
+    <filter>
+        <filter-name>gzip</filter-name>
+        <filter-class>com.caucho.filters.GzipFilter</filter-class>
+    </filter>
+    <filter-mapping> 
+        <filter-name>gzip</filter-name>
+        <servlet-name>SearchPage</servlet-name>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping> 
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <servlet-name>SearchPage</servlet-name>
+    </filter-mapping>
+    
+    <servlet>
+        <servlet-name>SearchPage</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/conf/spring-SearchPage.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>SearchPage</servlet-name>
+        <url-pattern>/search_video/*</url-pattern>
+    </servlet-mapping> 
+    <servlet-mapping>
+        <servlet-name>SearchPage</servlet-name>
+        <url-pattern>/search/video/*</url-pattern>
+    </servlet-mapping>    
+    <servlet-mapping>
+        <servlet-name>SearchPage</servlet-name>
+        <url-pattern>/search_advancedvideo/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchPage</servlet-name>
+        <url-pattern>/search/advancedvideo/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchPage</servlet-name>
+        <url-pattern>/search_hdvideo/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchPage</servlet-name>
+        <url-pattern>/search/hdvideo/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchPage</servlet-name>
+        <url-pattern>/search/rss/type/video/q/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchPage</servlet-name>
+        <url-pattern>/search_playlist/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchPage</servlet-name>
+        <url-pattern>/search/playlist/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchPage</servlet-name>
+        <url-pattern>/search_advancedplaylist/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchPage</servlet-name>
+        <url-pattern>/search/advancedplaylist/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchPage</servlet-name>
+        <url-pattern>/search_bar/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchPage</servlet-name>
+        <url-pattern>/search/bar/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchPage</servlet-name>
+        <url-pattern>/search_user/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchPage</servlet-name>
+        <url-pattern>/search/user/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchPage</servlet-name>
+        <url-pattern>/QSearch/~ajax/getSeriesOdshow</url-pattern>
+    </servlet-mapping>
+    <!-- /QSearch/~ajax/getPersonOdshow == /search/getPersonOdshow -->
+    <servlet-mapping>
+        <servlet-name>SearchPage</servlet-name>
+        <url-pattern>/QSearch/~ajax/getPersonOdshow</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchPage</servlet-name>
+        <url-pattern>/search/getPersonOdshow</url-pattern>
+    </servlet-mapping>
+    <!-- youku search end -->
+
+</web-app>

@@ -1,0 +1,26 @@
+<%@ page contentType="text/html; charset=utf-8" language="java" %>
+<div class="header">
+	<div class="main">
+		<div class="logo"><a href="/"><span class="logosoku"><strong>SOKU搜库</strong></span></a></div>
+		<div class="ranknav">
+			<a class="rank_hots" href="/top/rankmv.jsp" target="_blank">电影榜</a>
+            <a class="rank_movie" href="/top/ranktv.jsp" target="_blank">电视剧榜</a>
+            <a class="rank_star" href="/top/rankstar.jsp" target="_blank">明星榜</a>
+            <a class="rank_know" href="/result/rank_knowledge.jsp" target="_blank">知识榜</a>
+		</div>
+		<div class="sotool">
+			<form action="/v" method="get">
+			<div class="socore">
+				<input class="sotxt" name="keyword" type="text" value="<%=keyword %>" autocomplete="off" id="headq"/>
+				<button class="sobtn" type="submit"><em>搜索</em></button>
+			</div>
+			</form>
+		</div>
+		<div class="clear"></div>
+	</div><!--main end-->
+</div><!--header end-->
+
+<div class="kubox" id="kubox">
+
+</div><!--kubox end-->
+<script type="text/javascript">document.getElementById("headq").focus();Ab('')</script>

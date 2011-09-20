@@ -1,0 +1,20 @@
+<rewrite-dispatch xmlns="http://caucho.com/ns/resin" xmlns:resin="http://caucho.com/ns/resin/core">
+	 <!--目录-->
+	 <forward regexp='^/channel/teleplay_([^_]*)_([^_]*)_([^_]*)_([^_]*).html'  target='/top/ranktv.jsp?year=$1&amp;pn=$4&amp;area=$3&amp;type=$2'/>
+	 <forward regexp='^/channel/movie_([^_]*)_([^_]*)_([^_]*)_([^_]*).html'  target='/top/rankmv.jsp?year=$1&amp;pn=$4&amp;area=$3&amp;type=$2'/>
+
+	 <!--原来的页面，过段时间废弃掉-->
+	 <forward regexp='^/channel/([^_]*)/([^_]*).html'  target='/top/newrankchannel.jsp?channel=$1&amp;pn=$2'/>
+     <forward regexp='^/channel/([^_]*).html'  target='/top/newrankchannel.jsp?channel=$1'/>
+	 
+	 <!--节目详情页-->
+	 <forward regexp='^/detail/([^/]*)/(.*)' target='/detail?type=$1&amp;pid=$2'/>
+	 <!--排行榜-->
+	 <forward regexp='^/newtop/(.*).html' target='/top/newrankchannel.jsp?channel=$1'/>
+
+
+	 <forward regexp='^/channel/knowledge.html'  target='/top/rankkn.jsp'/>
+	 <forward regexp='^/channel/person/([^_]*).html'  target='/top/rankstar.jsp?pn=$1'/>
+
+	 <forward regexp='^/api/top_([^/]*)_(.*).html' target='/api/top.jsp?channel=$1&amp;limit=$2'/>
+</rewrite-dispatch>

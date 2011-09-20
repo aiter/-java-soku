@@ -1,0 +1,497 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>搜库互联网视频开放协议</title>
+<link type="text/css" rel="stylesheet" href="/css/youku.css" />
+<link type="text/css" rel="stylesheet" href="/css/soku.css" />
+<link type="text/css" rel="stylesheet" href="/css/protocal.css" />
+
+
+<script language="JavaScript">
+function h(obj,url){
+obj.style.behavior='url(#default#homepage)';
+obj.setHomePage(url);
+}
+String.prototype.TxtTrim = function()
+{
+return this.replace(/(^\s*)|(\s*$)/g, "");
+}
+var tLen; tLen=0,maxLen=400;
+function subform(o){
+var dLen;var sLen;
+var s=o.site,d=o.description,u=o.url,msg="";
+if(s.value.TxtTrim()==""){msg+="站点名不能为空，请填写站点名！\n";s.focus();alert(msg);return false;}
+
+dLen=0;sLen=0;
+for(i=0;i<s.value.length;i++){
+	if(s.value.charCodeAt(i) > "0" && s.value.charCodeAt(i) < "128"){
+		sLen+=1;
+	}else{ 
+		dLen+=2;
+	}
+}
+tLen=sLen+dLen;
+if(tLen>32){msg+="站点名请限定在16字以内！\n";s.focus();alert(msg);return false;}
+
+if(u.value.TxtTrim()==""){msg+="地址不能为空，请填写地址！\n";u.focus();alert(msg);return false;}
+if(u.value.search(/^http:\/\/[A-Za-z0-9 -]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/)!=0){
+	msg+="请提交合法的地址\n";u.focus();alert(msg);return false;
+}
+
+dLen=0;sLen=0;
+for(i=0;i<d.value.length;i++){
+	if(d.value.charCodeAt(i) > "0" && d.value.charCodeAt(i) < "128"){
+		sLen+=1;
+	}else{ 
+		dLen+=2;
+	}
+}
+tLen=sLen+dLen;
+if(tLen>maxLen){
+msg+=("备注的内容请限定在200字以内！");
+alert(msg);return false;
+}
+if(msg!="")return false;
+else{
+	alert("提交成功！");
+	return true;
+}
+}
+</script>
+
+</head>
+
+<body>
+
+<div class="window">
+<div class="screen">
+<div class="wrap">
+	
+	<div class="topbar">
+		<div ><a href="/"><img src="/img/logo_soku_beta.gif" width="172" height="30" /></a></div>
+	</div>
+		
+	<ul class="tree">
+		<li><a href="#kg">开放协议概述</a></li>
+
+		<li><a href="#kn">开放协议内容</a>
+			<ul>
+			<li><a href="#kn1">*XML网页示例</a></li>
+			<li><a href="#kn2">*XML标签说明</a></li>
+			</ul>
+		</li>	
+		<li><a href="#ks">开放协议使用</a>
+
+			<ul>
+			<li><a href="#ks1">*使用须知</a></li>
+			<li><a href="#ks2">*视频源收录标准</a></li>
+			<li><a href="#ks3">*创建XML文件</a></li>
+			<li><a href="#ks4">*验证XML文件</a></li>
+			<li><a href="#ks5">*提交XML网址</a></li>
+
+			<li><a href="#ks6">*常见问题解答</a></li>
+			</ul>	
+		</li>
+		<li>
+			<div class="links">
+			<a href="http://www.soku.com" target="_blank">soku首页</a><br />
+			<a href="http://www.youku.com" target="_blank">优酷首页</a>
+			</div>
+
+		</li>
+	</ul>
+
+	<div class="protocal">
+		<a name="kg"></a>
+		<h3 class="title">节目列表开放协议概述</h3>
+		<div class="entry">
+			<p>《互联网视频开放协议》是soku视频搜索制定的搜索引擎视频源收录标准，网站可将发布的视频内容制作成遵循此开放协议的XML格式的网页（独立于原有的视频发布形式）供搜索引擎索引，将网站发布的视频主动、及时地告知soku搜索引擎。</p>
+
+			<p>采用《互联网视频开放协议》就相当于网站的视频被搜索引擎订阅，通过优酷旗下的中文视频搜索引擎soku这个平台，网民将有可能在更大范围内更高频率地访问到您网站的视频，进而为您的网站带来潜在的流量。</p>
+			<p><b style="color:#C60;">您按照我们的指引方式便可以轻松使用该协议！</b></p>
+		</div>
+				
+		<a name="kn"></a>
+		<h3 class="title">节目列表开放协议内容</h3>
+		<div class="entry">
+			<p>下图为遵照《互联网视频开放协议》制作的XML格式的网页，网页上按照标准格式列出了网站发布的视频的相关信息。</p>
+
+			<a name="kn1"></a>
+			<h4>XML网页示例：</h4>
+			<div>
+			<img src="/img/example2.gif" alt="XML网页示例" />
+			</div>
+			
+			<a name="kn2"></a>
+			<h4>XML标签说明：</h4>
+			<div>
+
+			其中带星号标记的为必选项，未带星号标记为可选项。 <br />
+			<table class="bborder">
+			<tr><td width="10"><em class="need">*</em></td><td width="100"><em class="tagb">&lt;</em><em class="tagxml">document</em><em class="tagb">&gt;</em></td><td>标记整个XML文件内容的开始和结束。</td></tr>
+			<tr><td><em class="need">*</em></td><td><em class="tagb">&lt;</em><em class="tagxml">webSite</em><em class="tagb">&gt;</em></td><td>站点地址。</td></tr>
+			<tr><td><em class="need">*</em></td><td><em class="tagb">&lt;</em><em class="tagxml">webMaster</em><em class="tagb">&gt;</em></td><td>负责人员的Email。当有必要时，我们通过这个地址与您联系。</td></tr>
+
+			<tr><td><em class="need">*</em></td><td><em class="tagb">&lt;</em><em class="tagxml">updatePeri</em><em class="tagb">&gt;</em></td><td>更新周期，以分钟为单位。搜索引擎将遵照此周期访问该页面，使页面上的视频更及时地出现在soku视频中。协议中&lt;updatePeri&gt;只是一个参考值，soku视频搜索会参考这个值定期地检查您所提供的xml文件是否改变，检查改变的方法是通过发送HEAD请求检查xml文件的Last-Modified或Content-Length是否改变，来决定是否进行抓取。所以请务必确认您的服务器能返回Last-Modified或Content-Length其中一项，并且其值会根据您的xml文件的改变而改变。</td></tr>
+
+
+			<tr><td><em class="need">*</em></td><td><em class="tagb">&lt;</em><em class="tagxml">seriesVideo</em><em class="tagb">&gt;</em></td><td>标记每个系列视频信息的开始和结束。</td></tr>
+			<tr><td><em class="need">*</em></td><td><em class="tagb">&lt;</em><em class="tagxml">name</em><em class="tagb">&gt;</em></td><td>系列视频名字。</td></tr>
+
+			<tr><td><em class="need">|</em></td><td><em class="tagb">&lt;</em><em class="tagxml">videoNums</em><em class="tagb">&gt;</em></td><td>系列视频集数。</td></tr>
+			<tr><td><em class="need">|</em></td><td><em class="tagb">&lt;</em><em class="tagxml">brief</em><em class="tagb">&gt;</em></td><td>系列视频简介。</td></tr>
+
+
+
+
+
+			<tr><td><em class="need">*</em></td><td><em class="tagb">&lt;</em><em class="tagxml">item</em><em class="tagb">&gt;</em></td><td>标记每个视频信息的开始和结束。标记内为单个视频信息，不包括视频专题。</td></tr>
+			<tr><td><em class="need">*</em></td><td><em class="tagb">&lt;</em><em class="tagxml">op</em><em class="tagb">&gt;</em></td><td>标记视频信息的操作类型，为add表示添加，为del表示删除。</td></tr>
+
+<tr><td><em class="need">*</em></td><td><em class="tagb">&lt;</em><em class="tagxml">order</em><em class="tagb">&gt;</em></td><td>电视剧或者动漫必须有该标签（如果为第一集则为 1，依次类推）。</td></tr>
+<tr><td><em class="need">*</em></td><td><em class="tagb">&lt;</em><em class="tagxml">date</em><em class="tagb">&gt;</em></td><td>按日期播出的栏目必须有该标签（格式：2010-06-29 | 2010/06/29 | 2010.06.29 | 2010年06月29日）。</td></tr>
+
+			<tr><td><em class="need">*</em></td><td><em class="tagb">&lt;</em><em class="tagxml">title</em><em class="tagb">&gt;</em></td><td>视频标题（当op为del时也可不提供）。</td></tr>
+			<tr><td><em class="need">*</em></td><td><em class="tagb">&lt;</em><em class="tagxml">playLink</em><em class="tagb">&gt;</em></td><td>视频播放所在页面url地址。</td></tr>
+			<tr><td><em class="chec">|</em></td><td><em class="tagb">&lt;</em><em class="tagxml">imageLink</em><em class="tagb">&gt;</em></td><td>视频缩略图的url地址。</td></tr>
+			<tr><td><em class="chec">|</em></td><td><em class="tagb">&lt;</em><em class="tagxml">videoLink</em><em class="tagb">&gt;</em></td><td>视频内容的url地址。</td></tr>
+
+			<tr><td><em class="chec">|</em></td><td><em class="tagb">&lt;</em><em class="tagxml">category</em><em class="tagb">&gt;</em></td><td>视频类别信息，对视频内容的大概分组，一般只有一个，支持多个。</td></tr>
+			<tr><td><em class="chec">|</em></td><td><em class="tagb">&lt;</em><em class="tagxml">tag</em><em class="tagb">&gt;</em></td><td>视频标记信息，对视频内容的简短说明，支持多个。</td></tr>
+			<tr><td><em class="chec">|</em></td><td><em class="tagb">&lt;</em><em class="tagxml">hd</em><em class="tagb">&gt;</em></td><td>高清视频，高清为1，非高清为0。</td></tr>
+			
+
+			<tr><td><em class="chec">|</em></td><td><em class="tagb">&lt;</em><em class="tagxml">duration</em><em class="tagb">&gt;</em></td><td>视频播放时间。以秒为单位。</td></tr>
+			<tr><td><em class="chec">|</em></td><td><em class="tagb">&lt;</em><em class="tagxml">pubDate</em><em class="tagb">&gt;</em></td><td>视频发布时间，与该视频播放页面上的发布时间保持一致。请精确到分钟；若您网站的发布时间未记录小时分钟，提供年月日即可。
+			
+			<div class="tip" style="background:#f9f9f9;margin-bottom:10px;margin-top:5px;padding:10px;">
+			推荐时间格式：年月日小时分钟秒<br />
+			如：2010-06-20 11:30&nbsp;&nbsp;|&nbsp;&nbsp;2010/06/20 11:30:00&nbsp;&nbsp;|&nbsp;&nbsp;2010.06.20 11:30:00&nbsp;&nbsp;|<br />
+
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2010年06月20日11时30分00秒&nbsp;&nbsp;|&nbsp;&nbsp;Sun, 20 Jun 2010 11:30:00 GMT
+			</div>
+			</td></tr>
+			</table>
+			</div>
+		</div>
+	
+		<a name="ks"></a>
+		<h3 class="title">开放协议使用</h3>
+
+		<div class="entry">
+			<a name="ks1"></a>
+			<h4><b style="color:#55c22a">使用之前，您需要了解以下几点：</b></h4>			
+			<ul>
+			<li>无论您的网站是否被soku视频搜索引擎收录，都可以使用此开放协议。</li>
+			<li>您使用开放协议提供的内容应全部符合下面《视频源收录标准》。</li>
+			<li>《互联网视频开放协议》只是原始视频源收录方式的一种协助和有益补充，而不是完全取代。</li>
+
+			</ul>
+			<br />
+				
+			<a name="ks2"></a>
+			<h4><b style="color:#55c22a">视频源收录标准：</b></h4>
+			<ul>
+			<li>soku希望视频源多样化，鼓励原创视频内容。收录的基本原则是具有大量有价值的视频内容并能够及时更新的正规、合法的网站，且网站服务器高速、稳定，就符合了soku收录视频源的基本原则。</li>
+			<li>soku视频搜索可以收录任何类型的视频, 不过您应该对所提供的全部内容承担一切法律责任，保证您所提供内容的真实性、合法性，并且不得侵犯任何第三方的权益。</li>
+
+			<li>XML文件的最小更新周期为5分钟，小于5分钟，soku视频搜索将不能保证能及时获取你更新的数据。<br />
+				XML文件的大小最大为10M，大于10M的文件soku视频搜索将不能保证正确获取。<br />
+				XML文件提供的视频数据请保证至多是最近7天内的数据，对于7天前的数据soku视频搜索将不予抓取。如站点想提供7天前的数据，则需要<a href="mailto:sousuo@youku.com">联系我们</a>，同时提供另一个临时URL地址，让soku视频搜索访问获取，这个临时地址的XML文件不受10M大小限制，但不可超过2G。如果文件较大，建议分为多个文件，并提供多个URL地址。</li>
+			</ul>
+			<br />
+			<b style="color:#55c22a">下面就开始吧！</b><br /><br />
+
+			
+			<a name="ks3"></a>
+			<h4>第一步：创建XML文件</h4>
+			请按照上面公布的<a href="#kn">开放协议内容</a>制作XML文件。<br /><br />
+			<b>其它说明：</b>
+			<ul>	
+			<li>1、支持的编码格式有GB18030、UTF-8、GB2312、BIG5等，推荐使用GB18030和UTF-8。<br /><span class="notice">注意：XML文件头部的encoding值必须与XML文件的实际编码类型一致。</span></li>
+
+			<li>2、您可以将网站某一时间段发布的全部视频放在一个XML文件中，也可以分频道或栏目放在多个XML文件中。</li>
+			<li>3、存在以下情况不建议提交：网站审批未通过的视频，或者用户设为私有的视频。如果已经提交，建议通过DEL标记进行删除。</li>
+			<li>4、请保持每个XML文件处于按更新周期持续自动更新状态。</li>
+			<li>5、XML标签内容中的一些特殊字符需要转换为XML定义的转义字符，否则将发生错误导致搜索引擎不能获取页面上的视频，具体参见下表。如不想转义，则必须使用CDATA标记内容，如”XML网页示例“所示。
+			<table width="400">
+			<tr><td colspan="2" rowspan="2">字符</td><td colspan="2">转义后的字符</td></tr>
+			<tr><td>HTML字符</td><td>字符编码</td></tr>
+
+			<tr><td>和(and)</td><td>&amp;</td><td>&amp;amp;</td><td>&amp;#38;</td></tr>
+			<tr><td>单引号</td><td>'</td><td>&amp;apos;</td><td>&amp;#39;</td></tr>
+			<tr><td>双引号</td><td>&quot;</td><td>&amp;quot;</td><td>&amp;#34;</td></tr>
+			<tr><td>大于号</td><td>&gt;</td><td>&amp;gt;</td><td>&amp;#62;</td></tr>
+
+			<tr><td>小于号</td><td>&lt;</td><td>&amp;lt;</td><td>&amp;#60;</td></tr>
+			</table>
+			转义字符中的&quot;&amp;&quot;无需再转。</li>
+			</ul>
+			<br />
+			
+			<a name="ks4"></a>
+
+			<h4>第二步：验证XML文件</h4>
+			<div>
+			可以采用xmlspy或firefox对XML文件进行验证。更多验证工具，可参见下面地址：<br />
+			<a href="http://www.w3.org/XML/Schema#Tools">http://www.w3.org/XML/Schema#Tools</a><br />
+			<a href="http://www.xml.com/pub/a/2000/12/13/schematools.html">http://www.xml.com/pub/a/2000/12/13/schematools.html</a><br />
+			通过验证的XML文件能够使您提供的信息更加标准，确保您发布的视频信息不被搜索引擎遗漏。
+			</div>
+
+			<br />
+		
+		
+			<a name="ks5"></a>
+			<h4>第三步：提交XML网址</h4>
+			<div>
+			提交前请将XML文件上传到您的网站服务器，将XML文件的URL地址及其它信息输入下面对应的方框内。soku搜索引擎将定向访问该URL地址，当URL地址发生变化时需要重新提交。。<br />
+			soku视频搜索将对您提交的数据进行测试和观察一段时间，若您基本按照 《互联网视频开放协议》的要求进行制作但存在问题，我们会根据XML页面上提供的邮件地址与您联系。<br />
+			</div>
+
+			<div>
+			<span class="notice">注意: soku视频搜索不保证一定能收录您提交的全部内容。</span>
+			</div>
+			<br />
+			
+			<form name="regform" method="post" onsubmit="return subform(this)" action="add_video_map?soku" style="margin:0px;">
+
+			*站点名、地址为必填项。
+			<table width="400" class="noborder">
+			<tr>
+
+			<td width="120"><b>站点名</b></td>
+			<td><b>地址</b></td>
+			</tr>
+
+			<tr>
+			<td><input name="site" type="text" style="width:100px;" /></td>
+			<td><input name="url" value="http://" type="text" style="width:200px;" /></td>
+			</tr>
+
+			<tr>
+			<td>如：<em>Soku</em></td>
+			<td><em>http://www.soku.com</em></td>
+			</tr>
+			<tr>
+			<td colspan="2">
+			<label>备注:</label><br />
+
+			<textarea name="description" cols="40" rows="4"></textarea>
+			<br /><span class="tip">有需要时填写，并将内容控制在200字以内。</span>
+			<br /><br />
+			<button type="submit" name="submit" />提交</button>
+			</td>
+			</tr>
+			</table>
+
+			</form>
+		</div>
+		
+		<a name="ks6"></a>	
+		<h3 class="title">常见问题解答</h3>
+		<div class="entry">
+			<div class="tip">*《互联网视频开放协议》以下简称《视频开放协议》</div>
+			<ul class="QA" id="QA">
+			<li>
+
+				<div class="Q">我的网站的所有频道或栏目都可以被收录吗？</div>
+				<div class="A">
+				 您可以参考soku<a href="#ks2">《视频源收录标准》</a> 是否符合您的网站，如果符合就可以使用《视频开放协议》。
+				</div>
+			</li>
+			<li>
+				<div class="Q">网站的所有频道或栏目都可以被收录吗？</div>
+
+				<div class="A">
+				<p>
+				 您的网站该频道或栏目下的内容页是正常的视频播放页，并且您已按照《视频开放协议》正确提供XML文件，而且通过了测试和观察，就可以被我们收录。<br />
+				</p>
+			    <p>
+				<b>需要注意的是</b>：如果频道和栏目内容过多，请注意文件大小的限制，建议您拆分成多个XML进行提交。
+				</p>
+				</div>
+
+			</li>
+			<li>
+				<div class="Q">如果使用《视频开放协议》会影响我原来的视频页面设计与发布吗？</div>
+				<div class="A">
+				这个页面完全不干扰HTML视频页面，也不需要有链接链到这个地址，不需要展现给普通用户。
+				</div>
+			</li>
+			<li>
+				<div class="Q">使用《视频开放协议》后期还需要大量人力进行维护吗？</div>
+
+				<div class="A">
+				<p>
+				不需要。
+				</p>
+				<p>
+				您只需要进行一次开发，实现自动输出和自动更新。
+				</p>
+				</div>
+			</li>
+			<li>
+
+				<div class="Q">我的网站已经提供RSS输出，可直接提交RSS订阅地址吗？</div>
+				<div class="A">
+				<p>
+				 为了保证您网站的视频能够快速、准确地被soku视频搜索收录，请您严格遵照《视频开放协议》的各项要求创建XML文件，包括数据格式和数据内容，否则无法成功收录。<br />
+				</p>
+				<p>
+				 RSS订阅地址以及其它不符合《视频开放协议》数据格式要求的XML地址不适合提交。
+				</p>
+
+				</div>
+			</li>
+			<li>	
+				<div class="Q">我的网站每天发布大量视频，需要把全部视频都按照一定格式放在XML页面上吗？</div>
+				<div class="A">
+				<p>
+				不需要。
+				</p>
+				<p>
+
+				您只需要将最近更新周期内发布的视频信息逐个罗列在XML页面上，更新周期由您在<updatePeri>标签中设定。假设更新周期为30分钟，您最少可以提供最近30分钟内发布的视频，最多可以提供最近7天内的数据。
+				</p>
+				</div>
+			</li>
+			<li>
+				<div class="Q">我怎样理解“自动更新”？</div>
+				<div class="A">
+				<p>
+
+				 soku视频搜索的程序定周期定向地访问您提供的XML地址，这个周期由您在<updatePeri>标签中设定，soku视频搜索会参考这个值定期地检查您所提供的xml文件是否改变，检查改变的方法是通过发送HEAD请求检查xml文件的Last-Modified或Content-Length是否改变，来决定是否进行抓取。所以请务必确认您的服务器能返回Last-Modified或Content-Length其中一项，并且其值会根据您的xml文件的改变而改变。<br />
+				</p>
+				<p>
+				因此，您应该提供固定的XML地址，并保证地址上的内容按照更新周期持续更新，如果无法更新将会失去被收录的意义。
+				</p>
+				</div>
+			</li>
+						<li>
+
+				<div class="Q">什么时候需要重新提交XML地址？</div>
+				<div class="A">
+				当您需要改变XML文件的路径或名称时，请重新提交更改后的XML地址。<br />
+				</div>
+			</li>
+			<li>
+				<div class="Q">一个站点可以提交多个不同的XML地址吗？</div>
+
+				<div class="A">
+				<p>
+				可以。
+				</p>
+				<p>
+				您可以将网站某一时间段发布的全部视频放在一个XML文件中，提交一个XML地址；也可以分频道或栏目放在多个XML文件中，提交多个XML地址。 <br />
+				</p>
+				<p>
+				<b>需要注意的是</b>：一个XML地址上的视频只能来源于同一个站点。
+				</p>
+
+				</div>
+			</li>
+			<li>
+				<div class="Q">什么情况下容易导致全部或部分视频收录失败？</div>
+				<div class="A">
+				<ol>
+				<li>&lt;title&gt;和&lt;text&gt;标签中没有提供完整的相关内容时容易导致收录失败。<br />
+
+				<b>正确的做法是</b>：&lt;title&gt;和&lt;text&gt;标签中必须提供完整的相关内容，请不要省略部分内容，也不要增加与该篇视频不相关的内容。
+				</li>
+				<li>&lt;title&gt;和&lt;text&gt;标签中加入html语言也容易导致收录失败。<br />
+				<b>正确的做法是</b>：&lt;title&gt;和&lt;text&gt;标签中必须仅仅是表达视频内容的文字文本（XML转义符除外）。
+				</li>
+
+				<li>标签中的所有内容如URL、标题、视频链接等，若包含以下特殊符号如“&amp;”“&lt;”“&gt;”等半角符号，没有根据XML规范进行转义或用CDATA标记也会引起收录失败。<br />
+				<b>正确的做法是</b>：标签中的所有内容如URL、标题、视频链接等，若包含以下特殊符号如“&amp;”“&lt;”“&gt;”等，需要根据XML规范进行转义或用CDATA标记；这些特殊符号仅针对半角符号而言，全角符号无需进行转义。
+				</li>
+				<li>字符编码没有严格符合XML声明中的规范引起收录失败。<br />
+				<b>正确的做法是</b>：字符编码必须严格符合XML声明中的规范，例如XML声明为 &lt;?xml version=&quot;1.0&quot; encoding=&quot;GB2312&quot; ?&gt; ，若不完全是标准GB2312规范的编码，会导致部分数据丢失。
+				</li>
+
+				</ol>
+				</div>
+			</li>
+			<li>
+				<div class="Q">我该如何知道我的网站是否被成功收录？</div>
+				<div class="A">
+				<p>
+				在您提交站点后，soku视频搜索将对您提供的数据进行测试和观察一周。<br />
+
+				</p>
+				<p>
+				若您基本按照《视频开放协议》的标准进行制作但存在问题，我们会根据XML页面上提供的邮件地址与您联系（请保证邮件地址真实有效）。<br />
+				</p>
+				<p>
+				若测试一周后没有任何问题，将会在一至两天内开始正式收录，您可以在soku视频搜索框内输入“site:网站域名”查看收录的来自您网站的视频信息。
+				</p>
+				</div>
+			</li>
+
+			<li>
+				<div class="Q">我的网站为什么会从soku视频搜索结果中消失？</div>
+				<div class="A">
+				如果您的网站长时间无法从soku视频搜索到，或者突然从soku视频的搜索结果中消失，可能的原因有：<br />
+		
+				A、您的网站不符合用户的搜索体验，如视频播放页存在全屏弹窗广告等<br />
+				B、您的网站存在恶意作弊行为，如提交大量重复、虚假数据等<br />
+				C、您的网站所在服务器不稳定<br />
+
+				D、您的网页内容有不符合国家法律和法规规定的地方<br />
+				E、其他技术性问题<br />
+				如果您还有其它疑问或建议，请<a href="mailto:sousuo@youku.com">联系我们</a>。
+				</div>
+			</li>
+			<li>
+				<div class="Q">如果我的网站因存在作弊行为而从soku视频搜索结果中消失，是否还有被重新收录可能？</div>
+
+				<div class="A">
+				 soku视频搜索会定期对被处理站点进行自动评估，并对符合条件者重新收录。只要是做出完全修正的网站，都有机会被soku视频搜索重新收录。
+				</div>
+			</li>
+			<li>
+				<div class="Q">我没有从以上问题得到解答，我该怎么办？</div>
+				<div class="A">
+				如果您还有其它疑问或建议，请<a href="mailto:sousuo@youku.com">联系我们</a>。
+				</div>
+
+			</li>
+			</ul>
+		</div>
+	</div><!--protocal end-->
+	<div class="clear"></div>
+
+</div>
+</div>
+</div>
+<script type="text/javascript">
+(function(){
+		  
+var QA = document.getElementById('QA');
+var nodes = [];
+var children = QA.childNodes;
+for(var i=0; i<children.length; i++){
+	if(children[i].tagName){ if(children[i].tagName == 'LI'){ nodes.push(children[i]); } }	
+}
+for(var i=0; i<nodes.length; i++){
+	var Q = nodes[i].getElementsByTagName('DIV')[0];
+	var A = nodes[i].getElementsByTagName('DIV')[1];
+	Q.id = 'Q' + i;
+	A.id = 'A' + i;
+	Q.onclick = function(){
+		var index = this.getAttribute('id').split('Q')[1];
+		var A = document.getElementById('A' + index);
+		if(A){
+			if(A.style.display != 'block'){  A.style.display = 'block'; }
+			else{ A.style.display = 'none'; }
+		}	
+	}
+}
+	
+})();
+</script>
+
+</body>
+</html>

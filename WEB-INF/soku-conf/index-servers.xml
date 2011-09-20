@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<groups>
+		<group num="1">
+			<video description="视频索引服务器">
+				<server ip="10.103.8.141">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.142">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.143">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.144">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.145">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.146">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.147">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.148">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.149">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.150">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.151">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.152">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.153">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.154">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.155">
+					<pool_port>8080</pool_port>
+				</server>
+			</video>
+
+			<word description="纠错，相关搜索索引服务器">
+				<server ip="10.103.8.30">
+					<pool_port>8080</pool_port>
+				</server>
+			</word>
+		</group>
+		<group num="2">
+			<video description="视频索引服务器">
+				<server ip="10.103.8.61">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.62">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.63">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.64">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.65">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.66">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.67">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.68">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.69">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.70">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.71">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.72">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.73">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.74">
+					<pool_port>8080</pool_port>
+				</server>
+				<server ip="10.103.8.75">
+					<pool_port>8080</pool_port>
+				</server>
+			</video>
+
+			<word description="纠错，相关搜索索引服务器">
+				<server ip="10.103.8.190">
+					<pool_port>8080</pool_port>
+				</server>
+			</word>
+		</group>
+	</groups>
+</config>
