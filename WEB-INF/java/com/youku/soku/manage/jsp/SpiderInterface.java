@@ -19,10 +19,8 @@ import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.torque.TorqueException;
 import org.apache.torque.util.Criteria;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.youku.search.util.JdbcUtil;
@@ -33,6 +31,8 @@ import com.youku.soku.library.load.ProgrammeEpisodePeer;
 import com.youku.soku.library.load.ProgrammePeer;
 import com.youku.soku.library.load.ProgrammeSearchNumber;
 import com.youku.soku.library.load.ProgrammeSearchNumberPeer;
+import com.youku.soku.library.load.ProgrammeSite;
+import com.youku.soku.library.load.ProgrammeSitePeer;
 import com.youku.soku.manage.bo.ProgrammeSpiderBo;
 import com.youku.soku.manage.common.Constants;
 import com.youku.soku.manage.service.ProgrammeEpisodeService;
@@ -181,33 +181,33 @@ public class SpiderInterface {
 	 * 
 	 * return null; }
 	 */
-	public Map<Integer,ProgrammeSpiderBo> getProgrammeSpiderBos(){
-		Map<Integer,ProgrammeSpiderBo> result = new HashMap<Integer,ProgrammeSpiderBo>();
+	public Map<Integer, ProgrammeSpiderBo> getProgrammeAllBos() {
+		Map<Integer, ProgrammeSpiderBo> result = new HashMap<Integer, ProgrammeSpiderBo>();
 		Connection conn = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		try {
-			//List<Programme> pList = ProgrammePeer.doSelect(new Criteria());
-			//cate=2或付费的节目不扫描
-			String sql = "select * from programme where paid=0 and cate!=2";
-			
+			// List<Programme> pList = ProgrammePeer.doSelect(new Criteria());
+			// cate=2或付费的节目不扫描
+			String sql = "select * from programme where paid=0";
+
 			conn = DataBase.getLibraryConn();
 			pst = conn.prepareStatement(sql);
 			rs = pst.executeQuery();
 			while (rs.next()) {
-				ProgrammeSpiderBo psb=new ProgrammeSpiderBo();
+				ProgrammeSpiderBo psb = new ProgrammeSpiderBo();
 				psb.setId(rs.getInt("id"));
 				psb.setName(rs.getString("name"));
 				psb.setState(rs.getString("state"));
 				psb.setCate(rs.getInt("cate"));
 				psb.setEpisode_total(rs.getInt("episode_total"));
-				//psb.setPay(rs.getInt("pay"));
-				result.put(psb.getId(),psb);
+				// psb.setPay(rs.getInt("pay"));
+				result.put(psb.getId(), psb);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally {
+		} finally {
 			try {
 				if (pst != null) {
 					pst.close();
@@ -217,69 +217,139 @@ public class SpiderInterface {
 				}
 				JdbcUtil.close(conn);
 			} catch (SQLException e) {
-				
+
 			}
 		}
 		return result;
 	}
-	public Map<Integer, Integer> buildSearchNumberMap() throws Exception {
-        Map<Integer, Integer> searchNumberMap = new HashMap<Integer, Integer>();
-        List<ProgrammeSearchNumber> programmeSearchNumberMap = ProgrammeSearchNumberPeer.doSelect(new Criteria());
-        
-        if(programmeSearchNumberMap != null) {
-            for(ProgrammeSearchNumber pn : programmeSearchNumberMap) {
-                searchNumberMap.put(pn.getFkProgrammeId(), pn.getSearchNumber());
-            }
-        }
-        
-        return searchNumberMap;
-    }
-	
-	//兼容之前的方法 默认为0
-	public String exportEpisodeNotComplete() {
-		return exportEpisodeNotComplete(-1,0);
+
+	public Map<Integer, ProgrammeSpiderBo> getProgrammeNoPayBos() {
+		Map<Integer, ProgrammeSpiderBo> all = this.getProgrammeAllBos();
+		Map<Integer, ProgrammeSpiderBo> result = new HashMap<Integer, ProgrammeSpiderBo>();
+		for (Integer key : all.keySet()) {
+			ProgrammeSpiderBo psb = all.get(key);
+			if (psb.getState().equals("normal"))
+				result.put(key, psb);
+		}
+		return result;
 	}
-	//增加limit参数 可选择性扫描 默认是查询所有的
-	public String exportEpisodeNotComplete(int offset,int size) {
+
+	public Map<Integer, ProgrammeSpiderBo> getProgrammeSpiderBos() {
+		Map<Integer, ProgrammeSpiderBo> all = this.getProgrammeAllBos();
+		Map<Integer, ProgrammeSpiderBo> result = new HashMap<Integer, ProgrammeSpiderBo>();
+		for (Integer key : all.keySet()) {
+			ProgrammeSpiderBo psb = all.get(key);
+			if (psb.getState().equals("normal") && psb.getCate() != 2)
+				result.put(key, psb);
+		}
+		return result;
+	}
+
+	public Map<Integer, ProgrammeSpiderBo> getProgrammeCateBos() {
+		Map<Integer, ProgrammeSpiderBo> all = this.getProgrammeAllBos();
+		Map<Integer, ProgrammeSpiderBo> result = new HashMap<Integer, ProgrammeSpiderBo>();
+		for (Integer key : all.keySet()) {
+			ProgrammeSpiderBo psb = all.get(key);
+			if (psb.getCate() != 2)
+				result.put(key, psb);
+		}
+		return result;
+	}
+
+	public Map<Integer, Integer> buildSearchNumberMap() throws Exception {
+		Map<Integer, Integer> searchNumberMap = new HashMap<Integer, Integer>();
+		List<ProgrammeSearchNumber> programmeSearchNumberMap = ProgrammeSearchNumberPeer
+				.doSelect(new Criteria());
+
+		if (programmeSearchNumberMap != null) {
+			for (ProgrammeSearchNumber pn : programmeSearchNumberMap) {
+				searchNumberMap
+						.put(pn.getFkProgrammeId(), pn.getSearchNumber());
+			}
+		}
+
+		return searchNumberMap;
+	}
+
+	// 兼容之前的方法 默认为0
+	public String exportEpisodeNotComplete() {
+		return exportEpisodeNotComplete(-1, 0);
+	}
+
+	// 增加limit参数 可选择性扫描 默认是查询所有的
+	public String exportEpisodeNotComplete(int offset, int size) {
 		Connection conn = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		try {
 			long start = System.currentTimeMillis();
-			
-			Map<Integer,ProgrammeSpiderBo> psbMap=getProgrammeSpiderBos();
+
+			Map<Integer, ProgrammeSpiderBo> psbMap = getProgrammeCateBos();
 			conn = DataBase.getLibraryConn();
-			//String sql = "select p.id, p.name, p.cate, p.episode_total, ps.id, ps.episode_collected, ps.source_site, pe.url, pe.order_id, pe.order_stage from programme p, programme_site ps, programme_episode pe where p.id = ps.fk_programme_id and pe.fk_programme_site_id = ps.id and ps.completed = 0 and ps.source_site != 100 and ps.source_site != 14 and p.cate != 2 order by pe.order_stage desc";
-			String sql = "select ps.id,ps.fk_programme_id,ps.source_site, ps.episode_collected,pe.url, pe.order_id, pe.order_stage from programme_site ps, programme_episode pe where pe.fk_programme_site_id = ps.id and ps.completed = 0 and ps.source_site != 100 and ps.source_site != 14 order by pe.order_stage desc";
-			String limitsql =" limit "+offset;
-			String sizesql = ","+size;
-			if(offset>-1){
+			// String sql =
+			// "select p.id, p.name, p.cate, p.episode_total, ps.id, ps.episode_collected, ps.source_site, pe.url, pe.order_id, pe.order_stage from programme p, programme_site ps, programme_episode pe where p.id = ps.fk_programme_id and pe.fk_programme_site_id = ps.id and ps.completed = 0 and ps.source_site != 100 and ps.source_site != 14 and p.cate != 2 order by pe.order_stage desc";
+			// String sql =
+			// "select ps.id,ps.fk_programme_id,ps.source_site, ps.episode_collected,pe.url, pe.order_id, pe.order_stage from programme_site ps, programme_episode pe where pe.fk_programme_site_id = ps.id and ps.completed = 0 and ps.source_site != 100 and ps.source_site != 14 order by pe.order_stage desc";
+
+			String psids = "";
+			Map<Integer, ProgrammeSite> psMap = new HashMap<Integer, ProgrammeSite>();
+			Criteria crit = new Criteria();
+			crit.add(ProgrammeSitePeer.COMPLETED, 0);
+			crit.add(ProgrammeSitePeer.SOURCE_SITE, 14, Criteria.NOT_EQUAL);
+			crit.add(ProgrammeSitePeer.SOURCE_SITE, 100, Criteria.NOT_EQUAL);
+			if (offset > -1) {
+				crit.setLimit(offset);
+				if (size > 0)
+					crit.setOffset(size);
+			}
+			List<ProgrammeSite> psList = ProgrammeSitePeer.doSelect(crit);
+			if (null == psList || psList.size() == 0)
+				return null;
+			for (int i = 0; i < psList.size(); i++) {
+				ProgrammeSite ps = psList.get(i);
+				psMap.put(ps.getId(), ps);
+				psids += ps.getId();
+				if (i != psList.size() - 1)
+					psids += ",";
+
+			}
+
+			String sql = "select fk_programme_site_id, url, order_id, order_stage from programme_episode where fk_programme_site_id in ("
+					+ psids + ") order by order_stage desc";
+			String limitsql = " limit " + offset;
+			String sizesql = "," + size;
+			if (offset > -1) {
 				sql += limitsql;
-				if(size>0)
+				if (size > 0)
 					sql += sizesql;
 			}
 			pst = conn.prepareStatement(sql);
 			rs = pst.executeQuery();
-			
+
 			Map<Integer, Map<Integer, List<SpiderInfo>>> programmeMap = new HashMap<Integer, Map<Integer, List<SpiderInfo>>>();
 
 			while (rs.next()) {
-				int pid=rs.getInt("ps.fk_programme_id");
-				ProgrammeSpiderBo psb=psbMap.get(pid);
-				if(null==psb)
+				int psid = rs.getInt("fk_programme_site_id");
+				ProgrammeSite ps = psMap.get(psid);
+				if (null == ps)
+					continue;
+				int pid = ps.getFkProgrammeId();
+				ProgrammeSpiderBo psb = psbMap.get(pid);
+				if (null == psb)
 					continue;
 				SpiderInfo si = new SpiderInfo();
 				si.setId(pid);
 				si.setName(psb.getName());
 				si.setEpisodeTotal(psb.getEpisode_total());
-				si.setSource_site(rs.getInt("ps.source_site"));
-				si.setProgrammeSiteId(rs.getInt("ps.id"));
-				si.setEpisodeCollected(rs.getInt("ps.episode_collected"));
-				si.setUrl(rs.getString("pe.url"));
-				si.setOrderId(rs.getInt("pe.order_id"));
-				si.setOrderStage(rs.getInt("pe.order_stage"));
+				si.setSource_site(ps.getSourceSite());
+				si.setProgrammeSiteId(psid);
+				si.setEpisodeCollected(ps.getEpisodeCollected());
+				si.setUrl(rs.getString("url"));
+				si.setOrderId(rs.getInt("order_id"));
+				si.setOrderStage(rs.getInt("order_stage"));
 				si.setCate(psb.getCate());
-				Map<Integer, List<SpiderInfo>> infoMap = programmeMap.get(si.getId());
+				Map<Integer, List<SpiderInfo>> infoMap = programmeMap.get(si
+						.getId());
 				if (infoMap == null) {
 					infoMap = new LinkedHashMap<Integer, List<SpiderInfo>>();
 					programmeMap.put(si.getId(), infoMap);
@@ -293,7 +363,8 @@ public class SpiderInterface {
 				list.add(si);
 
 			}
-			Map<Integer, String> siteMap = new HashMap<Integer, String>(SiteService.getEpisodeSpiderMap());
+			Map<Integer, String> siteMap = new HashMap<Integer, String>(
+					SiteService.getEpisodeSpiderMap());
 			JSONArray info = new JSONArray();
 
 			int i = 0;
@@ -342,13 +413,18 @@ public class SpiderInterface {
 							if (p.getCate() == Constants.TELEPLAY_CATE_ID) {
 
 								if (p.getEpisodeTotal() != 0) {
-									int lackEpisodeCount = p.getEpisodeTotal() - s.getEpisodeCollected();
-									Set<String> episodeList = lackEpisodeMap.get(lackEpisodeCount);
+									int lackEpisodeCount = p.getEpisodeTotal()
+											- s.getEpisodeCollected();
+									Set<String> episodeList = lackEpisodeMap
+											.get(lackEpisodeCount);
 									if (episodeList == null) {
 										episodeList = new HashSet<String>();
-										lackEpisodeMap.put(lackEpisodeCount, episodeList);
+										lackEpisodeMap.put(lackEpisodeCount,
+												episodeList);
 									}
-									episodeList.add("siteId: " + s.getSource_site() + "name: " + p.getName());
+									episodeList.add("siteId: "
+											+ s.getSource_site() + "name: "
+											+ p.getName());
 								}
 							}
 						}
@@ -361,7 +437,8 @@ public class SpiderInterface {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 			int totalCount = 0;
 			for (int key : lackEpisodeMap.keySet()) {
-				bw.write("缺少" + key + "集的 剧集数" + lackEpisodeMap.get(key).size() + "   详细 " + lackEpisodeMap.get(key));
+				bw.write("缺少" + key + "集的 剧集数" + lackEpisodeMap.get(key).size()
+						+ "   详细 " + lackEpisodeMap.get(key));
 				bw.write("\n");
 				totalCount += lackEpisodeMap.get(key).size();
 			}
@@ -385,66 +462,134 @@ public class SpiderInterface {
 
 		return null;
 	}
-	//兼容之前的方法 默认为0
-	public String listProgramme3(){
-		return listProgramme3(-1,0);
+
+	// 兼容之前的方法 默认为0
+	public String listProgramme3() {
+		return listProgramme3(-1, 0);
 	}
-	//增加limit参数 可选择性扫描 默认是查询所有的
-	public String listProgramme3(int offset,int size) {
+
+	// 增加limit参数 可选择性扫描 默认是查询所有的
+	public String listProgramme3(int offset, int size) {
 		Connection conn = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		try {
 			long start = System.currentTimeMillis();
 
-			Map<Integer,ProgrammeSpiderBo> psbMap=getProgrammeSpiderBos();
+			Map<Integer, ProgrammeSpiderBo> psbMap = getProgrammeSpiderBos();
 			Map<Integer, Integer> searchNumberMap = buildSearchNumberMap();
 			conn = DataBase.getLibraryConn();
-			//String sql = "select p.id, p.name, p.cate, ps.id, ps.episode_collected, ps.source_site, pe.url, pe.order_id, pe.order_stage from programme p, programme_site ps, programme_episode pe where p.state = 'normal' and p.id = ps.fk_programme_id and pe.fk_programme_site_id = ps.id and ps.completed = 0 and ps.source_site != 100 and ps.source_site != 14 and p.cate != 2 order by pe.order_stage desc";
-			String sql = "select ps.fk_programme_id,ps.id, ps.episode_collected, ps.source_site, pe.url, pe.order_id, pe.order_stage from programme_site ps, programme_episode pe where pe.fk_programme_site_id = ps.id and ps.completed = 0 and ps.source_site != 100 and ps.source_site != 14 order by pe.order_stage desc";
-			String limitsql = " limit "+offset;
-			String sizesql = ","+size;
-			if(offset>-1){
-				sql += limitsql;
-				if(size>0)
-					sql += sizesql;
+			// String sql =
+			// "select p.id, p.name, p.cate, ps.id, ps.episode_collected, ps.source_site, pe.url, pe.order_id, pe.order_stage from programme p, programme_site ps, programme_episode pe where p.state = 'normal' and p.id = ps.fk_programme_id and pe.fk_programme_site_id = ps.id and ps.completed = 0 and ps.source_site != 100 and ps.source_site != 14 and p.cate != 2 order by pe.order_stage desc";
+			// String sql =
+			// "select ps.fk_programme_id,ps.id, ps.episode_collected, ps.source_site, pe.url, pe.order_id, pe.order_stage from programme_site ps, programme_episode pe where pe.fk_programme_site_id = ps.id and ps.completed = 0 and ps.source_site != 100 and ps.source_site != 14 order by pe.order_stage desc";
+			String psids = "";
+			Map<Integer, ProgrammeSite> psMap = new HashMap<Integer, ProgrammeSite>();
+			Criteria crit = new Criteria();
+			crit.add(ProgrammeSitePeer.COMPLETED, 0);
+			crit.add(ProgrammeSitePeer.SOURCE_SITE, 14, Criteria.NOT_EQUAL);
+			crit.add(ProgrammeSitePeer.SOURCE_SITE, 100, Criteria.NOT_EQUAL);
+			crit
+					.add(ProgrammeSitePeer.EPISODE_COLLECTED, 0,
+							Criteria.NOT_EQUAL);
+			crit.addGroupByColumn(ProgrammeSitePeer.FK_PROGRAMME_ID);
+			if (offset > -1) {
+				if (size > 0) {
+					crit.setLimit(size);
+					crit.setOffset(offset);
+				} else
+					crit.setLimit(offset);
 			}
+			List<ProgrammeSite> psList = ProgrammeSitePeer.doSelect(crit);
+			if (null == psList || psList.size() == 0)
+				return null;
+			for (int i = 0; i < psList.size(); i++) {
+				ProgrammeSite ps = psList.get(i);
+				psMap.put(ps.getId(), ps);
+				psids += ps.getId();
+				if (i != psList.size() - 1)
+					psids += ",";
+
+			}
+			
+			String sql = "select fk_programme_site_id, group_concat(url)urls, group_concat(order_id)ois, group_concat(order_stage)oss from programme_episode where fk_programme_site_id in ("
+					+ psids
+					+ ") group by fk_programme_site_id order by order_stage desc";
+
+			// String limitsql = " limit " + offset;
+			// String sizesql = "," + size;
+			// if (offset > -1) {
+			// sql += limitsql;
+			// if (size > 0)
+			// sql += sizesql;
+			// }
+			
 			pst = conn.prepareStatement(sql);
 			rs = pst.executeQuery();
 
 			Map<Integer, Map<Integer, List<SpiderInfo>>> programmeMap = new HashMap<Integer, Map<Integer, List<SpiderInfo>>>();
 
 			while (rs.next()) {
-				int pid=rs.getInt("ps.fk_programme_id");
-				ProgrammeSpiderBo psb=psbMap.get(pid);
-				if(null==psb || !psb.getState().equals("normal"))
+				int psid = rs.getInt("fk_programme_site_id");
+				ProgrammeSite ps = psMap.get(psid);
+				if (null == ps) {
 					continue;
-				SpiderInfo si = new SpiderInfo();
-				si.setId(pid);
-				si.setName(psb.getName());
-				si.setSource_site(rs.getInt("ps.source_site"));
-				si.setProgrammeSiteId(rs.getInt("ps.id"));
-				si.setEpisodeCollected(rs.getInt("ps.episode_collected"));
-				si.setUrl(rs.getString("pe.url"));
-				si.setOrderId(rs.getInt("pe.order_id"));
-				si.setOrderStage(rs.getInt("pe.order_stage"));
-				si.setCate(psb.getCate());
-				Map<Integer, List<SpiderInfo>> infoMap = programmeMap.get(si.getId());
-				if (infoMap == null) {
-					infoMap = new LinkedHashMap<Integer, List<SpiderInfo>>();
-					programmeMap.put(si.getId(), infoMap);
 				}
-
-				List<SpiderInfo> list = infoMap.get(si.getProgrammeSiteId());
-				if (list == null) {
-					list = new ArrayList<SpiderInfo>();
-					infoMap.put(si.getProgrammeSiteId(), list);
+				int pid = ps.getFkProgrammeId();
+				ProgrammeSpiderBo psb = psbMap.get(pid);
+				if (null == psb || !psb.getState().equals("normal")) {
+					continue;
 				}
-				list.add(si);
+				if (null == rs.getString("ois")
+						|| rs.getString("ois").isEmpty())
+					continue;
+				logger.debug("**** urls:" + rs.getString("urls") + "*******");
+				logger.debug("**** uis:" + rs.getString("ois") + "*******");
+				logger.debug("**** oss:" + rs.getString("oss") + "*******");
+				String[] urls = rs.getString("urls").split(",");
+				String[] ois = rs.getString("ois").split(",");
+				String[] oss = rs.getString("oss").split(",");
+				for (int i = 0; i < ois.length; i++) {
+					SpiderInfo si = new SpiderInfo();
+					si.setId(pid);
+					si.setName(psb.getName());
+					si.setSource_site(ps.getSourceSite());
+					si.setProgrammeSiteId(psid);
+					si.setEpisodeCollected(ps.getEpisodeCollected());
+					if (urls.length-1 < i)
+						si.setUrl("");
+					else
+						si.setUrl(urls[i]);
+					if (ois.length-1 < i)
+						si.setOrderId(0);
+					else
+					si.setOrderId(Integer.parseInt(ois[i]));
+					if (oss.length-1 < i)
+						si.setOrderStage(0);
+					else
+					si.setOrderStage(Integer.parseInt(oss[i]));
+					si.setCate(psb.getCate());
+					Map<Integer, List<SpiderInfo>> infoMap = programmeMap
+							.get(si.getId());
+					if (infoMap == null) {
+						infoMap = new LinkedHashMap<Integer, List<SpiderInfo>>();
+						programmeMap.put(si.getId(), infoMap);
+					}
 
+					List<SpiderInfo> list = infoMap
+							.get(si.getProgrammeSiteId());
+					if (list == null) {
+						list = new ArrayList<SpiderInfo>();
+						infoMap.put(si.getProgrammeSiteId(), list);
+					}
+					list.add(si);
+				}
+				logger.debug("**** programmeMap:" + programmeMap.size()
+						+ "*******");
 			}
 
-			Map<Integer, String> siteMap = new HashMap<Integer, String>(SiteService.getEpisodeSpiderMap());
+			Map<Integer, String> siteMap = new HashMap<Integer, String>(
+					SiteService.getEpisodeSpiderMap());
 			JSONArray info = new JSONArray();
 
 			int i = 0;
@@ -473,10 +618,12 @@ public class SpiderInterface {
 						}
 						if (!StringUtils.isBlank(si.getUrl())) {
 							if (p.getCate() != Constants.VARIETY_CATE_ID) {
-								episodeInfo.put(si.getOrderId() + "", si.getUrl());
+								episodeInfo.put(si.getOrderId() + "", si
+										.getUrl());
 							} else {
 								if (episodeInfo.length() == 0) { // 综艺只给最新一期的url
-									episodeInfo.put(si.getOrderStage() + "", si.getUrl());
+									episodeInfo.put(si.getOrderStage() + "", si
+											.getUrl());
 								}
 							}
 
@@ -485,7 +632,8 @@ public class SpiderInterface {
 					}
 
 					if (siteMap.get(s.getSource_site()) != null) {
-						if (s.getEpisodeCollected() > 0 || p.getCate() == Constants.VARIETY_CATE_ID) {
+						if (s.getEpisodeCollected() > 0
+								|| p.getCate() == Constants.VARIETY_CATE_ID) {
 
 							siteInfo.put(s.getSource_site() + "", episodeInfo);
 
@@ -496,7 +644,8 @@ public class SpiderInterface {
 				programmeInfo.put("id", p.getId());
 				programmeInfo.put("name", p.getName());
 				programmeInfo.put("cate", p.getCate());
-				programmeInfo.put("searchNumber", searchNumberMap.get(p.getId()));
+				programmeInfo.put("searchNumber", searchNumberMap
+						.get(p.getId()));
 				programmeInfo.put("siteInfo", siteInfo);
 				info.put(programmeInfo);
 			}
@@ -520,54 +669,84 @@ public class SpiderInterface {
 
 		return null;
 	}
-	public String listProgrammeNoEpisode(){
-		return listProgrammeNoEpisode(-1,0);
+
+	public String listProgrammeNoEpisode() {
+		return listProgrammeNoEpisode(-1, 0);
 	}
-	public String listProgrammeNoEpisode(int offset,int size) {
+
+	public String listProgrammeNoEpisode(int offset, int size) {
 		Connection conn = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		try {
 			long start = System.currentTimeMillis();
 
+			Map<Integer, ProgrammeSpiderBo> psbMap = getProgrammeNoPayBos();
 			Map<Integer, Integer> searchNumberMap = buildSearchNumberMap();
 			conn = DataBase.getLibraryConn();
-			//String sql = "select p.id, p.name, p.cate, ps.id, ps.source_site, ps.episode_collected from programme p, programme_site ps where p.state = 'normal' and p.id = ps.fk_programme_id and p.paid=0 and ps.source_site != 100";
-			String sql = "select p.id, p.name, p.cate, group_concat(ps.id)psid, group_concat(ps.source_site)psss, group_concat(ps.episode_collected)psec from programme p, programme_site ps where p.state = 'normal' and p.id = ps.fk_programme_id and p.paid=0 and ps.source_site != 100 group by p.id";
-			String limitsql = " limit "+offset;
-			String sizesql = ","+size;
-			if(offset>-1){
-				sql += limitsql;
-				if(size>0)
-					sql += sizesql;
+			// String sql =
+			// "select p.id, p.name, p.cate, ps.id, ps.source_site, ps.episode_collected from programme p, programme_site ps where p.state = 'normal' and p.id = ps.fk_programme_id and p.paid=0 and ps.source_site != 100";
+			// String sql =
+			// "select p.id, p.name, p.cate, group_concat(ps.id)psid, group_concat(ps.source_site)psss, group_concat(ps.episode_collected)psec from programme p, programme_site ps where p.state = 'normal' and p.id = ps.fk_programme_id and p.paid=0 and ps.source_site != 100 group by p.id";
+			String pids = "";
+			List<ProgrammeSpiderBo> psbList = new ArrayList<ProgrammeSpiderBo>(
+					psbMap.values());
+			if (offset > -1) {
+				if (size > 0) {
+					int to = offset + size;
+					psbList = psbList.subList(offset, to);
+				} else
+					psbList = psbList.subList(0, offset);
 			}
+			for (int i = 0; i < psbList.size(); i++) {
+				pids += psbList.get(i).getId();
+				if (i != psbList.size() - 1)
+					pids += ",";
+			}
+			String sql = "select fk_programme_id, group_concat(id)psid, group_concat(source_site)psss, group_concat(episode_collected)psec from programme_site where source_site != 100 and fk_programme_id in ("
+					+ pids + ") group by fk_programme_id";
+
+			String limitsql = " limit " + offset;
+			String sizesql = "," + size;
+			// if (offset > -1) {
+			// sql += limitsql;
+			// if (size > 0)
+			// sql += sizesql;
+			// }
 			pst = conn.prepareStatement(sql);
 			rs = pst.executeQuery();
 
 			Map<Integer, Map<Integer, List<SpiderInfo>>> programmeMap = new HashMap<Integer, Map<Integer, List<SpiderInfo>>>();
 
 			while (rs.next()) {
-				if(null==rs.getString("psss")||rs.getString("psss").isEmpty())
+				if (null == rs.getString("psss")
+						|| rs.getString("psss").isEmpty())
+					continue;
+				int pid = rs.getInt("fk_programme_id");
+				ProgrammeSpiderBo psb = psbMap.get(pid);
+				if (null == psb)
 					continue;
 				String[] psid = rs.getString("psid").split(",");
 				String[] psss = rs.getString("psss").split(",");
 				String[] psec = rs.getString("psec").split(",");
-				for(int i=0;i<psss.length;i++){
+				for (int i = 0; i < psss.length; i++) {
 					SpiderInfo si = new SpiderInfo();
-					si.setId(rs.getInt("p.id"));
-					si.setName(rs.getString("p.name"));
+					si.setId(psb.getId());
+					si.setName(psb.getName());
 					si.setSource_site(Integer.parseInt(psss[i]));
 					si.setProgrammeSiteId(Integer.parseInt(psid[i]));
 					si.setEpisodeCollected(Integer.parseInt(psec[i]));
-					si.setCate(rs.getInt("p.cate"));
-	
-					Map<Integer, List<SpiderInfo>> infoMap = programmeMap.get(si.getId());
+					si.setCate(psb.getCate());
+
+					Map<Integer, List<SpiderInfo>> infoMap = programmeMap
+							.get(si.getId());
 					if (infoMap == null) {
 						infoMap = new HashMap<Integer, List<SpiderInfo>>();
 						programmeMap.put(si.getId(), infoMap);
 					}
-	
-					List<SpiderInfo> list = infoMap.get(si.getProgrammeSiteId());
+
+					List<SpiderInfo> list = infoMap
+							.get(si.getProgrammeSiteId());
 					if (list == null) {
 						list = new ArrayList<SpiderInfo>();
 						infoMap.put(si.getProgrammeSiteId(), list);
@@ -581,11 +760,12 @@ public class SpiderInterface {
 
 			int i = 0;
 			int j = 0;
-			
+
 			for (Integer pk : programmeMap.keySet()) {
 				Map<Integer, List<SpiderInfo>> infoMap = programmeMap.get(pk);
-				Map<Integer, String> siteMap = new HashMap<Integer, String>(SiteService.getEpisodeSpiderMap());
-				
+				Map<Integer, String> siteMap = new HashMap<Integer, String>(
+						SiteService.getEpisodeSpiderMap());
+
 				SpiderInfo p = null;
 				JSONObject programmeInfo = new JSONObject();
 				JSONObject siteInfo = new JSONObject();
@@ -623,7 +803,8 @@ public class SpiderInterface {
 				programmeInfo.put("id", p.getId());
 				programmeInfo.put("name", p.getName());
 				programmeInfo.put("cate", p.getCate());
-				programmeInfo.put("searchNumber", searchNumberMap.get(p.getId()));
+				programmeInfo.put("searchNumber", searchNumberMap
+						.get(p.getId()));
 				programmeInfo.put("siteInfo", siteInfo);
 				info.put(programmeInfo);
 			}
@@ -670,10 +851,12 @@ public class SpiderInterface {
 				String timeLength = jsObj.optString("time_length");
 				int orderId = jsObj.optInt("jishu");
 
-				int programmeSiteId = ProgrammeSiteService.getProgrammeSiteId(programmeId, siteId);
+				int programmeSiteId = ProgrammeSiteService.getProgrammeSiteId(
+						programmeId, siteId);
 
 				boolean isNew = false;
-				ProgrammeEpisode pe = ProgrammeEpisodeService.getUniqueProgrammeEpisode(programmeSiteId, orderId);
+				ProgrammeEpisode pe = ProgrammeEpisodeService
+						.getUniqueProgrammeEpisode(programmeSiteId, orderId);
 				if (pe == null) {
 					pe = new ProgrammeEpisode();
 					isNew = true;
@@ -707,6 +890,7 @@ public class SpiderInterface {
 
 		return isSuccess;
 	}
+
 	private void logSpiderEpisode(ProgrammeEpisode pe) throws Exception {
 		EpisodeLog el = new EpisodeLog();
 		el.setFkProgrammeSiteId(pe.getFkProgrammeSiteId());
