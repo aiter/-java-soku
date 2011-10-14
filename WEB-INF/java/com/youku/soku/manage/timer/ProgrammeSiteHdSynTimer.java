@@ -18,7 +18,7 @@ public class ProgrammeSiteHdSynTimer {
 	public void start() {
 		Timer timer = new Timer(true);
 
-		final long delay = 60L * 1000; // one hour
+		final long delay = 60L * 1000; // one min
 		final long period = 24 * 60 * 1000 * 60; // 24 hour
 
 		TimerTask task = new TimerTask() {
