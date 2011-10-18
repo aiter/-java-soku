@@ -124,7 +124,8 @@ public class SiteService {
 		siteMap.put(9, "激动网");
 		siteMap.put(17, "乐视网");
 		siteMap.put(19, "奇艺网");
-		siteMap.put(11, "天线视频");
+		siteMap.put(27, "QQ");
+		siteMap.put(31, "PPTV");
 		
 		return siteMap;
 	}
@@ -141,6 +142,8 @@ public class SiteService {
 		siteMap.put(9, "激动网");
 		siteMap.put(17, "乐视网");
 		siteMap.put(19, "奇艺网");
+		siteMap.put(27, "QQ");
+		siteMap.put(31, "PPTV");
 		
 		return siteMap;
 	}

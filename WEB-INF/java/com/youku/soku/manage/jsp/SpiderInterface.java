@@ -543,9 +543,6 @@ public class SpiderInterface {
 				if (null == rs.getString("ois")
 						|| rs.getString("ois").isEmpty())
 					continue;
-				logger.debug("**** urls:" + rs.getString("urls") + "*******");
-				logger.debug("**** uis:" + rs.getString("ois") + "*******");
-				logger.debug("**** oss:" + rs.getString("oss") + "*******");
 				String[] urls = rs.getString("urls").split(",");
 				String[] ois = rs.getString("ois").split(",");
 				String[] oss = rs.getString("oss").split(",");
@@ -584,8 +581,6 @@ public class SpiderInterface {
 					}
 					list.add(si);
 				}
-				logger.debug("**** programmeMap:" + programmeMap.size()
-						+ "*******");
 			}
 
 			Map<Integer, String> siteMap = new HashMap<Integer, String>(

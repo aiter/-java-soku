@@ -16,7 +16,10 @@ import org.apache.torque.TorqueException;
 
 import com.youku.soku.config.Config;
 import com.youku.soku.index.server.ServerManager;
+import com.youku.soku.manage.admin.copyright.util.CopyrightSpiderTimer;
 import com.youku.soku.manage.timer.DeadLinkCheckTimer;
+import com.youku.soku.manage.timer.EpisodeProgrammeIdSynTimer;
+import com.youku.soku.manage.timer.ProgrammeSearchNumberTimer;
 import com.youku.soku.manage.timer.ProgrammeSiteCompleteMaintainTimer;
 import com.youku.soku.shield.DataLoadTimer;
 import com.youku.soku.suggest.timer.LibraryDataLoadTimer;
@@ -80,6 +83,12 @@ public class InitServlet_test extends HttpServlet {
 		new DataLoadTimer().start();
 		new LibraryDataLoadTimer().start();
 		new TrieTreeLoaderTimer().start();
+		//版权抓取任务
+		new CopyrightSpiderTimer().start();
+		//剧集的节目Id同步
+		new EpisodeProgrammeIdSynTimer().start();
+		new ProgrammeSearchNumberTimer().start();
+		System.out.println("**TEST CONFIG END**");
 	/*	new KnowledgeDataLoadTimer().start();
 		String memcachedPicPath = root + config.getInitParameter("memcached-pic");
 		MemCachedPic.init(memcachedPicPath);*/

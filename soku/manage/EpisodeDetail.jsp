@@ -198,6 +198,8 @@
 					$("#lock" + orderId).attr("style", "");
 					alert('保存成功');
 					window.location.reload();
+				}else if(o.status == 'unique'){
+					alert('期数已经存在');
 				} else {
 					alert('发生错误');
 				}
@@ -318,7 +320,8 @@
 					<th align="center" width="9%">激动网</th>
 					<th align="center" width="9%">乐视网</th>
 					<th align="center" width="9%">奇艺网</th>
-					<th align="center" width="11%">天线视频</th>
+					<th align="center" width="5%">QQ</th>
+					<th align="center" width="5%">PPTV</th>
 					
 				</tr>
 

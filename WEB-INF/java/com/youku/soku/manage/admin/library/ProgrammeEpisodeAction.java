@@ -147,9 +147,15 @@ public class ProgrammeEpisodeAction extends BaseActionSupport {
 				ProgrammeEpisodeDetailBo peDetailBo = getSiteEpisodeDetailBo(ps);
 				List<ProgrammeEpisode> episodeList = peDetailBo.getSiteEpisode();
 				if (episodeList != null) {
+					int episodeCount = 0;
 					for (ProgrammeEpisode pe : episodeList) {
+						episodeCount++;
 						String key = getEpisodeKey(ps.getSourceSite(), pe.getOrderId());
-
+						
+						//add on 2011.10.15  orderid 值为日期时，会造成内存不够用
+						if(p.getCate() == Constants.VARIETY_CATE_ID) { 
+							 key = getEpisodeKey(ps.getSourceSite(), episodeCount);
+						}
 						episodeSiteMap.put(key, pe);
 					}
 				}
@@ -170,10 +176,11 @@ public class ProgrammeEpisodeAction extends BaseActionSupport {
 			int episodeCollected = 0;
 			int episodeTotal = p.getEpisodeTotal();
 
-			/*
-			 * if(p.getCate() == Constants.VARIETY_CATE_ID) { maxOrder =
-			 * maxEpisodeCount; }
-			 */
+			//add on 2011.10.15  orderid 值为日期时，会造成内存不够用
+			 
+			if(p.getCate() == Constants.VARIETY_CATE_ID) { 
+				 maxOrder =maxEpisodeCount; 
+			 }
 
 			for (int i = Math.max(maxOrder, episodeTotal); i > 0; i--) {
 				ProgrammeEpisodeDetailBo peDetailBo = new ProgrammeEpisodeDetailBo();
@@ -408,6 +415,8 @@ public class ProgrammeEpisodeAction extends BaseActionSupport {
 			status = "fail";
 			throw e;
 		}
+		if(newId.equals("-1"))
+			status = "unique";
 
 		HttpServletResponse response = ServletActionContext.getResponse();
 		response.setContentType("text/html;charset=utf-8");
@@ -419,7 +428,8 @@ public class ProgrammeEpisodeAction extends BaseActionSupport {
 	private String saveEpisode(int id, String url) throws Exception {
 
 		ProgrammeSite ps = ProgrammeSiteService.getSite(getProgrammeId(), getSourceSiteId());
-
+		
+		
 		if (ps == null) {
 			ps = new ProgrammeSite();
 			ps.setFkProgrammeId(getProgrammeId());
@@ -433,6 +443,16 @@ public class ProgrammeEpisodeAction extends BaseActionSupport {
 		if (getProgrammeSiteId() == 0) {
 			setProgrammeSiteId(ps.getId());
 		}
+		
+		//保存时 检查是否有相同order_stage的剧集，若存在则提示order_stage唯一错误
+		/*Criteria crit = new Criteria();
+		crit.add(ProgrammeEpisodePeer.FK_PROGRAMME_SITE_ID,ps.getId());
+		crit.add(ProgrammeEpisodePeer.ORDER_STAGE,getOrderStage());
+		crit.add(ProgrammeEpisodePeer.URL,(Object)null,Criteria.NOT_EQUAL);
+		crit.add(ProgrammeEpisodePeer.URL,(Object)"",Criteria.NOT_EQUAL);
+		List<ProgrammeEpisode> checkPeList = ProgrammeEpisodePeer.doSelect(crit);
+		if(null!=url&&!url.isEmpty()&&null!=checkPeList && checkPeList.size()>0)
+			return "-1";*/
 
 		String newId = "0";
 		if (id > 0) {

@@ -26,6 +26,7 @@ import com.youku.soku.index.timer.SiteTimer;
 import com.youku.soku.library.load.timer.ForwardWordTimer;
 import com.youku.soku.manage.admin.copyright.util.CopyrightSpiderTimer;
 import com.youku.soku.manage.timer.DeadLinkCheckTimer;
+import com.youku.soku.manage.timer.EpisodeProgrammeIdSynTimer;
 import com.youku.soku.manage.timer.IndexPicGeneratorTimer;
 import com.youku.soku.manage.timer.IndexPicOnlineTimer;
 import com.youku.soku.manage.timer.ProgrammeAuditFlagFixTimer;
@@ -161,6 +162,7 @@ public class InitServlet extends HttpServlet {
         		new ShieldMailTimer().start();
         		new ProgrammeSiteHdSynTimer().start();
         		new CopyrightSpiderTimer().start();
+        		new EpisodeProgrammeIdSynTimer().start();
         		break;
         	case Constant.ServerType.COMMEND://搜索下拉推荐服务器
         		//加载屏蔽词

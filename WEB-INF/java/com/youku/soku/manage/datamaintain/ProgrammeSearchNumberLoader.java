@@ -17,6 +17,7 @@ import com.youku.search.util.DataFormat;
 import com.youku.search.util.JdbcUtil;
 import com.youku.soku.library.load.ProgrammeSearchNumber;
 import com.youku.soku.library.load.ProgrammeSearchNumberPeer;
+import com.youku.soku.manage.common.Constants;
 import com.youku.soku.suggest.trie.Entity;
 import com.youku.soku.util.DataBase;
 
@@ -42,7 +43,7 @@ public class ProgrammeSearchNumberLoader {
 		try {
 			conn = DataBase.getLibraryConn();
 			searchConn = DataBase.getSearchStatConn();
-			String sql = "SELECT id, name, alias FROM programme limit ?, ?";
+			String sql = "SELECT id, cate, name, alias FROM programme limit ?, ?";
 
 			pst = conn.prepareStatement(sql);
 			pst.setInt(1, offset);
@@ -52,9 +53,13 @@ public class ProgrammeSearchNumberLoader {
 				String name = rs.getString("name");
 				String alias = rs.getString("alias");
 				int id = rs.getInt("id");
+				int cate = rs.getInt("cate");
+				//若为综艺 则设置其全部的搜索量，即去掉年份
+				if(cate == Constants.VARIETY_CATE_ID){
+					name = name.split("\\s+")[0];
+				}
 				
 				int searchNumber = getSearchNumber(searchConn, name);
-				
 				if(alias != null) {
 					StringTokenizer st = new StringTokenizer(alias, "|");
 					while(st.hasMoreElements()) {
