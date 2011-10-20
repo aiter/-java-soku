@@ -43,8 +43,9 @@ public class ProgrammeEpisodeService {
 
 		Criteria crit = new Criteria();
 		crit.add(ProgrammeEpisodePeer.FK_PROGRAMME_SITE_ID, siteId);
+		
 		crit.addDescendingOrderByColumn(ProgrammeEpisodePeer.ORDER_ID);
-
+		
 		/*
 		 * if(siteId == Constants.YOUKU_SITE_ID) {
 		 * crit.add(ProgrammeEpisodePeer.VIEW_ORDER, 2); //youku站点只显示自动发现的剧集 }

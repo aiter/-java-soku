@@ -78,7 +78,8 @@ public class InitServlet extends HttpServlet {
 //		 启动定时更新任务
 		new ExtUpdateTimerTask().start();
 		
-
+		
+		new ExtUpdateRelatedShowTimerTask().start();
 
 		System.out
 				.println("*****************************************************");

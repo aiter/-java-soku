@@ -28,6 +28,7 @@ import com.youku.soku.library.load.Programme;
 import com.youku.soku.library.load.ProgrammeEpisode;
 import com.youku.soku.library.load.ProgrammeSite;
 import com.youku.soku.library.load.ProgrammeSitePeer;
+import com.youku.soku.manage.common.Constants;
 import com.youku.soku.newext.info.AliasInfo;
 import com.youku.soku.newext.info.AnimeInfo;
 import com.youku.soku.newext.info.ExtInfoHolder;
@@ -76,7 +77,8 @@ public class UpdateAlias {
 		criteria.addAscendingOrderByColumn(ProgrammeSitePeer.FK_PROGRAMME_ID);
 
 		// 得到该查询条件的总的更新记录条数
-		getTotalCount(startDate, endDate);
+		//getTotalCount(startDate, endDate);
+		
 		int updateProgrammeSiteCount = 0;
 		
 		String exceptionMessage = "增量更新发生异常：";
@@ -85,6 +87,7 @@ public class UpdateAlias {
 		logger.info("Current Sql:" + criteria);
 		try {
 			list = ProgrammeSitePeer.doSelect(criteria);
+			logger.info("增量加载的programme site个数: " + list.size());
 		} catch (TorqueException e) {
 			logger.error("获取programme site list失败");
 			logger.error(e.getMessage(), e);
@@ -141,22 +144,22 @@ public class UpdateAlias {
 
 						if (tmpPro.getCate() == ChannelType.MOVIE
 								.getValue()) {
-							UpdateMovie.doUpdate(tmpPro, movieInfo,
+							UpdateProgramme.doUpdate(tmpPro, movieInfo,
 									personInfo);
 
 						} else if (tmpPro.getCate() == ChannelType.TELEPLAY
 								.getValue()) {
-							UpdateTeleplay.doUpdate(tmpPro, teleplayInfo,
+							UpdateProgramme.doUpdate(tmpPro, teleplayInfo,
 									personInfo);
 
 						} else if (tmpPro.getCate() == ChannelType.ANIME
 								.getValue()) {
-							UpdateAnime.doUpdate(tmpPro, animeInfo,
+							UpdateProgramme.doUpdate(tmpPro, animeInfo,
 									personInfo);
 
 						} else if (tmpPro.getCate() == ChannelType.VARIETY
 								.getValue()) {
-							UpdateVariety.doUpdate(tmpPro, varietyInfo,
+							UpdateProgramme.doUpdate(tmpPro, varietyInfo,
 									personInfo);
 						}
 					}
@@ -225,12 +228,13 @@ public class UpdateAlias {
 						programmeSortmode);
 				programmePaid = middJson.optInt("paid", programmePaid);
 			} catch (JSONException e) {
+				logger.error(e.getMessage(), e);
 			}
 		}
 		programme.setPaid(programmePaid);
-		if (programmePaid == 1) {// 所有收费节目都不加载
+		/*if (programmePaid == 1) {// 所有收费节目都不加载
 			return;
-		}
+		}*/
 
 		programmeSite.setSortmode(programmeSortmode);
 		// 添加站点节目-->视频列表
@@ -320,19 +324,21 @@ public class UpdateAlias {
 			}
 
 			// 将站点排序
-			Collections.sort(list, new SiteComparator());
+			//Collections.sort(list, new SiteComparator());
 
 			// 设置节目的默认播放链接
-			List<ProgrammeEpisode> tmpProgrammeEpisodeList = aliasInfo.programmeSite_episode
+			/*List<ProgrammeEpisode> tmpProgrammeEpisodeList = aliasInfo.programmeSite_episode
 					.get(list.get(0));
 			if (tmpProgrammeEpisodeList != null
 					&& tmpProgrammeEpisodeList.size() > 0) {
-				programme.setPlayUrl(tmpProgrammeEpisodeList.get(0).getUrl());
-			}
-
+				//programme.setPlayUrl(tmpProgrammeEpisodeList.get(0).getUrl());
+				//programme.setPlayUrlSiteId(list.get(0).getSourceSite());
+			}*/
+			
+		
 			//添加节目-->节目站点对应关系。
 			aliasInfo.programme_programmeSite.put(programme, list);
-		}
+		} 
 	}
 
 }

@@ -26,9 +26,8 @@ public class ProgrammeComparator implements Comparator<Programme>, Serializable 
 			}else{
 				return 0;
 			}
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			//e.printStackTrace();
 		}
 		return 0;
 		

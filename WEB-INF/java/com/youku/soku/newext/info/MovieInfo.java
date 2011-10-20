@@ -2,9 +2,9 @@ package com.youku.soku.newext.info;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.youku.soku.library.load.Programme;
 import com.youku.soku.library.load.ProgrammeEpisode;
@@ -19,11 +19,11 @@ public class MovieInfo extends AliasInfo {
 	private static final long serialVersionUID = 1L;
 
 //	名称，别名 -------List<Programme>
-	public Map<String, ArrayList<Programme>> series_programme = new HashMap<String, ArrayList<Programme>>();
+	private Map<String, List<Programme>> series_programme = new ConcurrentHashMap<String, List<Programme>>();
 	
 	
 //	检索map,提供精准搜索匹配  Map<String,List<Programme>> name_programme
-	public Map<String, List<Programme>> name_programme = new HashMap<String, List<Programme>>();
+	private Map<String, List<Programme>> name_programme = new ConcurrentHashMap<String, List<Programme>>();
 
 //	 结果element
 //	public Map<ProgrammeSite, List<ProgrammeEpisode>> programmeSite_episode = new HashMap<ProgrammeSite, List<ProgrammeEpisode>>(100000);
@@ -68,5 +68,13 @@ public class MovieInfo extends AliasInfo {
 		}
 		name_programme.clear();
 	}
+	
+	public Map<String, List<Programme>> getSeries_programme() {
+		return series_programme;
+	}
 
+
+	public Map<String, List<Programme>> getName_programme() {
+		return name_programme;
+	}
 }

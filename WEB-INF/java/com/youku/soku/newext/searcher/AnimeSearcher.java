@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import com.youku.soku.library.load.Programme;
 import com.youku.soku.library.load.ProgrammeEpisode;
 import com.youku.soku.library.load.ProgrammeSite;
+import com.youku.soku.library.load.Series;
 import com.youku.soku.manage.util.ImageUtil;
 import com.youku.soku.newext.info.AnimeInfo;
 import com.youku.soku.newext.info.ExtInfoHolder;
@@ -40,11 +41,32 @@ public class AnimeSearcher {
 		}
 
 		AnimeInfo info = ExtInfoHolder.getCurrentThreadLocal().animeInfo;
+		
+//		 检索系列map,如果有结果则直接返回，不用搜索name_programmeSite表
+		List<Programme> programmeList = new ArrayList<Programme>();
+		programmeList = info.getSeries_programme().get(keyword.toLowerCase());
+
+		JSONArray returnJsonArr = new JSONArray();
+		if (programmeList != null && programmeList.size() > 0) {
+
+			JSONObject eleJson = null;
+			try {
+				eleJson = genJson(programmeList.get(0), info, site);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				logger.error("生成查询结果json数据失败");
+				e.printStackTrace();
+			}
+			if (eleJson != null)
+				returnJsonArr.put(eleJson);
+		}
+
+		if (returnJsonArr.length() > 0)
+			return returnJsonArr;
 
 		// 检索info.name_programmeSite
-		List<Programme> programmeList = info.name_programme.get(keyword.toLowerCase());
+		programmeList = info.getName_programme().get(keyword.toLowerCase());
 		if (programmeList != null && programmeList.size() > 0) {
-			JSONArray returnJsonArr = new JSONArray();
 			for (Programme programme : programmeList) {
 				JSONObject eleJson = null;
 				try {
@@ -73,6 +95,35 @@ public class AnimeSearcher {
 		
 		JSONObject returnJson = new JSONObject();
 		List<Integer> programmeSiteIdList=new ArrayList<Integer>();
+		
+		Series series=info.programme_series.get(programme);
+		if(series!=null && series.getId()>0){
+			JSONObject seriesJson=new JSONObject();
+			seriesJson.put("id", series.getId());
+			seriesJson.put("name",series.getName());
+			seriesJson.put("currentProgramme", programme.getId());
+			List<Programme> proList=info.getSeries_programme().get(StringUtils.trimToEmpty(series.getName()));
+			if(proList!=null && proList.size()>0){
+				JSONArray proJsonArr=new JSONArray();
+				for(Programme tmpPro: proList){
+					if(tmpPro.getId()==programme.getId()) continue;
+					JSONObject tmp=new JSONObject();
+					tmp.put("id", tmpPro.getId());
+					tmp.put("name", tmpPro.getName());
+					String middleResourceStr = info.middMap.get(tmpPro.getContentId());
+					JSONObject middJson=new JSONObject();
+					if (middleResourceStr != null) {
+						middJson=new JSONObject(middleResourceStr);
+						tmp.put("showid", middJson.optString("showid"));
+					}
+					
+					proJsonArr.put(tmp);
+				}
+			   seriesJson.put("programmes", proJsonArr);
+			}
+			
+			returnJson.put("series", seriesJson);
+		}
 		
 		//获取一个节目的中间层信息
 		String middleResourceStr = info.middMap.get(programme.getContentId());
@@ -105,7 +156,7 @@ public class AnimeSearcher {
 				
 				eleSite.put("firstLogo", StringUtils.trimToEmpty(programmeSite
 						.getFirstLogo()));
-				if(programmeSite.getSourceSite()==ProgrammeSiteType.优酷网.getValue()){
+				if(programmeSite.getSourceSite()==ProgrammeSiteType.优酷网.getValue() && programmeSite.getCompleted() != 1){
 					eleSite.put("streamtypes", middJson.optJSONArray("streamtypes")==null?"[]":middJson.optJSONArray("streamtypes"));
 					programmeJson.put("update_notice", StringUtils.trimToEmpty(middJson.optString("update_notice")));
 				}
@@ -148,7 +199,7 @@ public class AnimeSearcher {
 					logger.debug("add :"+ProgrammeSiteType.siteMap.get(programmeSiteIdList.get(i).intValue()));
 				}
 				
-				programmeJson.put("sites",programmeSiteIdList);
+				programmeJson.put("sites",tmpSiteList);
 			}
 		}
 

@@ -14,10 +14,12 @@ public class Loader {
 
 	AliasInfoLoader aliasLoader=new AliasInfoLoader();
 	
-	TeleplayLoader teleplayLoader = new TeleplayLoader();
+	/*TeleplayLoader teleplayLoader = new TeleplayLoader();
 	MovieLoader movieLoader = new MovieLoader();
 	VarietyLoader varietyLoader = new VarietyLoader();
-	AnimeLoader animeLoader = new AnimeLoader();
+	AnimeLoader animeLoader = new AnimeLoader();*/
+	
+	ProgrammeLoader porgrammeLoader = new ProgrammeLoader();
 
 	public void load(ExtInfo extInfo) throws Exception {
 
@@ -27,12 +29,17 @@ public class Loader {
 		
 		
 //		填充AliasInfo 中的 Map<Programme,List<ProgrammeSite>>  programme_programmeSite
+		
+		MiddTierResourceBuilder middTierResourceBuilder = new MiddTierResourceBuilder();
+		middTierResourceBuilder.init();
 
-		aliasLoader.load(extInfo.aliasInfo);
-		movieLoader.load(extInfo.movieInfo,extInfo.personInfo);
-		teleplayLoader.load(extInfo.teleplayInfo,extInfo.personInfo);
-		varietyLoader.load(extInfo.varietyInfo,extInfo.personInfo);
-		animeLoader.load(extInfo.animeInfo,extInfo.personInfo);
+		aliasLoader.load(extInfo.aliasInfo, middTierResourceBuilder);
+		porgrammeLoader.load(extInfo.movieInfo,extInfo.personInfo, middTierResourceBuilder);
+		porgrammeLoader.load(extInfo.teleplayInfo,extInfo.personInfo, middTierResourceBuilder);
+		porgrammeLoader.load(extInfo.varietyInfo,extInfo.personInfo, middTierResourceBuilder);
+		porgrammeLoader.load(extInfo.animeInfo,extInfo.personInfo, middTierResourceBuilder);
+		
+		porgrammeLoader.load(extInfo.documentaryInfo, extInfo.personInfo, middTierResourceBuilder);
 		
 //		对人物的电影电视剧列表排序
 		extInfo.personInfo.sortPersonProgramme(extInfo.aliasInfo);

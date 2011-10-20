@@ -105,6 +105,13 @@ public  static JSONObject genJson(Programme programme, VarietyInfo info,String s
 				JSONObject tmp=new JSONObject();
 				tmp.put("id", tmpPro.getId());
 				tmp.put("name", tmpPro.getName());
+				String middleResourceStr = info.middMap.get(tmpPro.getContentId());
+				JSONObject middJson=new JSONObject();
+				if (middleResourceStr != null) {
+					middJson=new JSONObject(middleResourceStr);
+					tmp.put("showid", middJson.optString("showid"));
+				}
+				
 				proJsonArr.put(tmp);
 			}
 		   seriesJson.put("programmes", proJsonArr);
@@ -141,7 +148,7 @@ public  static JSONObject genJson(Programme programme, VarietyInfo info,String s
 			JSONObject eleSite = new JSONObject();
 			eleSite.put("firstLogo", StringUtils.trimToEmpty(programmeSite
 					.getFirstLogo()));
-			if(programmeSite.getSourceSite()==ProgrammeSiteType.优酷网.getValue()){
+			if(programmeSite.getSourceSite()==ProgrammeSiteType.优酷网.getValue() && programmeSite.getCompleted() != 1){
 				eleSite.put("streamtypes", middJson.optJSONArray("streamtypes")==null?"[]":middJson.optJSONArray("streamtypes"));
 				programmeJson.put("update_notice", StringUtils.trimToEmpty(middJson.optString("update_notice")));
 			}

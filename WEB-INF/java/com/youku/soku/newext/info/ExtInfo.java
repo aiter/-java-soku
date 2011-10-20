@@ -23,6 +23,8 @@ public class ExtInfo implements Serializable {
 	public AnimeInfo animeInfo = new AnimeInfo(aliasInfo);
 	public PersonInfo personInfo = new PersonInfo();
 	
+	public DocumentaryInfo documentaryInfo = new DocumentaryInfo(aliasInfo);
+	
 	public boolean isDestroy = false;
 	
 
@@ -34,6 +36,7 @@ public class ExtInfo implements Serializable {
 		list.add(varietyInfo.info());
 		list.add(animeInfo.info());
 		list.add(personInfo.info());
+		list.add(documentaryInfo.info());
 
 		return list.toString();
 	}

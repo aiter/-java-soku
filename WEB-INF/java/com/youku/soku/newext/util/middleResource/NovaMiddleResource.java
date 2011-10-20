@@ -71,7 +71,7 @@ public class NovaMiddleResource {
 			return jsonObject;
 
 		} catch (Exception e) {
-			logger.error("抓取数据发生异常, url: " + builder, e);
+			logger.debug("抓取数据发生异常, url: " + builder, e);
 			return null;
 		}
 	}

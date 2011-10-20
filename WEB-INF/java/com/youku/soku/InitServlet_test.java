@@ -15,15 +15,14 @@ import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 
 import com.youku.soku.config.Config;
+import com.youku.soku.config.ExtServerConfig;
 import com.youku.soku.index.server.ServerManager;
 import com.youku.soku.manage.admin.copyright.util.CopyrightSpiderTimer;
-import com.youku.soku.manage.timer.DeadLinkCheckTimer;
 import com.youku.soku.manage.timer.EpisodeProgrammeIdSynTimer;
 import com.youku.soku.manage.timer.ProgrammeSearchNumberTimer;
-import com.youku.soku.manage.timer.ProgrammeSiteCompleteMaintainTimer;
-import com.youku.soku.shield.DataLoadTimer;
-import com.youku.soku.suggest.timer.LibraryDataLoadTimer;
-import com.youku.soku.suggest.timer.TrieTreeLoaderTimer;
+import com.youku.soku.newext.servlet.ExtTimerTask;
+import com.youku.soku.newext.servlet.ExtUpdateRelatedShowTimerTask;
+import com.youku.soku.newext.servlet.ExtUpdateTimerTask;
 
 
 /**
@@ -69,26 +68,34 @@ public class InitServlet_test extends HttpServlet {
 		} catch (Exception ex) {
 			ex.printStackTrace(System.err);
 		}
+		
+		ExtServerConfig.init(cfgFilePath+"ext.conf");
         
 		//配置memcache
 		
-		 
+		//版权抓取任务
+		new CopyrightSpiderTimer().start();
+		//剧集的节目Id同步
+		new EpisodeProgrammeIdSynTimer().start();
+		new ProgrammeSearchNumberTimer().start();
+				
 	      //加载站点信息
 		
+		new ExtTimerTask().start();
+
+		new ExtUpdateTimerTask().start();
+		new ExtUpdateRelatedShowTimerTask().start();
 		
+	
+		
+/*		new Top100ReportMailTimer().start();
 	//	new SiteTimer().start();
 	//	new DeadLinkCheckTimer().start();
 	//	new ProgrammeSiteCompleteMaintainTimer().start();
 	//	new KnowledgeDataLoadTimer().start();
 		new DataLoadTimer().start();
 		new LibraryDataLoadTimer().start();
-		new TrieTreeLoaderTimer().start();
-		//版权抓取任务
-		new CopyrightSpiderTimer().start();
-		//剧集的节目Id同步
-		new EpisodeProgrammeIdSynTimer().start();
-		new ProgrammeSearchNumberTimer().start();
-		System.out.println("**TEST CONFIG END**");
+		new TrieTreeLoaderTimer().start();*/
 	/*	new KnowledgeDataLoadTimer().start();
 		String memcachedPicPath = root + config.getInitParameter("memcached-pic");
 		MemCachedPic.init(memcachedPicPath);*/

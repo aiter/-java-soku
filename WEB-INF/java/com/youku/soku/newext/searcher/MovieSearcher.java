@@ -43,14 +43,35 @@ public class MovieSearcher {
 		}
 
 		MovieInfo info = ExtInfoHolder.getCurrentThreadLocal().movieInfo;
+		
+//		 检索系列map,如果有结果则直接返回，不用搜索name_programmeSite表
+		List<Programme> programmeList = new ArrayList<Programme>();
+		programmeList = info.getSeries_programme().get(keyword.toLowerCase());
+
+		JSONArray returnJsonArr = new JSONArray();
+		if (programmeList != null && programmeList.size() > 0) {
+
+			JSONObject eleJson = null;
+			try {
+				eleJson = genJson(programmeList.get(0), info, site);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				logger.error("生成查询结果json数据失败");
+				e.printStackTrace();
+			}
+			if (eleJson != null)
+				returnJsonArr.put(eleJson);
+		}
+
+		if (returnJsonArr.length() > 0)
+			return returnJsonArr;
 
 		// 检索系列map,如果有结果则直接返回，不用搜索name_programmeSite表
-		List<Programme> programmeList = new ArrayList<Programme>();
+		programmeList = new ArrayList<Programme>();
 
 		// 检索info.name_programmeSite
-		programmeList = info.name_programme.get(keyword.toLowerCase());
+		programmeList = info.getName_programme().get(keyword.toLowerCase());
 		if (programmeList != null && programmeList.size() > 0) {
-			JSONArray returnJsonArr = new JSONArray();
 			for (Programme programme : programmeList) {
 				JSONObject eleJson = null;
 				try {
@@ -109,7 +130,7 @@ public class MovieSearcher {
 						.getFirstLogo()));
 				
 //				只有优酷视频才添加hd字段
-				if(programmeSite.getSourceSite()==ProgrammeSiteType.优酷网.getValue()){
+				if(programmeSite.getSourceSite()==ProgrammeSiteType.优酷网.getValue() && programmeSite.getCompleted() != 1){
 					eleSite.put("streamtypes", middJson.optJSONArray("streamtypes")==null?"[]":middJson.optJSONArray("streamtypes"));
 					programmeJson.put("update_notice", StringUtils.trimToEmpty(middJson.optString("update_notice")));
 				}
@@ -157,8 +178,7 @@ public class MovieSearcher {
 			
 
 		}else{
-			logger.error("该影片没有对应的programme_site:name："+programme.getName()+"   pid:"+programme.getId());
-			
+			//logger.error("该影片没有对应的programme_site:name："+programme.getName()+"   pid:"+programme.getId());
 		}
 
 

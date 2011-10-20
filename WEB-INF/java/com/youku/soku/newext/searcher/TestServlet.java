@@ -46,7 +46,7 @@ public class TestServlet extends HttpServlet {
 			
 			
 			String name=request.getParameter("person");
-			Set<Integer> idSet = info.nameIdsMap.get(name);
+			List<Integer> idSet = info.nameIdsMap.get(name);
 			
 			StringBuffer returnBf=new StringBuffer();
 			if(idSet!=null && idSet.size()>0){

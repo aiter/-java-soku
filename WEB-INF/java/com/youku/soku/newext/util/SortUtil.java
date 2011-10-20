@@ -65,13 +65,13 @@ public class SortUtil {
 		//节目名-->对应的节目列表排序
 		 List<Programme> proList = null;
 		if(aliasInfo instanceof AnimeInfo){
-			proList = ((AnimeInfo)aliasInfo).name_programme.get(programme.getName());
+			proList = ((AnimeInfo)aliasInfo).getName_programme().get(programme.getName());
 		}else if (aliasInfo instanceof MovieInfo) {
-			proList = ((AnimeInfo)aliasInfo).name_programme.get(programme.getName());
+			proList = ((AnimeInfo)aliasInfo).getName_programme().get(programme.getName());
 		}else if (aliasInfo instanceof TeleplayInfo) {
-			proList = ((AnimeInfo)aliasInfo).name_programme.get(programme.getName());
+			proList = ((AnimeInfo)aliasInfo).getName_programme().get(programme.getName());
 		}else if (aliasInfo instanceof VarietyInfo) {
-			proList = ((AnimeInfo)aliasInfo).name_programme.get(programme.getName());
+			proList = ((AnimeInfo)aliasInfo).getName_programme().get(programme.getName());
 		}else {
 			
 		}

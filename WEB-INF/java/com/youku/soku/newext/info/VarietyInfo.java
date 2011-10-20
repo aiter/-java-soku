@@ -1,9 +1,10 @@
 package com.youku.soku.newext.info;
 
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.youku.soku.library.load.Programme;
 import com.youku.soku.library.load.ProgrammeEpisode;
@@ -33,10 +34,10 @@ public class VarietyInfo extends AliasInfo {
 	}
 	
 //系列的名称，别名-------------List<Programme>
-	public Map<String ,List<Programme>> series_programme=new HashMap<String,List<Programme>>();
+	public Map<String ,List<Programme>> series_programme=new ConcurrentHashMap<String,List<Programme>>();
 	
 //	 (名称 + 版本) | (搜索词) 为key   (给前端提供搜索服务的map)
-	public Map<String, List<Programme>> name_programme = new HashMap<String, List<Programme>>();
+	public Map<String, List<Programme>> name_programme = new ConcurrentHashMap<String, List<Programme>>();
 //	结果map
 //    public Map<ProgrammeSite,List<ProgrammeEpisode>> programmeSite_episode=new HashMap<ProgrammeSite,List<ProgrammeEpisode>>(100000);
 
@@ -68,6 +69,15 @@ public class VarietyInfo extends AliasInfo {
 			list.clear();
 		}
 		name_programme.clear();
+	}
+	
+	public Map<String, List<Programme>> getSeries_programme() {
+		return series_programme;
+	}
+
+
+	public Map<String, List<Programme>> getName_programme() {
+		return name_programme;
 	}
 
 }

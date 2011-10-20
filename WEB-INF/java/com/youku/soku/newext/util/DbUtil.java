@@ -199,7 +199,7 @@ public class DbUtil {
 			 episode = resultList.get(i);
 			 old = null;
 			 int orderId = episode.getOrderId();
-			 if((cate==ChannelType.TELEPLAY.getValue() || cate == ChannelType.ANIME.getValue()) && episode.getOrderStage()>0){
+			 if((cate==ChannelType.TELEPLAY.getValue() || cate == ChannelType.ANIME.getValue() || cate == ChannelType.VARIETY.getValue()) && episode.getOrderStage()>0){
 				 orderId = episode.getOrderStage();
 			 }
 			 old = map.get(orderId);

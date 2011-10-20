@@ -1,3 +1,4 @@
+
 package com.youku.soku.newext.searcher;
 
 import java.io.IOException;
@@ -81,9 +82,9 @@ public class PersonProgrammeSearcherServlet extends HttpServlet {
 			AliasInfo aliasInfo=ExtInfoHolder.getCurrentThreadLocal().aliasInfo;
 			
 			if (personId>0) {
-				returnJson = getDetailJsonByid(info,personId,aliasInfo);
+				returnJson = PeopleSearcher.getDetailJsonByid(info,personId,aliasInfo);
 			}else if(person!=null && person.length()>0){
-				returnJson = genDetailJson(info, person,aliasInfo);
+				returnJson = PeopleSearcher.genDetailJson(info, person,aliasInfo);
 			} 
 
 
@@ -194,88 +195,4 @@ public class PersonProgrammeSearcherServlet extends HttpServlet {
 
 	}*/
 
-	/**
-	 * @param info
-	 * @param personId
-	 * @param aliasInfo
-	 * @return
-	 */
-	private JSONObject getDetailJsonByid(PersonInfo info, int personId,
-			AliasInfo aliasInfo) {
-		JSONObject resultJson = new JSONObject();
-		String personPic = StringUtils.trimToEmpty(info.personpicMap
-				.get(personId));
-		
-		try {
-			if (personPic != null && personPic.length() > 0) {
-
-				JSONObject personInfo = new JSONObject(personPic);
-				if (personInfo != null) {
-					resultJson.put("name", personInfo.optString("personname"));
-					resultJson.put("detail", personInfo);
-				}
-			} else {
-				resultJson.put("detail", "{}");
-			}
-		} catch (JSONException e) {
-			logger.error("构造json对象失败： " + e.getMessage());
-		}
-
-		
-		List<Programme> programmeList = info.personproMap.get(personId);
-		List<JSONObject> movieList = new ArrayList<JSONObject>();
-		List<JSONObject> teleList = new ArrayList<JSONObject>();
-		List<JSONObject> zyList = new ArrayList<JSONObject>();
-		try {
-			if (programmeList != null && programmeList.size() > 0) {
-				for (Programme programme : programmeList) {
-					try {
-						JSONObject jsonObject = PeopleSearcher.genJson(programme, aliasInfo,null);
-						if(JSONUtil.isEmpty(jsonObject)){
-							continue;
-						}
-						if (programme.getCate() == ChannelType.MOVIE.getValue()) {
-							movieList.add(jsonObject);
-						} else if (programme.getCate() == ChannelType.TELEPLAY.getValue()) {
-							teleList.add(jsonObject);
-						}else if(programme.getCate() == ChannelType.VARIETY.getValue()){
-							zyList.add(jsonObject);
-						}
-					} catch (Exception e) {
-					}
-				}
-			}
-
-			resultJson.put(ChannelType.MOVIE.name(), movieList);
-			resultJson.put(ChannelType.TELEPLAY.name(), teleList);
-			resultJson.put(ChannelType.VARIETY.name(), zyList);
-		} catch (JSONException e) {
-			e.printStackTrace();
-			logger.error("构造json对象失败： " + e.getMessage());
-		}
-		return resultJson;
-	}
-
-	private JSONObject genDetailJson(PersonInfo info, String person, AliasInfo aliasInfo) {
-		JSONObject resultJson = new JSONObject();
-		
-		Set<Integer> idList = info.nameIdsMap.get(person);
-		if(idList==null || idList.size()<1){
-			try {
-				resultJson.put("detail", "{}");
-			} catch (JSONException e) {
-			}
-			return resultJson;
-		}
-		
-		JSONObject personArray = new JSONObject();
-		for (Integer personId : idList) {
-			try {
-				personArray.put(personId+"",getDetailJsonByid(info, personId, aliasInfo));
-			} catch (JSONException e) {
-			}
-		}
-		
-		return personArray;
-	}
 }

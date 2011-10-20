@@ -329,7 +329,7 @@
 				
 					<tr <s:if test="#index.odd">class="bg"</s:if>>
 						<td align="left">
-							<s:property value="orderStage"/>(<s:property value="orderId"/>)
+							<s:property value="orderStage"/> (<s:property value="getDate(orderId,cate)"/>)
 						</td>
 						
 							<s:iterator value="siteEpisode" status="siteIndex">

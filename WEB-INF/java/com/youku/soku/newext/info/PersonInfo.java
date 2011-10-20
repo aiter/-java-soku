@@ -2,11 +2,14 @@ package com.youku.soku.newext.info;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -31,13 +34,16 @@ public class PersonInfo implements Serializable {
 	
 	
 //  人物头像map
-	public Map<Integer,String> personpicMap=new HashMap<Integer,String>();
+	public Map<Integer,String> personpicMap=new ConcurrentHashMap<Integer,String>();
 	
 //	演员节目对应关系
-	public Map<Integer,List<Programme>> personproMap=new HashMap<Integer,List<Programme>>();
+	public Map<Integer,List<Programme>> personproMap=new ConcurrentHashMap<Integer,List<Programme>>();
 	
 	//人物名称对应人物ID
-	public Map<String,Set<Integer>> nameIdsMap=new HashMap<String,Set<Integer>>();
+	public Map<String,List<Integer>> nameIdsMap=new ConcurrentHashMap<String,List<Integer>>();
+	
+	//人物作为嘉宾参加的节目信息，节目信息为json array
+	public Map<Integer, String> personGuestProgrammeMap = new HashMap<Integer, String>();
 	
 	public void sortPersonProgramme(AliasInfo aliasInfo) {
 //		Map<String,List<Programme>> personProgrammeMap= personproMap;
@@ -72,8 +78,69 @@ public class PersonInfo implements Serializable {
 		}
 		
 	}
-	public void addPerson(Programme programme,AliasInfo aliasInfo){
+	
+	public void addPerson(Programme programme, AliasInfo aliasInfo){
+		addPerson(programme, aliasInfo, null, null);
+	}
+	
+	public void addPerson(Programme programme,AliasInfo aliasInfo, JSONArray programmeGuestInfo, Map<Integer, JSONObject> personInfoMap){
 		if(programme==null) return;
+		
+		//添加人物看点
+		if(programmeGuestInfo != null) {
+			for(int i = 0; i < programmeGuestInfo.length(); i++) {
+				JSONObject videoInfoJSONObject = programmeGuestInfo.optJSONObject(i);
+				JSONArray guestInfo = videoInfoJSONObject.optJSONArray("guest");
+				if(guestInfo != null) {
+					for(int j = 0; j < guestInfo.length(); j++) {
+						JSONObject guestJSONObject = guestInfo.optJSONObject(j);
+						int personId = guestJSONObject.optInt("id");
+						String resultInfo = personGuestProgrammeMap.get(personId);
+						JSONArray resultJSONArray;
+						if(resultInfo == null) {
+							resultJSONArray = new JSONArray();
+						} else {
+							try {
+								resultJSONArray = new JSONArray(resultInfo);
+							} catch (JSONException e) {
+								logger.error(e.getMessage(), e);
+								resultJSONArray = new JSONArray();
+							}
+						}
+						
+						try {
+							JSONObject point = new JSONObject();
+							point.put("title", programme.getName() + "  " + videoInfoJSONObject.optString("title"));
+							point.put("videoid", videoInfoJSONObject.optString("videoid"));
+							point.put("start", guestJSONObject.optString("start"));
+							resultJSONArray.put(point);
+						} catch (JSONException e) {
+							logger.error(e.getMessage(), e);
+						}
+						
+						List<JSONObject> guestPointList = new ArrayList<JSONObject>();
+						for(int k = 0; k < resultJSONArray.length(); k++) {
+							guestPointList.add(resultJSONArray.optJSONObject(k));
+						}
+						
+						Collections.sort(guestPointList, new Comparator<JSONObject> () {
+							@Override
+							public int compare(JSONObject o1, JSONObject o2) {
+								return o2.optString("show_videostage").compareTo(o1.optString("show_videostage"));
+							}
+						});
+						
+						JSONArray sortedResultJSONArray = new JSONArray();
+						for(JSONObject obj : guestPointList) {
+							sortedResultJSONArray.put(obj);
+						}
+						personGuestProgrammeMap.put(personId, sortedResultJSONArray.toString());
+					}
+				}
+			}
+		}
+		
+		
 		String middStr=aliasInfo.middMap.get(programme.getContentId());
 		if(middStr==null || middStr.length()<=0) return;
 		
@@ -126,9 +193,9 @@ public class PersonInfo implements Serializable {
 			/** 添加人物ID-->节目对应关系 */
 			addPersonProgramme(programme,persons);
 			/** 添加人物ID-->人物信息对应关系 */
-			addPersonpic(programme,persons);
+			addPersonpic(programme,persons, personInfoMap);
 			/** 添加人物名称-->人物ID列表对应关系 */
-			addNameIds(persons,idNameMap);
+			addNameIds(persons,idNameMap, personInfoMap);
 			
 		} catch (JSONException e) {
 			logger.error("构造json对象失败："+middStr);
@@ -158,13 +225,17 @@ public class PersonInfo implements Serializable {
 	 * <p>设置用户ID-->用户信息Map</p>
 	 * <p>添加用户名称-->用户ID的List</p>
 	 */
-	private void addPersonpic(Programme programme,Set<Integer> persons) {
+	private void addPersonpic(Programme programme,Set<Integer> persons, Map<Integer, JSONObject> personInfoMap) {
 		if(persons.size()==0) return;
-		String fields="pk_odperson persondesc personname personalias gender  birthday homeplace height  bloodtype nationality occupation thumburl";
 		for(Integer personId:persons){
 			if(personId<=0 ) continue;
 			
-			JSONObject picJson=MiddleResourceUtil.getPersonById(personId,fields);
+			JSONObject picJson = null;
+			if(personInfoMap == null) {
+				picJson=getPersonJson(personId, 2);
+			} else {
+				picJson = personInfoMap.get(personId);
+			}
 			if(picJson!=null){
 				String picUrl=picJson.toString();
 				if(picUrl!=null && StringUtils.trimToEmpty(picUrl).length()>0){
@@ -181,19 +252,98 @@ public class PersonInfo implements Serializable {
 		}
 	}
 	
+	private JSONObject getPersonJson(int personId, int maxRetriveTime) {
+		String fields = "state pk_odperson persondesc personname personalias gender  birthday homeplace height  bloodtype nationality occupation thumburl total_vv";
+		JSONObject perJson = null;
+		for(int i = 0; i < maxRetriveTime; i++) {
+			perJson = MiddleResourceUtil.getPersonById(personId, fields);
+			if(perJson != null) {
+				return perJson;
+			}
+		}
+		
+		
+		return null;
+	}
+	
 	/**
 	 * 添加用户名称-->用户ID的List
 	 */
-	private void addNameIds(Set<Integer> persons,Map<Integer, String> idNameMap) {
+	private void addNameIds(Set<Integer> persons,Map<Integer, String> idNameMap, final Map<Integer, JSONObject> personInfoMap) {
 		if(persons.size()==0) return;
 		
+		JSONObject perJson = null;
+		
+		Map<String, Set<Integer>> tmpPersonNameIdsMap = new HashMap<String, Set<Integer>>();
+		final Map<Integer, JSONObject> tmpPersonMap = new HashMap<Integer, JSONObject>();  //临时存放的person中间层数据，防止随后的排序再次查中间层
+		
 		for(Integer personId:persons){
-			if(personId<=0 ) continue;
-			String personName = idNameMap.get(personId);
+			boolean isNormalPerson = false;
+			if(personInfoMap != null) {
+				perJson = personInfoMap.get(personId);
+			} else {
+				perJson = getPersonJson(personId, 4);
+				tmpPersonMap.put(personId, perJson);
+			}
 			
-			MiscUtil.putIfAbsent(nameIdsMap, personName, new HashSet<Integer>());
+			if(perJson != null) {
+				isNormalPerson = "normal".equals(perJson.optString("state"));
+			}
 			
-			nameIdsMap.get(personName).add(personId);
+			if(isNormalPerson) {
+				if(personId<=0 ) continue;
+				String personName = idNameMap.get(personId);
+				
+				MiscUtil.putIfAbsent(tmpPersonNameIdsMap, personName, new HashSet<Integer>());
+				
+				tmpPersonNameIdsMap.get(personName).add(personId);
+				
+				//人物别名命中 add on 20110905  update on 20111012
+				JSONArray aliasArr = perJson.optJSONArray("personalias");
+				if(aliasArr != null) {
+					for(int i = 0; i < aliasArr.length(); i++) {
+						JSONObject aliasObj = aliasArr.optJSONObject(i);
+						String alias = aliasObj.optString("alias");
+						if(alias.length() > 0) {
+							MiscUtil.putIfAbsent(tmpPersonNameIdsMap, alias, new HashSet<Integer>());
+							tmpPersonNameIdsMap.get(alias).add(personId);
+						}
+					}
+				}
+			
+			}
+		
+		}
+		
+		//同名人物排序
+		for(String key : tmpPersonNameIdsMap.keySet()) {
+			Set<Integer> personIds = tmpPersonNameIdsMap.get(key);
+			
+			if(personIds == null) {
+				continue;
+			}
+			
+			List<Integer> personIdList = nameIdsMap.get(key);
+			if(personIdList == null) {
+				personIdList = new ArrayList<Integer>();
+				nameIdsMap.put(key, personIdList);
+			}
+			personIdList.addAll(personIds);
+			
+			if(personIds.size() > 1) {
+				Collections.sort(personIdList, new Comparator<Integer>() {
+
+					@Override
+					public int compare(Integer o1, Integer o2) {
+						JSONObject person1Info = (personInfoMap != null) ? personInfoMap.get(o1) : tmpPersonMap.get(o1);
+						JSONObject person2Info = (personInfoMap != null) ? personInfoMap.get(o2) : tmpPersonMap.get(o2);
+						
+						return person2Info.optInt("total_vv") - person1Info.optInt("total_vv");
+					}
+					
+				});
+			}
+			
 		}
 		
 	}
@@ -215,7 +365,7 @@ public class PersonInfo implements Serializable {
 		}
 		
 		if(nameIdsMap!=null){
-			for(Set<Integer> list:nameIdsMap.values()){
+			for(List<Integer> list:nameIdsMap.values()){
 				list.clear();
 			}
 			nameIdsMap.clear();

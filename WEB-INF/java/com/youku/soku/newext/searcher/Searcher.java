@@ -98,6 +98,8 @@ public class Searcher {
 		JSONArray  teleplay_json= TeleplaySearcher.searchByName(k,site);
 		JSONArray  variety_json= VarietySearcher.searchByName(k,site);
 		JSONArray  anime_json=AnimeSearcher.searchByName(k,site);
+		
+		JSONArray documentary_json = DocumentarySearcher.searchByName(k, site);
         
 		List<Integer> channelTypeList=new ArrayList<Integer>();
 		JSONObject jsonObject=new JSONObject();
@@ -122,6 +124,11 @@ public class Searcher {
 			jsonObject.put(ChannelType.ANIME.name(), anime_json);
 		}
 		
+		if (documentary_json != null) {
+			channelTypeList.add(ChannelType.DOCUMENTARY.getValue());
+			jsonObject.put(ChannelType.DOCUMENTARY.name(), documentary_json);
+		}
+		
         if(channelTypeList.size()>0)
         	jsonObject.put("nameTypes", channelTypeList);
 
@@ -144,6 +151,9 @@ public class Searcher {
 			
 		}else if(cate_id==TypeConstant.NameType.ANIME){
 			JSONObject tmpJson= AnimeSearcher.search(programmeIdArr,cate_id);
+			if(tmpJson!=null) returnStr=tmpJson.toString(4);
+		} else if(cate_id == TypeConstant.NameType.DOCUMENTARY) {
+			JSONObject tmpJson= DocumentarySearcher.search(programmeIdArr,cate_id);
 			if(tmpJson!=null) returnStr=tmpJson.toString(4);
 		}
 		
@@ -244,7 +254,26 @@ public class Searcher {
 					if(searchResult!=null) 
 						returnJson.put(new Integer(i).toString(), animeJson);
 					continue;
-				}else if(StringUtils.trimToEmpty(eleNameArr[1]).equals(ChannelType.PERSON.name())){
+				}
+				
+				else if(StringUtils.trimToEmpty(eleNameArr[1]).equals(ChannelType.DOCUMENTARY.name())){
+					JSONObject animeJson=new JSONObject();
+					
+					List<Integer> nameTypesList=new ArrayList<Integer>();
+					nameTypesList.add(ChannelType.DOCUMENTARY.getValue());
+					animeJson.put("nameTypes",ChannelType.DOCUMENTARY.name());
+					
+					animeJson.put("searchKey",StringUtils.trimToEmpty(eleNameArr[0]));
+					
+					JSONArray searchResult=DocumentarySearcher.searchByName(StringUtils.trimToEmpty(eleNameArr[0]),site);
+					animeJson.put(ChannelType.DOCUMENTARY.name(),searchResult);
+					
+					if(searchResult!=null) 
+						returnJson.put(new Integer(i).toString(), animeJson);
+					continue;
+				}
+				
+				else if(StringUtils.trimToEmpty(eleNameArr[1]).equals(ChannelType.PERSON.name())){
 					
 					JSONObject personJson=new JSONObject();
 					

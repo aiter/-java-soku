@@ -12,6 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import com.youku.search.pool.net.util.Cost;
 import com.youku.soku.newext.loader.FileLoaderAndSaver;
 import com.youku.soku.newext.loader.UpdateAlias;
+import com.youku.soku.newext.loader.UpdateRecommendation;
 
 /**
  * 直达区数据定期加载
@@ -67,7 +68,7 @@ public class ExtTimerTask {
 				//由于直达区文件更新需要一定时间，这时候做过的增量更新会被覆盖。所以加载完成后再做一遍增量，将过去3个小时改变的节目在加载一遍
 				Date startDate=null,nowDate=new Date();
 				Calendar calendar=Calendar.getInstance();
-				calendar.add(Calendar.HOUR, -3);
+				calendar.add(Calendar.HOUR, -24);
 				last=calendar.getTime().getTime();
 				startDate=new Date(last);	
 				
@@ -76,6 +77,9 @@ public class ExtTimerTask {
 						"结束时间："+sdf.format(nowDate));				
 				 new UpdateAlias().doUpdate(startDate,nowDate);
 				 //增量更新结束
+				 
+				 //重新加载相关节目
+				 new UpdateRecommendation().doUpdate();
 				
 				last = loaderAndSaver.file.lastModified();
 				logger.info("加载直达区新文件, 最新修改时间: " + new Date(last));

@@ -53,7 +53,7 @@ public class TopSearcherServlet extends HttpServlet {
 				cate_id=TypeConstant.NameType.MOVIE;
 			}
 			if(cate_id!=TypeConstant.NameType.MOVIE && cate_id!=TypeConstant.NameType.TELEPLAY &&
-					cate_id!=TypeConstant.NameType.VARIETY && cate_id!= TypeConstant.NameType.ANIME){
+					cate_id!=TypeConstant.NameType.VARIETY && cate_id!= TypeConstant.NameType.ANIME && cate_id != TypeConstant.NameType.DOCUMENTARY){
 				logger.error("cate 类型出错");
 				response.getWriter().print("");
 				response.getWriter().flush();

@@ -15,6 +15,8 @@ public class TypeConstant implements Serializable {
 		public static final int MUSIC = 4;// 音乐
 		public static final int ANIME = 5;// 动漫
 		public static final int PERSON = 6;// 人物
+		
+		public static final int DOCUMENTARY = 9;// 纪录片
 	}
 
 	public static class RoleType implements Serializable {

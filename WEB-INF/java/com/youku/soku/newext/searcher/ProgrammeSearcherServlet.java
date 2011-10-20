@@ -1,9 +1,6 @@
 package com.youku.soku.newext.searcher;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,16 +11,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 
-import com.youku.search.pool.net.util.Cost;
+import com.youku.soku.library.load.Programme;
 import com.youku.soku.newext.info.AliasInfo;
 import com.youku.soku.newext.info.AnimeInfo;
+import com.youku.soku.newext.info.DocumentaryInfo;
 import com.youku.soku.newext.info.ExtInfoHolder;
 import com.youku.soku.newext.info.MovieInfo;
 import com.youku.soku.newext.info.TeleplayInfo;
 import com.youku.soku.newext.info.VarietyInfo;
-import com.youku.soku.library.load.Programme;
-import com.youku.soku.library.load.ProgrammeSite;
-import com.youku.soku.util.ChannelType;
+import com.youku.soku.newext.util.ChannelType;
 
 
 /**
@@ -76,6 +72,7 @@ public class ProgrammeSearcherServlet extends HttpServlet {
 				TeleplayInfo tinfo=null;
 				AnimeInfo ainfo=null;
 				VarietyInfo vinfo=null;
+				DocumentaryInfo docinfo = null;
 				if(programme.getCate()==ChannelType.MOVIE.getValue()){/**电影*/
 					minfo=ExtInfoHolder.getCurrentThreadLocal().movieInfo;
 					resultJson=MovieSearcher.genJson(programme,minfo,null);
@@ -92,6 +89,10 @@ public class ProgrammeSearcherServlet extends HttpServlet {
 					ainfo=ExtInfoHolder.getCurrentThreadLocal().animeInfo;
 					resultJson=AnimeSearcher.genJson(programme,ainfo,null);
 					resultJson.put("channel", ChannelType.ANIME.name());
+				} else if(programme.getCate() == ChannelType.DOCUMENTARY.getValue()) {
+					docinfo=ExtInfoHolder.getCurrentThreadLocal().documentaryInfo;
+					resultJson=DocumentarySearcher.genJson(programme,docinfo,null);
+					resultJson.put("channel", ChannelType.DOCUMENTARY.name());
 				}
 				
 			}else{
