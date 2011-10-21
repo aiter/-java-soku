@@ -147,8 +147,11 @@ public class SokuFeedBackAction extends BaseActionSupport {
 						txt = "站内";
 					else if (fd.getSource() == 0)
 						txt = "站外";
-					else
+					else{//未知的也过滤掉
 						txt = "未知";
+						if(filter == 1)
+							continue;
+					}
 					sheet.addCell(new jxl.write.Label(0, j, txt,
 							writecellfontkeyword));
 
