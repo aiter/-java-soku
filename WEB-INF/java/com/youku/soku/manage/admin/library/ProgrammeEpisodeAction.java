@@ -195,10 +195,11 @@ public class ProgrammeEpisodeAction extends BaseActionSupport {
 							  key = getEpisodeKey(ps.getSourceSite(), episodeCount); 
 						  }
 
-						String date = (pe.getOrderStage()+"").substring(4,8);
+						String date = "";
 						String o_year ="";
 						if (!zy_stage_no_date && p.getCate() == Constants.VARIETY_CATE_ID) {
 							if (pe.getOrderStage() > 10000000){
+								date=(pe.getOrderStage()+"").substring(4,8);
 								o_year=(pe.getOrderStage()+"").substring(0,4);
 								date = year + date;
 								key = "site"

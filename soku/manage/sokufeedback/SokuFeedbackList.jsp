@@ -103,7 +103,12 @@ $(function() {
 	});
 	
 });
-	
+	function checkNeedFilter(obj){
+		if(obj.checked == true)
+			document.getElementById("filter").value=1;
+		else
+			document.getElementById("filter").value=0;
+	}
 	</script>
 </head>
 <body>
@@ -119,6 +124,7 @@ $(function() {
 <div class="select-bar"><s:form id="sokufeedbackForm"
 	action="SokuFeedBack_list" validate="false" cssClass="form"
 	theme="simple">
+	<input type="hidden" id="filter" name="filter" value="0" />
 	<label> 开始时间:<s:textfield id="startTime" name="startTime" /> </label>
 	<label> 结束时间:<s:textfield id="endTime" name="endTime" /> </label>
 	<label> source:<s:select key="source"
@@ -127,12 +133,14 @@ $(function() {
 	<label> state:<s:select key="state"
 		list="#{-1:'所有', 1:'喜欢', 0:'不喜欢'}" listKey="key" listValue="value" cssClass="aw"></s:select>
 	</label>
-	<label> keyword:<s:textfield key="keyword" cssClass="text" /> </label>
-	<label> url:<s:textfield key="url" cssClass="text" /> </label>
+	<label> keyword:<s:textfield key="keyword" cssClass="text" style="width:120px"/> </label>
+	<label> url:<s:textfield key="url" cssClass="text" style="width:120px"/> </label>
 	<label> <input id="list" type="button"
 		class="ui-button ui-state-default ui-corner-all" value="查询" /> </label>
 	<label> <input id="export" type="button"
-		class="ui-button ui-state-default ui-corner-all" value="导出为xls文件" /> </label>
+		class="ui-button ui-state-default ui-corner-all" value="导出为xls文件" />
+		 </label>
+	<input type="checkbox" onclick="checkNeedFilter(this)"/>过滤
 </s:form></div>
 
 <div class="table"><img src="soku/manage/img/bg-th-left.gif" width="8"

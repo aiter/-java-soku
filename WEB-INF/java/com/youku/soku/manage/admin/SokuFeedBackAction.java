@@ -7,9 +7,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -42,6 +45,7 @@ public class SokuFeedBackAction extends BaseActionSupport {
 	String createTime;
 	String startTime;
 	String endTime;
+	private int filter = 0;
 	private int pageNumber;
 	private PageInfo pageInfo;
 	String downfilename;
@@ -129,7 +133,15 @@ public class SokuFeedBackAction extends BaseActionSupport {
 				sheet.addCell(new jxl.write.Label(6, 1, "ip", writecellfont));
 				int j = 2;
 				String txt = "未知";
+				System.out.println(" feedback export size:"+list.size()+" filter:"+filter+" ");
 				for (SokuFeedback fd : list) {
+					//是否过滤
+					if(filter == 1){
+						String msg = fd.getMessage();
+						//若符合过滤条件 则过滤掉改记录
+						if(needFilter(msg))
+							continue;
+					}
 
 					if (fd.getSource() == 1)
 						txt = "站内";
@@ -148,8 +160,11 @@ public class SokuFeedBackAction extends BaseActionSupport {
 						txt = "未知";
 					sheet.addCell(new jxl.write.Label(1, j, txt,
 							writecellfontkeyword));
-					if (!fd.getUrl().startsWith("http://")
-							&& !!fd.getUrl().startsWith("www."))
+					//fd.getUrl为null bug
+					if(null==fd.getUrl()){
+						fd.setUrl("");
+					}
+					if (!fd.getUrl().startsWith("http://"))
 						sheet.addCell(new jxl.write.Label(2, j, fd.getUrl(),
 								writecellfontkeyword));
 					else
@@ -236,6 +251,57 @@ public class SokuFeedBackAction extends BaseActionSupport {
 			logger.error(e);
 		}
 	}
+	
+	//导出xls时  根据过滤规则过滤feedback ：空，纯标点 英文 数字，包含下载 广告 缓冲 卡等关键词
+	public boolean needFilter(String feedback){
+		String regx1 = "";//空
+		String regx2 = "\\p{Punct}+";//纯标点
+		String regx3 = "\\w+";//纯英文
+		String regx4 = "\\d+";//纯数字
+		String regx5 = "[\u4e00-\u9fa5]";//少于4个中文
+		String keywords = "下载,广告,缓冲,卡";
+		
+		feedback = feedback.replaceAll("\\s+", "");
+		String regxContent = "";
+		if(feedback.equals(regx1))
+			return true;
+		int zw = 0;
+		Pattern p = Pattern.compile(regx5);
+		Matcher m = p.matcher(feedback);
+		while(m.find())
+			zw++;
+		if(zw < 4)
+			return true;
+		
+		p=Pattern.compile(regx2);
+		m=p.matcher(feedback);
+		if(m.find())
+			regxContent = m.group();
+		if(feedback.equals(regxContent))
+			return true;
+		
+		p=Pattern.compile(regx3);
+		m=p.matcher(feedback);
+		if(m.find())
+			regxContent = m.group();
+		if(feedback.equals(regxContent))
+			return true;
+		
+		p=Pattern.compile(regx4);
+		m=p.matcher(feedback);
+		if(m.find())
+			regxContent = m.group();
+		if(feedback.equals(regxContent))
+			return true;
+		
+		String[] keys = keywords.split(",");
+		for(String key:keys){
+			if(feedback.contains(key))
+				return true;
+		}
+		
+		return false;
+	}
 
 	public String getStartTime() {
 		return startTime;
@@ -315,6 +381,14 @@ public class SokuFeedBackAction extends BaseActionSupport {
 
 	public void setSource(int source) {
 		this.source = source;
+	}
+
+	public int getFilter() {
+		return filter;
+	}
+
+	public void setFilter(int filter) {
+		this.filter = filter;
 	}
 
 }
