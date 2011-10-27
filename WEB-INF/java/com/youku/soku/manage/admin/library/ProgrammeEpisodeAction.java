@@ -218,6 +218,8 @@ public class ProgrammeEpisodeAction extends BaseActionSupport {
 
 				if (maxOrder < peDetailBo.getOrderId()) {
 					maxOrder = peDetailBo.getOrderId();
+					if(maxOrder > 3000)
+						maxOrder = 3000;
 					maxOrderSite = ps.getSourceSite();
 				}
 
@@ -240,8 +242,8 @@ public class ProgrammeEpisodeAction extends BaseActionSupport {
 				else
 					maxOrder = maxEpisodeCount;
 			}
-
-			for (int i = Math.max(maxOrder, episodeTotal); i > 0; i--) {
+			
+			for (int i = Math.max(episodeTotal, maxOrder); i > 0; i--) {
 				ProgrammeEpisodeDetailBo peDetailBo = new ProgrammeEpisodeDetailBo();
 				peDetailBo.setOrderId(i);
 				peDetailBo.setCate(p.getCate());
@@ -390,6 +392,8 @@ public class ProgrammeEpisodeAction extends BaseActionSupport {
 		for (ProgrammeEpisode te : rawProgrammeEpisodeList) {
 			if (te.getOrderId() > maxOrder) {
 				maxOrder = te.getOrderId();
+				if(maxOrder > 3000)
+					maxOrder = 3000;
 			}
 			if (!ImageUtil.isYoukuImage(te.getLogo())) {
 				te.setLogo(ImageUtil.getDisplayUrl(te.getLogo()));
@@ -434,6 +438,8 @@ public class ProgrammeEpisodeAction extends BaseActionSupport {
 				for (ProgrammeEpisode te : programmeEpisodeList) {
 					if (te.getOrderId() > maxOrder) {
 						maxOrder = te.getOrderId();
+						if(maxOrder > 3000)
+							maxOrder = 3000;
 					}
 				}
 
@@ -445,7 +451,10 @@ public class ProgrammeEpisodeAction extends BaseActionSupport {
 				}
 
 				for (ProgrammeEpisode te : programmeEpisodeList) {
-					allTelplayList.set(te.getOrderId(), te);
+					if(te.getOrderId() > maxOrder)
+						allTelplayList.set(maxOrder, te);
+					else
+						allTelplayList.set(te.getOrderId(), te);
 				}
 				allTelplayList.remove(0);
 				programmeEpisodeList = allTelplayList;

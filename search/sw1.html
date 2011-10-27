@@ -1,0 +1,126 @@
+<html>
+<head>
+<title></title>
+<script type="text/javascript" src="gbkEncode.js"></script>
+<script type="text/javascript">
+        var key = "";
+        var site_count = 2;//8;
+        var site_ids = ["td","qy"];//["td","qy","bd","sg","yk","xl","sh","ls"];
+        var site_urls = ["http://so.tudou.com/nisearch/","http://so.qiyi.com/so/q_"];//["http://so.tudou.com/nisearch/","http://so.qiyi.com/so/q_","http://video.baidu.com/v?word=","http://v.sogou.com/v?query=","http://www.soku.com/v?keyword=","http://video.sina.com.cn/search/index.php?k=","http://so.tv.sohu.com/mts?wd=","http://so.letv.com/s?wd="];
+	
+        function search(){
+			key = document.getElementById("keyword").value;
+			if(key.length == 0){
+			   alert("please entry keyword!");
+			   document.getElementById("keyword").focus();
+			   return;
+				}
+				for(var i=0;i<site_count;i++){
+			var frame = window.top.frames[site_ids[i]];//document.getElementById();
+			var frame_f ;
+			if(navigator.userAgent.indexOf('MSIE') >= 0)
+				frame_f = frame.document.getElementById(site_ids[i]);
+			else 
+				frame_f = window.top.document.getElementById(site_ids[i]).contentDocument.getElementById(site_ids[i]);
+
+			var key_encode = key;
+			if("bd,sh".indexOf(site_ids[i])==-1)
+			  	key_encode = encodeURIComponent(key);
+			else
+				key_encode = GBKEncode(key);
+			frame_f.src = site_urls[i]+key_encode;
+		}
+	}
+	document.onkeydown = function(evt){
+	    var evt = window.event?window.event:evt;
+	    if(evt.keyCode==13){
+		search();
+	    }
+       }
+
+       function initSite(){
+         site_count = 0;
+         site_ids =[];
+         site_urls = [];
+         var sites = document.getElementsByName("site"); 
+         var index = 0;      
+         for(var i=0;i<sites.length;i++){
+	    var value = sites[i].id;
+            if(sites[i].checked == true){
+               site_count ++;
+               site_urls[index] = value.split(",")[1];
+               site_ids[index] = value.split(",")[0]; 
+               index ++;
+            }
+	  }
+		document.getElementById("siteids").value = site_ids;
+		var frames = window.top.document.getElementById("sf");
+		var framechild = frames.childNodes;
+		var length = framechild.length;
+		for(var j=0;j<length;j++){
+			frames.removeChild(framechild[0]);
+		}
+	 	initFrame();
+        if(key.length>0)
+	      setTimeout('search()',1000);
+       }
+
+       function initFrame(){
+         var frames = window.top.document.getElementById("sf");alert(frames);
+		 var p = 100/site_count;
+         var html = "";
+         frames.cols = "";
+         for(var i=0;i<site_count;i++){
+	    if(i==site_count-1)
+		frames.cols += p + "%";
+            else
+         	frames.cols += p+"%,"; 
+            //html += "<frame src='"+site_ids[i]+".html' name='"+site_ids[i]+"' id='"+site_ids[i]+"' >";
+	 }
+	 for(var i=0;i<site_count;i++){
+	 	var frame ;
+	 	if(navigator.userAgent.indexOf('MSIE') >= 0)
+			frame = frames.document.createElement("frame");
+		else
+			frame = document.createElement("frame");
+	 	frame.id = site_ids[i];
+        	frame.name = site_ids[i];
+	  	frame.src = site_ids[i] + ".html";
+	  	frames.appendChild(frame);
+	 }
+       }
+	
+	initFrame();
+
+	//the function for nodesite use back
+	function initSiteHtml(sitesids){
+		var sites = document.getElementsByName("site");
+		for(var i=0;i<sites.length;i++){
+			if(sitesids.indexOf(sites[i].id.split(",")[0])>-1)
+				sites[i].checked = true;
+		}
+		initSite();
+	}
+	
+</script>
+</head>
+<body>
+  <div>
+    <input type="text" id="keyword"/>
+    <input type="button" value="search" onclick="search();"/>
+    <input type="checkbox" name="site" id="td,http://so.tudou.com/nisearch/" value="0" onclick="initSite();" checked />土豆
+    <input type="checkbox" name="site" id="qy,http://so.qiyi.com/so/q_" value="1" onclick="initSite();" checked />奇艺
+    <input type="checkbox" name="site" id="bd,http://video.baidu.com/v?ty=10&word=" value="2" onclick="initSite();" />百度
+    <input type="checkbox" name="site" id="sg,http://v.sogou.com/v?query=" value="3" onclick="initSite();" />搜狗
+    <input type="checkbox" name="site" id="yk,http://www.soku.com/v?keyword=" value="4" onclick="initSite();" />优酷
+    <input type="checkbox" name="site" id="xl,http://video.sina.com.cn/search/index.php?k=" value="5" onclick="initSite();" />新浪
+    <input type="checkbox" name="site" id="sh,http://so.tv.sohu.com/mts?wd=" value="6" onclick="initSite();" />搜狐
+    <input type="checkbox" name="site" id="ls,http://so.letv.com/s?wd=" value="7" onclick="initSite();" />乐视
+    <input type="checkbox" name="site" id="qq,http://v.qq.com/search.html?pagetype=3&ms_key=" value="8" onclick="initSite();" />QQ
+    <input type="checkbox" name="site" id="pp,http://search.pptv.com/s_video/q_" value="9" onclick="initSite();" />PPTV
+    <input type="hidden" id="siteids" value="td,qy" />
+    <input type="button" value="下一个" id="nextkeywords" onclick="nextKey()" style="display:none" />
+  </div> 
+  
+</body>
+</html>

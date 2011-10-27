@@ -17,6 +17,10 @@ public class DataBase {
 	/**
 	 * 获取主数据库Connection
 	 */
+	public static Connection getSpider23Connection() throws TorqueException
+	{
+		return Torque.getConnection("spider23");
+	}
 	public static Connection getSpiderConnection() throws TorqueException
 	{
 		return Torque.getConnection("so");

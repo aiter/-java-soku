@@ -1,0 +1,101 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/search/!svn/ver/7353/src/WEB-INF/java/com/youku/soku/newext/loader
+END
+LoadFromFile.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/search/!svn/ver/4573/src/WEB-INF/java/com/youku/soku/newext/loader/LoadFromFile.java
+END
+UpdateTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/search/!svn/ver/4699/src/WEB-INF/java/com/youku/soku/newext/loader/UpdateTask.java
+END
+Loader.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/search/!svn/ver/7313/src/WEB-INF/java/com/youku/soku/newext/loader/Loader.java
+END
+UpdateRecommendation.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/search/!svn/ver/6850/src/WEB-INF/java/com/youku/soku/newext/loader/UpdateRecommendation.java
+END
+GenFile.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/search/!svn/ver/4573/src/WEB-INF/java/com/youku/soku/newext/loader/GenFile.java
+END
+CmsLoader.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/search/!svn/ver/6758/src/WEB-INF/java/com/youku/soku/newext/loader/CmsLoader.java
+END
+GenRelatedShowFile.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/search/!svn/ver/7313/src/WEB-INF/java/com/youku/soku/newext/loader/GenRelatedShowFile.java
+END
+ProgrammeLoader.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/search/!svn/ver/6850/src/WEB-INF/java/com/youku/soku/newext/loader/ProgrammeLoader.java
+END
+MiddTierResourceBuilder.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/search/!svn/ver/7447/src/WEB-INF/java/com/youku/soku/newext/loader/MiddTierResourceBuilder.java
+END
+Update.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/search/!svn/ver/4699/src/WEB-INF/java/com/youku/soku/newext/loader/Update.java
+END
+RelatedShowBuilder.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/search/!svn/ver/7313/src/WEB-INF/java/com/youku/soku/newext/loader/RelatedShowBuilder.java
+END
+FileLoaderAndSaver.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/search/!svn/ver/4638/src/WEB-INF/java/com/youku/soku/newext/loader/FileLoaderAndSaver.java
+END
+UpdateAlias.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/search/!svn/ver/6850/src/WEB-INF/java/com/youku/soku/newext/loader/UpdateAlias.java
+END
+RelatedShowLoaderAndSaver.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/search/!svn/ver/6758/src/WEB-INF/java/com/youku/soku/newext/loader/RelatedShowLoaderAndSaver.java
+END
+AliasInfoLoader.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/search/!svn/ver/7353/src/WEB-INF/java/com/youku/soku/newext/loader/AliasInfoLoader.java
+END
+UpdateProgramme.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/search/!svn/ver/7447/src/WEB-INF/java/com/youku/soku/newext/loader/UpdateProgramme.java
+END

@@ -80,7 +80,7 @@ public class NewProgrammeAction extends BaseActionSupport {
 		ResultSet rs = null;
 		
 		try {
-			conn = DataBase.getSpiderConnection();
+			conn = DataBase.getSpider23Connection();
 			
 			int recordCount = getNewProgrammeCount();
 			

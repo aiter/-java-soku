@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/search/!svn/ver/6850/src/WEB-INF/java/com/youku/soku/newext/servlet
+END
+ExtTimerTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/search/!svn/ver/6850/src/WEB-INF/java/com/youku/soku/newext/servlet/ExtTimerTask.java
+END
+ExtRelatedShowBuildTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/search/!svn/ver/6758/src/WEB-INF/java/com/youku/soku/newext/servlet/ExtRelatedShowBuildTask.java
+END
+ExtUpdateTimerTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/search/!svn/ver/6413/src/WEB-INF/java/com/youku/soku/newext/servlet/ExtUpdateTimerTask.java
+END
+InitServlet.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/search/!svn/ver/6758/src/WEB-INF/java/com/youku/soku/newext/servlet/InitServlet.java
+END
+ExtUpdateRelatedShowTimerTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/search/!svn/ver/6758/src/WEB-INF/java/com/youku/soku/newext/servlet/ExtUpdateRelatedShowTimerTask.java
+END

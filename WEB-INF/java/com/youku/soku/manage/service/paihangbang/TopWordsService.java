@@ -1,16 +1,15 @@
 package com.youku.soku.manage.service.paihangbang;
 
-import java.io.File;
-import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
-import java.util.Map.Entry;
 
-import jxl.Workbook;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
@@ -23,8 +22,6 @@ import org.apache.torque.NoRowsException;
 import org.apache.torque.TooManyRowsException;
 import org.apache.torque.TorqueException;
 import org.apache.torque.util.Criteria;
-import org.apache.torque.util.SqlEnum;
-import org.apache.torque.util.Criteria.Criterion;
 
 import com.workingdogs.village.Record;
 import com.youku.soku.manage.bo.paihangbang.KeywordTypeVO;
@@ -282,4 +279,35 @@ public class TopWordsService {
 			return "全部";
 	}
 	
+	//获取指定数量的搜索词  默认按搜索数量排序
+	public static List<TopWordsVO> getTopKeyWords(int top,int cate){
+		List<TopWordsVO> result = new ArrayList<TopWordsVO>();
+		Calendar c= Calendar.getInstance();
+		c.add(Calendar.DATE, -1);
+		String top_date = new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());
+		
+		Criteria crit = new Criteria();
+		if(cate>0 && cate <10)
+			crit.add(TopWordsPeer.CATE,cate);
+		else if(cate==100)
+			crit.add(TopWordsPeer.CATE,0);
+		crit.setLimit(top);
+		crit.add(TopWordsPeer.TOP_DATE,top_date);
+		if(cate!=WordType.搞笑.getValue())
+			crit.add(TopWordsPeer.ISTOP,1);
+		crit.addDescendingOrderByColumn(TopWordsPeer.QUERY_COUNT);
+		crit.addDescendingOrderByColumn(TopWordsPeer.KEYWORD);
+		try {
+			List<TopWords> twList = TopWordsPeer.doSelect(crit);
+			for(TopWords tw:twList){
+				TopWordsVO twv = new TopWordsVO();
+				twv.setKeyword(tw.getKeyword());
+				result.add(twv);
+			}
+		} catch (TorqueException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

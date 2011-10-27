@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/search/!svn/ver/7447/src/WEB-INF/java/com/youku/soku/newext/redis/searcher
+END
+ShardedRedisClient.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/search/!svn/ver/7447/src/WEB-INF/java/com/youku/soku/newext/redis/searcher/ShardedRedisClient.java
+END
+RedisExtSearcher.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/search/!svn/ver/7447/src/WEB-INF/java/com/youku/soku/newext/redis/searcher/RedisExtSearcher.java
+END
+RedisClient.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/search/!svn/ver/7447/src/WEB-INF/java/com/youku/soku/newext/redis/searcher/RedisClient.java
+END

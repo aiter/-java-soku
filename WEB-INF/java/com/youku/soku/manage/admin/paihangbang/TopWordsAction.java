@@ -510,6 +510,11 @@ public class TopWordsAction extends BaseActionSupport {
 		}
 		return null;
 	}
+	//获取指定cate搜索词的数量
+	public String compareKeyWord(){
+		topwordsvo = TopWordsService.getTopKeyWords(num, cate);
+		return "compare";
+	}
 	
 	
 	public int getNum() {

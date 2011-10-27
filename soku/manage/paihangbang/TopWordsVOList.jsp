@@ -326,6 +326,17 @@ $(function() {
 		window.location = 'TopWords_exportXls.do?num='+num+'&cate='+cate+'&topdate='+topdate;
 	}
 	
+	function compareKeyword(){
+		var num = document.getElementById("top").value;
+		var cate = document.getElementById("topwordsForm_cate").value;
+		if(num.length==0){
+			alert("请输入导出的条数！");
+			document.getElementById("top").focus();
+			return;
+		}
+		window.open("TopWords_compareKeyWord.do?num="+num+"&cate="+cate,"_blank");
+	}
+	
 	</script>
 </head>
 <body>
@@ -362,6 +373,10 @@ $(function() {
 	<label> <s:textfield id="num" name="num" cssClass="text" value="200"/> </label>
 	<label> <input id="list" type="button" onclick="exportXls()" 
 		class="ui-button ui-state-default ui-corner-all" value="导出搜索排行" /> </label>
+	
+	<label> <s:textfield id="top" name="top" cssClass="text" value="50"/> </label>
+	<label> <input id="list" type="button" onclick="compareKeyword()" 
+		class="ui-button ui-state-default ui-corner-all" value="关键词比较" /> </label>
 </div>
 
 <input type="hidden" id="operateId" />

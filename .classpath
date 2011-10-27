@@ -75,7 +75,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/xml-apis-2.0.2.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/xmlParserAPIs-2.0.2.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/xom-1.0-2005-01-05.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/xwork-2.0.4.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/xwork-core-2.1.6.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/youku-analyze.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/youku-ftp.jar"/>

@@ -457,6 +457,7 @@
 
 		<action name="TopWords_*" method="{1}"  class="com.youku.soku.manage.admin.paihangbang.TopWordsAction">
                         <result name="list">/soku/manage/paihangbang/TopWordsVOList.jsp</result>
+                        <result name="compare">/search/kit.jsp</result>
                      <interceptor-ref name="newtopmanage" />
                </action>
 			

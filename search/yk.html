@@ -1,0 +1,50 @@
+﻿<html>
+<head>
+<title>多站点搜索</title>
+<script type="text/javascript">
+	var dbc = 0;
+	var _site_ids ;
+	function maxOrmin(){
+		var sw = window.top.document.getElementById("sw");
+		var sf = window.top.document.getElementById("sf");
+		if(navigator.userAgent.indexOf('MSIE') >= 0)
+			_site_ids = window.top.frames["sw"].document.getElementById("siteids").value;
+		else
+			_site_ids = sw.contentDocument.getElementById("siteids").value;
+		var _site_ids_arry = _site_ids.split(",");
+		sf.cols = "";
+		var sitesize = _site_ids_arry.length;
+		var sitep = 100/sitesize;
+		//dbc show the button is max or min
+		for(var i=0;i<sitesize ;i++){
+			if("yk" == _site_ids_arry[i]){
+				if(dbc == 0)
+					sf.cols += "100%";
+				else
+					sf.cols += sitep + "%";
+			}else{
+				if(dbc == 0)
+					sf.cols += "0%";
+				else
+					sf.cols += sitep + "%";
+			}
+			if(i != sitesize-1)
+				sf.cols += ","
+		}
+		dbc = dbc==0?1:0;
+		if(dbc == 1)
+			document.getElementById("btn").value="返回";
+		else
+			document.getElementById("btn").value="全屏";		
+	}
+</script>
+</head>
+<body>
+<div>
+<input type="button" id="btn" value="全屏" onclick="maxOrmin()"/>
+</div>
+<iframe src="http://www.soku.com/v?keyword=" width="100%" height="100%" name="yk" id="yk"  marginheight="0" marginwidth="0" frameborder="0" style="border:#FFFFFF"></iframe>
+
+
+</body>
+</html>

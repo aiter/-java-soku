@@ -483,12 +483,14 @@ public class SpiderInterface {
 			// "select p.id, p.name, p.cate, ps.id, ps.episode_collected, ps.source_site, pe.url, pe.order_id, pe.order_stage from programme p, programme_site ps, programme_episode pe where p.state = 'normal' and p.id = ps.fk_programme_id and pe.fk_programme_site_id = ps.id and ps.completed = 0 and ps.source_site != 100 and ps.source_site != 14 and p.cate != 2 order by pe.order_stage desc";
 			// String sql =
 			// "select ps.fk_programme_id,ps.id, ps.episode_collected, ps.source_site, pe.url, pe.order_id, pe.order_stage from programme_site ps, programme_episode pe where pe.fk_programme_site_id = ps.id and ps.completed = 0 and ps.source_site != 100 and ps.source_site != 14 order by pe.order_stage desc";
+			List<Integer> pids = new ArrayList<Integer>();
 			String psids = "";
 			Map<Integer, ProgrammeSite> psMap = new HashMap<Integer, ProgrammeSite>();
 			Criteria crit = new Criteria();
 			crit.add(ProgrammeSitePeer.COMPLETED, 0);
-			crit.add(ProgrammeSitePeer.SOURCE_SITE, 14, Criteria.NOT_EQUAL);
-			crit.add(ProgrammeSitePeer.SOURCE_SITE, 100, Criteria.NOT_EQUAL);
+			//crit.add(ProgrammeSitePeer.SOURCE_SITE, 14, Criteria.NOT_EQUAL);
+			//crit.add(ProgrammeSitePeer.SOURCE_SITE, 100, Criteria.NOT_EQUAL);
+			crit.addNotIn(ProgrammeSitePeer.SOURCE_SITE, new int[]{14,100});
 			crit
 					.add(ProgrammeSitePeer.EPISODE_COLLECTED, 0,
 							Criteria.NOT_EQUAL);
@@ -505,13 +507,28 @@ public class SpiderInterface {
 				return null;
 			for (int i = 0; i < psList.size(); i++) {
 				ProgrammeSite ps = psList.get(i);
+				//psMap.put(ps.getId(), ps);
+				//psids += ps.getId();
+				//if (i != psList.size() - 1)
+				//	psids += ",";
+				pids.add(ps.getFkProgrammeId());
+			}
+			Criteria pscrit = new Criteria();
+			pscrit.add(ProgrammeSitePeer.COMPLETED, 0);
+			//pscrit.add(ProgrammeSitePeer.SOURCE_SITE, 14, Criteria.NOT_EQUAL);
+			//pscrit.add(ProgrammeSitePeer.SOURCE_SITE, 100, Criteria.NOT_EQUAL);
+			crit.addNotIn(ProgrammeSitePeer.SOURCE_SITE, new int[]{14,100});
+			pscrit.add(ProgrammeSitePeer.EPISODE_COLLECTED, 0,Criteria.NOT_EQUAL);
+			pscrit.addIn(ProgrammeSitePeer.FK_PROGRAMME_ID, pids);
+			List<ProgrammeSite> pssList = ProgrammeSitePeer.doSelect(pscrit);
+			for (int i = 0; i < pssList.size(); i++) {
+				ProgrammeSite ps = pssList.get(i);
 				psMap.put(ps.getId(), ps);
 				psids += ps.getId();
-				if (i != psList.size() - 1)
+				if (i != pssList.size() - 1)
 					psids += ",";
-
 			}
-			
+			System.out.print(" addin pids:"+psids);
 			String sql = "select fk_programme_site_id, group_concat(url)urls, group_concat(order_id)ois, group_concat(order_stage)oss from programme_episode where fk_programme_site_id in ("
 					+ psids
 					+ ") group by fk_programme_site_id order by order_stage desc";
@@ -546,6 +563,7 @@ public class SpiderInterface {
 				String[] urls = rs.getString("urls").split(",");
 				String[] ois = rs.getString("ois").split(",");
 				String[] oss = rs.getString("oss").split(",");
+				
 				for (int i = 0; i < ois.length; i++) {
 					SpiderInfo si = new SpiderInfo();
 					si.setId(pid);
@@ -592,7 +610,6 @@ public class SpiderInterface {
 
 			for (Integer pk : programmeMap.keySet()) {
 				Map<Integer, List<SpiderInfo>> infoMap = programmeMap.get(pk);
-
 				SpiderInfo p = null;
 				JSONObject programmeInfo = new JSONObject();
 				JSONObject siteInfo = new JSONObject();
@@ -602,7 +619,7 @@ public class SpiderInterface {
 
 					JSONObject episodeInfo = new JSONObject();
 					for (SpiderInfo si : infoMap.get(key)) {
-
+						
 						j++;
 						if (s == null) {
 							s = si;
@@ -642,7 +659,8 @@ public class SpiderInterface {
 				programmeInfo.put("searchNumber", searchNumberMap
 						.get(p.getId()));
 				programmeInfo.put("siteInfo", siteInfo);
-				info.put(programmeInfo);
+				if(siteInfo.length()>0)
+					info.put(programmeInfo);
 			}
 
 			long end = System.currentTimeMillis();
@@ -783,7 +801,7 @@ public class SpiderInterface {
 					}
 
 					siteMap.remove(s.getSource_site());
-					if (s.getEpisodeCollected() == 0) {
+					if (s.getEpisodeCollected() == 0 && null!=SiteService.getEpisodeSpiderMap().get(s.getSource_site())) {
 						siteInfo.put(s.getSource_site() + "", episodeInfo);
 
 						programmeInfo.put("siteInfo", siteInfo);
