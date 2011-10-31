@@ -456,10 +456,10 @@ public class TopWordsAction extends BaseActionSupport {
 		if (null != topwords) {
 			if (!StringUtils.isBlank(searchwords)) {
 				List<ProgrammeVO> programmes = null;
-				if (topwords.getCate() == WordType.综艺.getValue())
-					programmes = ProgrammeMgt.getInstance().getSeries(
-							searchwords.trim(), topwords.getCate());
-				else
+				//if (topwords.getCate() == WordType.综艺.getValue())
+				//	programmes = ProgrammeMgt.getInstance().getSeries(
+				//			searchwords.trim(), topwords.getCate());
+				//else
 					programmes = ProgrammeMgt.getInstance().getProgramme(
 							searchwords.trim(), topwords.getCate());
 				if (null != programmes) {
@@ -515,7 +515,18 @@ public class TopWordsAction extends BaseActionSupport {
 		topwordsvo = TopWordsService.getTopKeyWords(num, cate);
 		return "compare";
 	}
-	
+	//获取所有自定义词的分类
+	public String typeList(){
+		if (null == pageInfo)
+			pageInfo = new PageInfo();
+		pageInfo.setPageSize(100);
+		if (getPageNumber() == 0) {
+			setPageNumber(1);
+		}
+		pageInfo.setCurrentPageNumber(getPageNumber());
+		
+		return "typeList";
+	}
 	
 	public int getNum() {
 		return num;

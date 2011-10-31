@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -181,6 +183,88 @@ public class SpiderInterface {
 	 * 
 	 * return null; }
 	 */
+	public List<Integer> getProgrammeIdsByHot(int offset,int size){
+		List<Integer> result = new ArrayList<Integer>();
+		Connection conn = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			//按节目的搜索量排序
+			String sql = "select p.id from programme p,programme_site ps,programme_search_number psn where p.id=psn.fk_programme_id and p.id=ps.fk_programme_id and ps.source_site!=14 and ps.source_site!=100 and ps.completed=0 and ps.episode_collected!=0 and p.cate!=2 and p.state='normal' group by psn.fk_programme_id order by psn.search_number desc";
+			String limitsql = "";
+			if (offset > -1) {
+				if (size > 0) {
+					limitsql = " limit "+offset+","+size;
+				} else
+					limitsql = " limit "+offset;
+			}
+			
+			conn = DataBase.getLibraryConn();
+			pst = conn.prepareStatement(sql+limitsql);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				result.add(rs.getInt("p.id"));
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+				if (rs != null) {
+					rs.close();
+				}
+				JdbcUtil.close(conn);
+			} catch (SQLException e) {
+
+			}
+		}
+		return result;
+	}
+	
+	public List<ProgrammeSpiderBo> getProgrammeSpiderBoByHot(){
+		List<ProgrammeSpiderBo> result = new ArrayList<ProgrammeSpiderBo>();
+		Connection conn = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			// 按节目搜索量排序
+			String sql = "select p.id,p.name,p.state,p.cate,p.episode_total from programme p,programme_search_number psn where p.id=psn.fk_programme_id and p.paid=0 and p.state='normal' order by psn.search_number desc";
+
+			conn = DataBase.getLibraryConn();
+			pst = conn.prepareStatement(sql);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				ProgrammeSpiderBo psb = new ProgrammeSpiderBo();
+				psb.setId(rs.getInt("p.id"));
+				psb.setName(rs.getString("p.name"));
+				psb.setState(rs.getString("p.state"));
+				psb.setCate(rs.getInt("p.cate"));
+				psb.setEpisode_total(rs.getInt("p.episode_total"));
+				// psb.setPay(rs.getInt("pay"));
+				result.add(psb);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+				if (rs != null) {
+					rs.close();
+				}
+				JdbcUtil.close(conn);
+			} catch (SQLException e) {
+
+			}
+		}
+		return result;
+	}
+	
 	public Map<Integer, ProgrammeSpiderBo> getProgrammeAllBos() {
 		Map<Integer, ProgrammeSpiderBo> result = new HashMap<Integer, ProgrammeSpiderBo>();
 		Connection conn = null;
@@ -463,13 +547,19 @@ public class SpiderInterface {
 		return null;
 	}
 
-	// 兼容之前的方法 默认为0
+	// 兼容最开始的方法 默认为0 不按搜索量排序
 	public String listProgramme3() {
-		return listProgramme3(-1, 0);
+		return listProgramme3(-1, 0,0);
 	}
-
-	// 增加limit参数 可选择性扫描 默认是查询所有的
+	
+	// 兼容之前的方法 默认为0 不按搜索量排序
 	public String listProgramme3(int offset, int size) {
+		return listProgramme3(offset, size,0);
+	}
+	
+	// 增加limit参数 可选择性扫描 默认是查询所有的
+	// 是否根据搜索量排序
+	public String listProgramme3(int offset, int size, int hot) {
 		Connection conn = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -485,6 +575,7 @@ public class SpiderInterface {
 			// "select ps.fk_programme_id,ps.id, ps.episode_collected, ps.source_site, pe.url, pe.order_id, pe.order_stage from programme_site ps, programme_episode pe where pe.fk_programme_site_id = ps.id and ps.completed = 0 and ps.source_site != 100 and ps.source_site != 14 order by pe.order_stage desc";
 			List<Integer> pids = new ArrayList<Integer>();
 			String psids = "";
+			Map<Integer,Integer> photMap = new HashMap<Integer,Integer>();
 			Map<Integer, ProgrammeSite> psMap = new HashMap<Integer, ProgrammeSite>();
 			Criteria crit = new Criteria();
 			crit.add(ProgrammeSitePeer.COMPLETED, 0);
@@ -495,13 +586,20 @@ public class SpiderInterface {
 					.add(ProgrammeSitePeer.EPISODE_COLLECTED, 0,
 							Criteria.NOT_EQUAL);
 			crit.addGroupByColumn(ProgrammeSitePeer.FK_PROGRAMME_ID);
-			if (offset > -1) {
-				if (size > 0) {
-					crit.setLimit(size);
-					crit.setOffset(offset);
-				} else
-					crit.setLimit(offset);
+			if(hot == 1){
+				List<Integer> pidsList = this.getProgrammeIdsByHot(offset, size);
+				System.out.println(" pidsList:"+pidsList.size()+" ");
+				crit.addIn(ProgrammeSitePeer.FK_PROGRAMME_ID, pidsList);
+			}else{
+				if (offset > -1) {
+					if (size > 0) {
+						crit.setLimit(size);
+						crit.setOffset(offset);
+					} else
+						crit.setLimit(offset);
+				}
 			}
+			
 			List<ProgrammeSite> psList = ProgrammeSitePeer.doSelect(crit);
 			if (null == psList || psList.size() == 0)
 				return null;
@@ -513,6 +611,7 @@ public class SpiderInterface {
 				//	psids += ",";
 				pids.add(ps.getFkProgrammeId());
 			}
+			System.out.println(" pidsList2:"+pids.size()+" ");
 			Criteria pscrit = new Criteria();
 			pscrit.add(ProgrammeSitePeer.COMPLETED, 0);
 			//pscrit.add(ProgrammeSitePeer.SOURCE_SITE, 14, Criteria.NOT_EQUAL);
@@ -528,7 +627,6 @@ public class SpiderInterface {
 				if (i != pssList.size() - 1)
 					psids += ",";
 			}
-			System.out.print(" addin pids:"+psids);
 			String sql = "select fk_programme_site_id, group_concat(url)urls, group_concat(order_id)ois, group_concat(order_stage)oss from programme_episode where fk_programme_site_id in ("
 					+ psids
 					+ ") group by fk_programme_site_id order by order_stage desc";
@@ -659,8 +757,10 @@ public class SpiderInterface {
 				programmeInfo.put("searchNumber", searchNumberMap
 						.get(p.getId()));
 				programmeInfo.put("siteInfo", siteInfo);
+				
 				if(siteInfo.length()>0)
 					info.put(programmeInfo);
+				
 			}
 
 			long end = System.currentTimeMillis();
@@ -682,19 +782,24 @@ public class SpiderInterface {
 
 		return null;
 	}
-
+	
+	//兼容最早的接口
 	public String listProgrammeNoEpisode() {
 		return listProgrammeNoEpisode(-1, 0);
 	}
-
-	public String listProgrammeNoEpisode(int offset, int size) {
+	//兼容之前的接口 默认不选择搜索量排序
+	public String listProgrammeNoEpisode(int offset, int size){
+		return listProgrammeNoEpisode(offset,size,0);
+	}
+	
+	public String listProgrammeNoEpisode(int offset, int size, int hot) {
 		Connection conn = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		try {
 			long start = System.currentTimeMillis();
 
-			Map<Integer, ProgrammeSpiderBo> psbMap = getProgrammeNoPayBos();
+			Map<Integer, ProgrammeSpiderBo> psbMap =getProgrammeNoPayBos();
 			Map<Integer, Integer> searchNumberMap = buildSearchNumberMap();
 			conn = DataBase.getLibraryConn();
 			// String sql =
@@ -702,8 +807,11 @@ public class SpiderInterface {
 			// String sql =
 			// "select p.id, p.name, p.cate, group_concat(ps.id)psid, group_concat(ps.source_site)psss, group_concat(ps.episode_collected)psec from programme p, programme_site ps where p.state = 'normal' and p.id = ps.fk_programme_id and p.paid=0 and ps.source_site != 100 group by p.id";
 			String pids = "";
-			List<ProgrammeSpiderBo> psbList = new ArrayList<ProgrammeSpiderBo>(
-					psbMap.values());
+			List<ProgrammeSpiderBo> psbList = null;
+			if(hot == 0)
+				psbList = new ArrayList<ProgrammeSpiderBo>(psbMap.values());
+			else
+				psbList = getProgrammeSpiderBoByHot();
 			if (offset > -1) {
 				if (size > 0) {
 					int to = offset + size;

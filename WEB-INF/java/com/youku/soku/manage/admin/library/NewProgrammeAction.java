@@ -95,7 +95,7 @@ public class NewProgrammeAction extends BaseActionSupport {
 				likeSql = " AND p.name like ?";
 			}
 				
-			String sql = mainSql + likeSql + " ORDER BY p.name, p.cate LIMIT " + pageInfo.getOffset() + ", "
+			String sql = mainSql + likeSql + " ORDER BY p.create_time desc LIMIT " + pageInfo.getOffset() + ", "
 					+ pageInfo.getPageSize();
 			pst = conn.prepareStatement(sql);
 			if(!StringUtils.isBlank(searchWord)) {
@@ -196,7 +196,7 @@ public class NewProgrammeAction extends BaseActionSupport {
 		ResultSet rs = null;
 		int recordCount = 0;
 		try {
-			conn = DataBase.getSpiderConnection();
+			conn = DataBase.getSpider23Connection();
 			String sql = "SELECT count(*) FROM program";
 			
 			pst = conn.prepareStatement(sql);

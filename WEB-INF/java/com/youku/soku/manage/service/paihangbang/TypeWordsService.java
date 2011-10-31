@@ -119,4 +119,24 @@ public class TypeWordsService {
 		}
 		return null;
 	}
+	
+	public PageInfo getTypeList(PageInfo pageInfo,int cate){
+		Criteria crit = new Criteria();
+		if(cate > -1)
+			crit.add(TypeWordsPeer.CATE,cate);
+		try {
+			List<TypeWords> result = TypeWordsPeer.doSelect(crit);
+			int totalRecord = result.size();
+			int totalPageNumber = (int) Math.ceil((double) totalRecord
+					/ pageInfo.getPageSize());
+			pageInfo.setTotalPageNumber(totalPageNumber);
+			pageInfo.setTotalRecords(totalRecord);
+			pageInfo.initCrit(crit);
+			pageInfo.setResults(result);
+		} catch (TorqueException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return pageInfo;
+	}
 }

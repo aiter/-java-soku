@@ -40,6 +40,8 @@ public class EncoderTest {
 	public static void main(String[] args) {
 		//System.out.println(chineseToUtf8("登出"));
 		//System.out.println(unicodeToChinese("\u767b\u51fa"));
-		System.out.println(chineseToUnicode("屏蔽系统"));
+		//System.out.println(chineseToUnicode("屏蔽系统"));
+		System.out.print("test".matches("(t|{\\S+})"));
+		//System.out.print("test".matches("(巨翼|{\"type\":\"0\",\"alias\":\"Big Wing\"})[ ]*[ ]*[第]*[ ]*[0]*5[ ]*[集话回]"));
 	}
 }

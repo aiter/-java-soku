@@ -118,7 +118,7 @@ public class TopWordsService {
 		List<TopWords> result = TopWordsPeer.doSelect(crit);
 		
 		Set<Integer> muluidset = new HashSet<Integer>();
-		if(cate==WordType.电视剧.getValue()||cate==WordType.电影.getValue()||cate==WordType.不限.getValue()){
+		//if(cate==WordType.电视剧.getValue()||cate==WordType.电影.getValue()||cate==WordType.不限.getValue()){
 			Map<String,Integer> muludate = TopDateService.getTopDateMulu();
 			String onlineDate = null;
 			int version_no = 0;
@@ -127,7 +127,7 @@ public class TopWordsService {
 				version_no = entry.getValue();
 			}
 			muluidset = RankInfoService.getInstance().getMuluProgrammeId(onlineDate, version_no);
-		}
+		//}
 		List<TopWordsVO> topwords = new ArrayList<TopWordsVO>();
 		TopWordsVO twvo = new TopWordsVO();
 		if(null!=result){
@@ -175,11 +175,11 @@ public class TopWordsService {
 				e.printStackTrace();
 			}
 		}
-		if(tw.getProgrammeId()>0&&(tw.getCate()==WordType.电视剧.getValue()||tw.getCate()==WordType.电影.getValue()||tw.getCate()==WordType.综艺.getValue())){
+		//if(tw.getProgrammeId()>0&&(tw.getCate()==WordType.电视剧.getValue()||tw.getCate()==WordType.电影.getValue()||tw.getCate()==WordType.综艺.getValue())){
 			ktvo.setProgrammeName(ProgrammeMgt.getInstance().getProgrammeNameById(tw.getProgrammeId(),tw.getCate()));
 			if(muluidset.contains(tw.getProgrammeId()))
 				ktvo.setIsMulu(1);
-		}
+		//}
 		ktvo.setVisible(tw.getVisible());
 		ktvo.setCreateTime(tw.getCreateDate());
 		ktvo.setUrl(tw.getUrl());
