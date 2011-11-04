@@ -81,7 +81,9 @@ public abstract class BaseShieldWords extends BaseObject
 
     /** The value for the modifier field */
     private String modifier;
-
+    
+    /** The value for the modifier field */
+    private int ranges;
 
     /**
      * Get the Id
@@ -475,9 +477,35 @@ public abstract class BaseShieldWords extends BaseObject
 
     }
 
-       
-        
-    private static List fieldNames = null;
+    /**
+     * Get the ranges
+     *
+     * @return int
+     */
+    public int getRanges()
+    {
+        return ranges;
+    }
+
+
+    /**
+     * Set the value of Id
+     *
+     * @param v new value
+     */
+    public void setRanges(int v) 
+    {
+    	System.out.println(" ranges:"+v);
+        if (this.ranges != v)
+        {
+            this.ranges = v;
+            setModified(true);
+        }
+
+
+    }   
+
+	private static List fieldNames = null;
 
     /**
      * Generate a list of field names.
@@ -503,6 +531,7 @@ public abstract class BaseShieldWords extends BaseObject
             fieldNames.add("UpdateTime");
             fieldNames.add("CreateTime");
             fieldNames.add("Modifier");
+            fieldNames.add("Ranges");
             fieldNames = Collections.unmodifiableList(fieldNames);
         }
         return fieldNames;
@@ -571,6 +600,10 @@ public abstract class BaseShieldWords extends BaseObject
         if (name.equals("Modifier"))
         {
             return getModifier();
+        }
+        if (name.equals("Ranges"))
+        {
+            return getRanges();
         }
         return null;
     }
@@ -721,6 +754,15 @@ public abstract class BaseShieldWords extends BaseObject
             setModifier((String) value);
             return true;
         }
+        if (name.equals("Ranges"))
+        {
+            if (value == null || ! (Integer.class.isInstance(value)))
+            {
+                throw new IllegalArgumentException("setByName: value parameter was null or not an Integer object.");
+            }
+            setRanges(((Integer) value).intValue());
+            return true;
+        }
         return false;
     }
 
@@ -789,6 +831,10 @@ public abstract class BaseShieldWords extends BaseObject
         if (name.equals(ShieldWordsPeer.MODIFIER))
         {
             return getModifier();
+        }
+        if (name.equals(ShieldWordsPeer.RANGES))
+        {
+            return getRanges();
         }
         return null;
     }
@@ -861,6 +907,10 @@ public abstract class BaseShieldWords extends BaseObject
         {
             return setByName("Modifier", value);
         }
+      if (ShieldWordsPeer.RANGES.equals(name))
+      {
+          return setByName("Ranges", value);
+      }
         return false;
     }
 
@@ -928,6 +978,10 @@ public abstract class BaseShieldWords extends BaseObject
         if (pos == 13)
         {
             return getModifier();
+        }
+        if (pos == 14)
+        {
+            return getRanges();
         }
         return null;
     }
@@ -1000,6 +1054,10 @@ public abstract class BaseShieldWords extends BaseObject
         {
             return setByName("Modifier", value);
         }
+    if (position == 14)
+	    {
+	        return setByName("Ranges", value);
+	    }
         return false;
     }
      
@@ -1170,6 +1228,7 @@ public abstract class BaseShieldWords extends BaseObject
         copyObj.setUpdateTime(updateTime);
         copyObj.setCreateTime(createTime);
         copyObj.setModifier(modifier);
+        copyObj.setRanges(ranges);
 
         copyObj.setId( 0);
 

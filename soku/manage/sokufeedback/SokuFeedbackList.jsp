@@ -128,7 +128,7 @@ $(function() {
 	<label> 开始时间:<s:textfield id="startTime" name="startTime" /> </label>
 	<label> 结束时间:<s:textfield id="endTime" name="endTime" /> </label>
 	<label> source:<s:select key="source"
-		list="#{-1:'所有', 1:'站内', 0:'站外'}" listKey="key" listValue="value" cssClass="aw"></s:select>
+		list="#{-1:'所有', 1:'站内', 0:'站外', 4:'用户中心'}" listKey="key" listValue="value" cssClass="aw"></s:select>
 	</label>
 	<label> state:<s:select key="state"
 		list="#{-1:'所有', 1:'喜欢', 0:'不喜欢'}" listKey="key" listValue="value" cssClass="aw"></s:select>

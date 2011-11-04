@@ -161,7 +161,7 @@
 			var selectHitRole = document.getElementsByName(name);
 			var flag = false;
 			for(j = 0; j < selectHitRole.length; j++)
-				if(selectHitRole[j].checked){
+				if(selectHitRole[j].checked == true){
 					flag = true;
 					break;
 				}
@@ -229,7 +229,12 @@
 			<s:radio list="radioSiteLevelMap" listKey="key" listValue="value" key="shieldWordsBo.wordSiteLevel"></s:radio>
 		</fieldset>
 	</fieldset>
-	
+	<s:if test="shieldRangeList.size()>0">
+		<fieldset>
+			<legend>作用范围</legend>
+			<s:checkboxlist list="shieldRangeList" listKey="id" listValue="name" key="shieldWordsBo.shieldRangeIdList"></s:checkboxlist >
+		</fieldset>
+	</s:if>
 	<fieldset>
 		<legend>生效时间</legend>
 		<s:textfield key="shieldWordsBo.startTime" id="startDate"></s:textfield> 至 <s:textfield key="shieldWordsBo.expireTime" id="endDate"></s:textfield>

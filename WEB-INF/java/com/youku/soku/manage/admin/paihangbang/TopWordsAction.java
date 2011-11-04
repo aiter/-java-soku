@@ -1,10 +1,14 @@
 package com.youku.soku.manage.admin.paihangbang;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -42,8 +46,6 @@ import com.youku.soku.top.mapping.TypeWords;
 import com.youku.top.paihangbang.RankinfoMgt;
 import com.youku.top.paihangbang.TopDateMgt;
 import com.youku.top.util.TopDateType;
-import com.youku.top.util.TopWordType;
-import com.youku.top.util.TopWordType.WordType;
 
 public class TopWordsAction extends BaseActionSupport {
 
@@ -62,7 +64,9 @@ public class TopWordsAction extends BaseActionSupport {
 	private String searchWord;
 	private int proid = -1;
 	private static boolean isRun = false;
-
+	private String type;
+	private String updateids;
+	
 	private String muludateMsg;
 	private String bangdandateMsg;
 	private String fundateMsg;
@@ -128,7 +132,7 @@ public class TopWordsAction extends BaseActionSupport {
 		List<TopWords> topwords = TopWordsService.getInstance().getTopWords(
 				date);
 		int count = 0;
-		logger.debug("==== topwords:"+topwords.size()+" =====");
+		logger.debug("==== topwords:" + topwords.size() + " =====");
 		if (null != topwords && topwords.size() > 1000) {
 			try {
 				logger.info("size:" + topwords.size());
@@ -175,6 +179,18 @@ public class TopWordsAction extends BaseActionSupport {
 		return null;
 	}
 
+	public String betchUpdate(){
+		if(null!=updateids && !updateids.isEmpty()){
+			String[] updateidstr = updateids.split(",");
+			for(String idstr:updateidstr){
+				int id = Integer.parseInt(idstr);
+				setUpdateid(id);
+				this.update();
+			}
+		}
+		return null;
+	}
+	
 	public String update() {
 		int cate = getCate();
 		int visible = getVisible();
@@ -456,12 +472,12 @@ public class TopWordsAction extends BaseActionSupport {
 		if (null != topwords) {
 			if (!StringUtils.isBlank(searchwords)) {
 				List<ProgrammeVO> programmes = null;
-				//if (topwords.getCate() == WordType.综艺.getValue())
-				//	programmes = ProgrammeMgt.getInstance().getSeries(
-				//			searchwords.trim(), topwords.getCate());
-				//else
-					programmes = ProgrammeMgt.getInstance().getProgramme(
-							searchwords.trim(), topwords.getCate());
+				// if (topwords.getCate() == WordType.综艺.getValue())
+				// programmes = ProgrammeMgt.getInstance().getSeries(
+				// searchwords.trim(), topwords.getCate());
+				// else
+				programmes = ProgrammeMgt.getInstance().getProgramme(
+						searchwords.trim(), topwords.getCate());
 				if (null != programmes) {
 					JSONObject json = null;
 					for (ProgrammeVO pvo : programmes) {
@@ -483,51 +499,117 @@ public class TopWordsAction extends BaseActionSupport {
 
 		return null;
 	}
-	
+
 	private int num = 0;
-	//查询指定数量的热门搜索 生成xls并下载
-	public String exportXls(){
+
+	// 查询指定数量的热门搜索 生成xls并下载
+	public String exportXls() {
 		logger.debug("********* start export action*********");
 		String cateName = TopWordsService.getCateNameForXls(cate);
 		String fileName;
 		try {
 			fileName = cateName + topdate + ".xls";
-			HttpServletResponse response=ServletActionContext.getResponse();
+			HttpServletResponse response = ServletActionContext.getResponse();
 			response.reset();
-			response.setContentType("application/x-msdownload");  
-		    response.setHeader("Content-Disposition","attachment;filename=" + new String(fileName.getBytes(),"iso8859-1"));  
-		    ServletOutputStream sos = response.getOutputStream(); 
-		    
-		    jxl.write.WritableWorkbook wwb = Workbook.createWorkbook(sos);
-		    wwb = TopWordsService.exportXls(num, cate,cateName,topdate, wwb);
-			logger.debug("********* end export action :"+wwb.getNumberOfSheets()+"*********");
-		    wwb.write();
-		    wwb.close();
-		    
+			response.setContentType("application/x-msdownload");
+			response.setHeader("Content-Disposition", "attachment;filename="
+					+ new String(fileName.getBytes(), "iso8859-1"));
+			ServletOutputStream sos = response.getOutputStream();
+
+			jxl.write.WritableWorkbook wwb = Workbook.createWorkbook(sos);
+			wwb = TopWordsService.exportXls(num, cate, cateName, topdate, wwb);
+			logger.debug("********* end export action :"
+					+ wwb.getNumberOfSheets() + "*********");
+			wwb.write();
+			wwb.close();
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
-	//获取指定cate搜索词的数量
-	public String compareKeyWord(){
+
+	// 获取指定cate搜索词的数量
+	public String compareKeyWord() {
 		topwordsvo = TopWordsService.getTopKeyWords(num, cate);
 		return "compare";
 	}
-	//获取所有自定义词的分类
-	public String typeList(){
-		if (null == pageInfo)
-			pageInfo = new PageInfo();
-		pageInfo.setPageSize(100);
-		if (getPageNumber() == 0) {
-			setPageNumber(1);
+
+	// 获取所有自定义词的分类
+	public String typeList() {
+		if(cate == -1)
+			cate = 100;
+		if(null!=type&&!type.isEmpty()){
+			type = type.toUpperCase();
+			Map<Integer, String> map = this.getVideoType();
+			for(Integer key:map.keySet()){
+				if(map.get(key).equals(type)){
+					cate = key;
+					break;
+				}
+			}
 		}
-		pageInfo.setCurrentPageNumber(getPageNumber());
-		
-		return "typeList";
+		//提供对应txt数据文件下载
+			String fileName = this.getVideoType().get(cate)+".txt";
+			File f = new File(fileName);
+			f=TypeWordsService.getInstance().getTypeListTxt(cate,f,this.getVideoType());
+			HttpServletResponse response = ServletActionContext.getResponse();
+			response.reset();
+			response.setContentType("application/x-download;charset=utf-8");
+			try {
+				response.setHeader("Content-Disposition", "attachment;filename="+ new String(fileName.getBytes(), "iso8859-1"));
+			} catch (UnsupportedEncodingException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			BufferedInputStream bis= null;
+			BufferedOutputStream bos = null;
+			try {
+				FileInputStream in=new FileInputStream(f);
+				bis=new BufferedInputStream(in); 
+				//InputStreamReader bis=new InputStreamReader(in,"gb2312"); 
+				bos=new BufferedOutputStream(response.getOutputStream()); 
+				//OutputStreamWriter bos=new OutputStreamWriter(response.getOutputStream(),"gb2312"); 
+				byte[] buff=new byte[4096];
+                int bytesRead = -1;
+                while((bytesRead=bis.read(buff,0,buff.length))>-1){
+                        bos.write(buff,0,bytesRead);
+                }
+                //response.flushBuffer();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally{
+				try {
+					if(null!=bis)
+					bis.close();
+					if(null!=bos)
+						bos.close(); 
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		return null;
 	}
 	
+	public Map<Integer, String> getVideoType() {
+		Map<Integer, String> map = new HashMap<Integer, String>();
+		map.put(0, "TOPCONCERN");
+		map.put(1, "TELEPLAY");
+		map.put(2, "MOVIE");
+		map.put(3, "VARIETY");
+		map.put(4, "MUSIC");
+		map.put(5, "ANIME");
+		map.put(6, "PERSON");
+		map.put(7, "SPORTS");
+		map.put(8, "SCIENCE");
+		map.put(9, "FUN");
+		map.put(100, "ALL");
+		return map;
+	}
+
 	public int getNum() {
 		return num;
 	}
@@ -573,8 +655,8 @@ public class TopWordsAction extends BaseActionSupport {
 	}
 
 	public List<CateVO> getCatevos() {
-		List<CateVO> cvs= CateMgt.getCateVOs();
-		cvs.add(new CateVO("无类型",100));
+		List<CateVO> cvs = CateMgt.getCateVOs();
+		cvs.add(new CateVO("无类型", 100));
 		return cvs;
 	}
 
@@ -582,6 +664,12 @@ public class TopWordsAction extends BaseActionSupport {
 		return CateMgt.getUpdateCateVOs();
 	}
 
+	public List<CateVO> getTypeCatevos() {
+		List<CateVO> cvs = CateMgt.getCateVOs();
+		cvs.add(0,new CateVO("无类型", 100));
+		return cvs;
+	}
+	
 	public void setUpdatecatevos(List<CateVO> updatecatevos) {
 		this.updatecatevos = updatecatevos;
 	}
@@ -684,5 +772,21 @@ public class TopWordsAction extends BaseActionSupport {
 
 	public void setVisible(int visible) {
 		this.visible = visible;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getUpdateids() {
+		return updateids;
+	}
+
+	public void setUpdateids(String updateids) {
+		this.updateids = updateids;
 	}
 }

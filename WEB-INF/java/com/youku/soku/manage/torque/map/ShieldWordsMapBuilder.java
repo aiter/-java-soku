@@ -281,5 +281,21 @@ public class ShieldWordsMapBuilder implements MapBuilder
         cMap.setPosition(14);
         tMap.addColumn(cMap);
         tMap.setUseInheritance(false);
+ // ------------- Column: range --------------------
+        cMap = new ColumnMap( "ranges", tMap);
+        cMap.setType( new Integer(0) );
+        cMap.setTorqueType( "INTEGER" );
+        cMap.setUsePrimitive(true);
+        cMap.setPrimaryKey(false);
+        cMap.setNotNull(true);
+        cMap.setJavaName( "Ranges" );
+        cMap.setAutoIncrement(false);
+        cMap.setProtected(false);
+        cMap.setDescription("作用范围");
+        cMap.setInheritance("false");
+        cMap.setSize( 4 );
+        cMap.setPosition(15);
+        tMap.addColumn(cMap);
     }
+    
 }

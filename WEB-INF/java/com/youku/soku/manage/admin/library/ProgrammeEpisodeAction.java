@@ -172,9 +172,9 @@ public class ProgrammeEpisodeAction extends BaseActionSupport {
 				}
 				
 				String name = p.getName();
-				if(!zy_stage_no_date && name.endsWith("\\s+\\d{4}"))
+				if(!zy_stage_no_date && name.matches(".*\\s+\\d{4}$"))
 					year = name.substring(name.length()-4,name.length());
-				System.out.print(" zy year:"+year);
+				System.out.println(" zy year:"+year);
 			}
 			
 			for (ProgrammeSite ps : psList) {

@@ -193,6 +193,13 @@ public final class Constants {
 	
 	public static final String MANAGE_SOKUFEEDBACK = "manage_new_soku_feedback";
 	
+	//shield range authen
+	public static final String SHIELD_WORD_RANGE_SITE = "shield_word_range_site";
+	
+	public static final String SHIELD_WORD_RANGE_WIFI = "shield_word_range_wifi";
+	
+	public static final String SHIELD_WORD_RANGE_REFER = "shield_word_range_refer";
+	
 	/**
 	 * the token representing display on the index page
 	 */

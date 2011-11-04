@@ -72,7 +72,7 @@ public class InitServlet_test extends HttpServlet {
 		ExtServerConfig.init(cfgFilePath+"ext.conf");
         
 		//配置memcache
-		
+		System.out.println("start initservlet test ");
 		//版权抓取任务
 		new CopyrightSpiderTimer().start();
 		//剧集的节目Id同步

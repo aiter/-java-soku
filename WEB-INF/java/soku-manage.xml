@@ -460,6 +460,10 @@
                         <result name="compare">/search/kit.jsp</result>
                      <interceptor-ref name="newtopmanage" />
                </action>
+        <action name="TypeWords_list" method="typeList"  class="com.youku.soku.manage.admin.paihangbang.TopWordsAction">
+                       
+                     <interceptor-ref name="guest" />
+               </action>
 			
                  <action name="SokuFeedBack_*" method="{1}"  class="com.youku.soku.manage.admin.SokuFeedBackAction">
 	        	<result name="list">/soku/manage/sokufeedback/SokuFeedbackList.jsp</result>

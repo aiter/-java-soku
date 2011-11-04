@@ -1,6 +1,11 @@
 package com.youku.soku.manage.service.paihangbang;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.net.URLEncoder;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -119,11 +124,11 @@ public class TypeWordsService {
 		}
 		return null;
 	}
-	
-	public PageInfo getTypeList(PageInfo pageInfo,int cate){
+
+	public PageInfo getTypeList(PageInfo pageInfo, int cate) {
 		Criteria crit = new Criteria();
-		if(cate > -1)
-			crit.add(TypeWordsPeer.CATE,cate);
+		if (cate > -1 && cate < 10)
+			crit.add(TypeWordsPeer.CATE, cate);
 		try {
 			List<TypeWords> result = TypeWordsPeer.doSelect(crit);
 			int totalRecord = result.size();
@@ -131,12 +136,37 @@ public class TypeWordsService {
 					/ pageInfo.getPageSize());
 			pageInfo.setTotalPageNumber(totalPageNumber);
 			pageInfo.setTotalRecords(totalRecord);
+			crit.setLimit(pageInfo.getOffset());
+			crit.setOffset(pageInfo.getPageSize());
 			pageInfo.initCrit(crit);
+			result = TypeWordsPeer.doSelect(crit);
 			pageInfo.setResults(result);
 		} catch (TorqueException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return pageInfo;
+	}
+
+	public File getTypeListTxt(int cate, File f, Map<Integer, String> keyMap) {
+		Criteria crit = new Criteria();
+		if (cate > -1 && cate < 10)
+			crit.add(TypeWordsPeer.CATE, cate);
+		try {
+			List<TypeWords> result = TypeWordsPeer.doSelect(crit);
+			if (null == result || result.size() == 0)
+				return f;
+			BufferedWriter writer = new BufferedWriter(new FileWriter(f));
+			for (TypeWords tw : result) {
+				writer.write(tw.getKeyword()+ "/" + (keyMap.get(tw.getCate()))+"\r\n");
+			}
+			writer.flush();
+			writer.close();
+			return f;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

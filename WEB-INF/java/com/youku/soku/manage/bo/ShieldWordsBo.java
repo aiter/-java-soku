@@ -69,6 +69,8 @@ public class ShieldWordsBo {
     private String shieldChannelStr;
     
     private String determinWordInfo;
+    
+    private List shieldRangeIdList;
 
 	public int getId() {
 		return id;
@@ -263,6 +265,14 @@ public class ShieldWordsBo {
 
 	public void setOthersEffect(int othersEffect) {
 		this.othersEffect = othersEffect;
+	}
+
+	public List getShieldRangeIdList() {
+		return shieldRangeIdList;
+	}
+
+	public void setShieldRangeIdList(List shieldRangeIdList) {
+		this.shieldRangeIdList = shieldRangeIdList;
 	}
 
 	@Override

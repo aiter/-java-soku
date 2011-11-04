@@ -65,6 +65,17 @@ public class CategoryMap {
 			return new Category(id, name, T_PK);
 		}
 	}
+	
+	public static List<Category> getShieldRangeList(){
+		List<Category> result = new ArrayList<Category>();
+		Category site = new Category(1,"网站","");
+		Category wifi = new Category(2,"无线","");
+		Category refer = new Category(3,"下拉提示","");
+		result.add(site);
+		result.add(wifi);
+		result.add(refer);
+		return result;
+	}
 
 	public final List<Category> list = new ArrayList<Category>();// 所有数据
 	public final Map<Integer, Category> map = new HashMap<Integer, Category>();// 所有数据

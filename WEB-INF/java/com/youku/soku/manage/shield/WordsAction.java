@@ -38,6 +38,8 @@ import com.youku.soku.manage.entity.ShieldWordConstants;
 import com.youku.soku.manage.exception.DbOperationException;
 import com.youku.soku.manage.exception.PageNotFoundException;
 import com.youku.soku.manage.service.ShieldWordService;
+import com.youku.soku.manage.service.UserPermissionService;
+import com.youku.soku.manage.torque.AuthPermission;
 import com.youku.soku.manage.torque.DeterminerWordRelation;
 import com.youku.soku.manage.torque.DeterminerWordRelationPeer;
 import com.youku.soku.manage.torque.ShieldCategory;
@@ -46,6 +48,8 @@ import com.youku.soku.manage.torque.ShieldWordRelation;
 import com.youku.soku.manage.torque.ShieldWordRelationPeer;
 import com.youku.soku.manage.torque.ShieldWords;
 import com.youku.soku.manage.torque.ShieldWordsPeer;
+import com.youku.soku.manage.torque.User;
+import com.youku.soku.manage.torque.UserPermission;
 import com.youku.soku.manage.util.JFConverter;
 
 public class WordsAction extends BaseActionSupport {
@@ -65,6 +69,7 @@ public class WordsAction extends BaseActionSupport {
 	 */
 	public String input() throws Exception {
 		setShieldChannelList(CategoryMap.getInstance().videoList);
+		setShieldRangeList(getShieldRangeByAuthen());
 		if(getWordId() == -1) {
 			setTask(Constants.CREATE);
 			return INPUT;
@@ -534,10 +539,12 @@ public class WordsAction extends BaseActionSupport {
 	
 	private ShieldWordsBo getShieldWordBo(ShieldWords sw) throws Exception{
 		List<Category> channelList = CategoryMap.getInstance().videoList;
+		List<Category> rangeList = CategoryMap.getShieldRangeList();
 		List<DeterminerWordRelation> determinerWordRelationList = DeterminerWordRelationPeer.doSelect(new Criteria().add(DeterminerWordRelationPeer.FK_WORD_ID, sw.getId()));
 		List<ShieldWordRelation> shieldWordRelationList = ShieldWordRelationPeer.doSelect(new Criteria().add(ShieldWordRelationPeer.FK_WORD_ID, sw.getId()));
-		
+		List<ShieldWords> shieldRangeList = ShieldWordsPeer.doSelect(new Criteria().add(ShieldWordsPeer.WORD,sw.getWord()));
 		List wordChannelList = new ArrayList();
+		List wordRangeList = new ArrayList();
 		StringBuilder channelBuffer = new StringBuilder();
 		for(ShieldWordRelation sr : shieldWordRelationList) {
 			for(Category sc : channelList) {
@@ -550,11 +557,19 @@ public class WordsAction extends BaseActionSupport {
 				}
 			}
 		}
+		for(ShieldWords sws:shieldRangeList){
+			for(Category sc : rangeList) {
+				if(sc.getId() == sws.getRanges()) {
+					wordRangeList.add(sc.getId());
+				}
+			}
+		}
 		
 		
 		ShieldWordsBo shieldWordBo = new ShieldWordsBo();
 		copyProperties(shieldWordBo, sw);
 		shieldWordBo.setShieldChannelIdList(wordChannelList);
+		shieldWordBo.setShieldRangeIdList(wordRangeList);//
 		shieldWordBo.setShieldChannelStr(channelBuffer.toString());
 		if(determinerWordRelationList != null && !determinerWordRelationList.isEmpty()) {
 			DeterminerWordRelation dwr = determinerWordRelationList.get(0);
@@ -577,6 +592,7 @@ public class WordsAction extends BaseActionSupport {
 	private void saveShieldWordRelation(ShieldWordsBo swBo) throws Exception {
 
 		List channelList = swBo.getShieldChannelIdList();
+		List rangeList = swBo.getShieldRangeIdList();
 		Criteria crit = new Criteria();
 		crit.add(ShieldWordRelationPeer.FK_WORD_ID, swBo.getId());
 		List<ShieldWordRelation> wordRelationList = ShieldWordRelationPeer.doSelect(crit);
@@ -607,6 +623,47 @@ public class WordsAction extends BaseActionSupport {
 		for(ShieldWordRelation s : wordRelationList) {
 			ShieldWordRelationPeer.doDelete(s.getPrimaryKey());
 		}
+		//shield range
+		Criteria wordcrit = new Criteria();
+		wordcrit.add(ShieldWordsPeer.WORD,swBo.getWord());
+		List<ShieldWords> shieldWordsList = ShieldWordsPeer.doSelect(wordcrit);
+		if (rangeList != null) {
+			for (Object sc : rangeList) {
+				int fkShieldChannelId = Integer.valueOf((String) sc);
+
+				boolean existRelation = false;
+				for (Iterator<ShieldWords> it = shieldWordsList
+						.iterator(); it.hasNext();) {
+					ShieldWords sw = it.next();
+					if (fkShieldChannelId == sw.getRanges()) {
+						it.remove();
+						existRelation = true;
+						break;
+					}
+				}
+				if (!existRelation) {
+					ShieldWords sw = new ShieldWords();
+					sw.setWord(swBo.getWord());
+					sw.setExcluding(swBo.getExcluding());
+					sw.setType(swBo.getType());
+					sw.setYoukuEffect(swBo.getYoukuEffect());
+					sw.setOthersEffect(swBo.getOthersEffect());
+					sw.setHitRole(swBo.getHitRole());
+					sw.setFkShieldCategoryId(swBo.getFkShieldCategoryId());
+					sw.setStartTime(swBo.getStartTime());
+					sw.setExpireTime(swBo.getExpireTime());
+					sw.setRemark(swBo.getRemark());
+					sw.setUpdateTime(swBo.getUpdateTime());
+					sw.setCreateTime(swBo.getCreateTime());
+					sw.setRanges(fkShieldChannelId);
+					sw.save();
+				}
+			}
+		}
+		for(ShieldWords s : shieldWordsList) {
+			if(s.getRanges()>0)
+				ShieldWordsPeer.doDelete(s.getPrimaryKey());
+		}
 	
 		DeterminerWordRelation dwr = null;
 		Criteria rcrit = new Criteria();
@@ -631,6 +688,53 @@ public class WordsAction extends BaseActionSupport {
 		}
 	}
 	
+	//根据用户权限 设置用户管理屏蔽词的作用范围
+	public List<Category> getShieldRangeByAuthen(){
+		List<Category> result = new ArrayList<Category>();
+		List<Category> allRange = CategoryMap.getShieldRangeList();
+		Map session = getSession();
+		User user = (User) session.get(Constants.USER_KEY);
+		Map<String, AuthPermission> permissionMap = (Map<String, AuthPermission>)session.get(Constants.PERMISSION_MAP_KEY);
+	    log.debug(" *** authen map :"+permissionMap.size()+" ***");
+		boolean site = false;
+	    boolean wifi = false;
+	    boolean refer = false;
+	    List<UserPermission> permissionsList = new ArrayList<UserPermission>();
+		try {
+			permissionsList = UserPermissionService.findPermissionsByUserId(user.getUserId());
+		} catch (TorqueException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		log.debug(" ***user authen map :"+permissionsList.size()+" ***");
+		AuthPermission siteAuth = permissionMap.get(Constants.SHIELD_WORD_RANGE_SITE);
+		log.debug(" ***site authen value :"+siteAuth+" ***");
+		AuthPermission wifiAuth = permissionMap.get(Constants.SHIELD_WORD_RANGE_WIFI);
+		AuthPermission referAuth = permissionMap.get(Constants.SHIELD_WORD_RANGE_REFER);
+		for (UserPermission userPermission : permissionsList) {
+			if (site == false && null!=siteAuth && userPermission.getPermissionId() == siteAuth.getId()) {
+				site = true;
+			}
+			if (wifi == false && wifiAuth != null && userPermission.getPermissionId() == wifiAuth.getId()) {
+				wifi = true;
+			}
+			if (refer == false && referAuth != null && userPermission.getPermissionId() == referAuth.getId()) {
+				refer = true;
+			}
+		}
+		log.debug(" *** has site :"+site+" wifi:"+wifi+" refer:"+refer+" ***");
+		for(Category c:allRange){
+			if(site && c.getId()==1)
+				result.add(c);
+			if(wifi && c.getId()==2)
+				result.add(c);
+			if(refer && c.getId()==3)
+				result.add(c);
+		}
+		log.debug(" *** result:"+result.size()+" ***");
+		return result;
+	}
+	
 	private int wordId;
 	
 	private PageInfo pageInfo;
@@ -644,6 +748,9 @@ public class WordsAction extends BaseActionSupport {
 	private List<DeterminerWordRelation> determinerWordRelationList;
 	
 	private List<Category> shieldChannelList;
+	
+	//屏蔽词作用范围
+	private List<Category> shieldRangeList;
 	
 	private int pageNumber;
 	
@@ -864,6 +971,14 @@ public class WordsAction extends BaseActionSupport {
 
 	public void setImportWordType(int importWordType) {
 		this.importWordType = importWordType;
+	}
+
+	public List<Category> getShieldRangeList() {
+		return shieldRangeList;
+	}
+
+	public void setShieldRangeList(List<Category> shieldRangeList) {
+		this.shieldRangeList = shieldRangeList;
 	}
 	
 	

@@ -97,7 +97,13 @@
            <interceptor name="SokuFeedback"  class="com.youku.soku.manage.interceptor.SokuFeedBackAuthenticationInterceptor"/>
 
            <interceptor name="indexPicManage"  class="com.youku.soku.manage.interceptor.ManageIndexPicInterceptor"/>
+        <!--   
+        <interceptor name="shieldWordRangeSite"  class="com.youku.soku.manage.interceptor.ShieldWordRangeSiteInterceptor"/>
+ 	    
+ 	    <interceptor name="shieldWordRangeWifi"  class="com.youku.soku.manage.interceptor.ShieldWordRangeWifiInterceptor"/>
  	     
+ 	    <interceptor name="shieldWordRangeRefer"  class="com.youku.soku.manage.interceptor.ShieldWordRangeReferInterceptor"/>
+ 	    -->    
             <interceptor-stack name="user" >
             	<interceptor-ref name="connectionManage" />
                 <interceptor-ref name="authentication" />

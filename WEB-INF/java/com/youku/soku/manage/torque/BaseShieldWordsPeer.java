@@ -86,6 +86,7 @@ public abstract class BaseShieldWordsPeer
     public static final String CREATE_TIME;
     /** the column name for the modifier field */
     public static final String MODIFIER;
+    public static final String RANGES;
 
     static
     {
@@ -106,6 +107,7 @@ public abstract class BaseShieldWordsPeer
         UPDATE_TIME = "shield_words.update_time";
         CREATE_TIME = "shield_words.create_time";
         MODIFIER = "shield_words.modifier";
+        RANGES = "shield_words.ranges";
         if (Torque.isInit())
         {
             try
@@ -125,7 +127,7 @@ public abstract class BaseShieldWordsPeer
     }
  
     /** number of columns for this peer */
-    public static final int numColumns =  14;
+    public static final int numColumns =  15;
 
     /** A class that can be returned by this peer. */
     protected static final String CLASSNAME_DEFAULT =
@@ -273,6 +275,7 @@ public abstract class BaseShieldWordsPeer
         criteria.addSelectColumn(UPDATE_TIME);
         criteria.addSelectColumn(CREATE_TIME);
         criteria.addSelectColumn(MODIFIER);
+        criteria.addSelectColumn(RANGES);
     }
 
     /**
@@ -309,7 +312,6 @@ public abstract class BaseShieldWordsPeer
             ShieldWordsPeer.populateObject(row, offset, obj);
                 obj.setModified(false);
             obj.setNew(false);
-
             return obj;
         }
         catch (InstantiationException e)
@@ -352,6 +354,7 @@ public abstract class BaseShieldWordsPeer
             obj.setUpdateTime(row.getValue(offset + 11).asUtilDate());
             obj.setCreateTime(row.getValue(offset + 12).asUtilDate());
             obj.setModifier(row.getValue(offset + 13).asString());
+            obj.setRanges(row.getValue(offset + 14).asInt());
         }
         catch (DataSetException e)
         {
@@ -423,7 +426,6 @@ public abstract class BaseShieldWordsPeer
         correctBooleans(criteria);
 
         setDbName(criteria);
-
         // BasePeer returns a List of Value (Village) arrays.  The array
         // order follows the order columns were placed in the Select clause.
         if (con == null)
@@ -447,7 +449,6 @@ public abstract class BaseShieldWordsPeer
         throws TorqueException
     {
         List results = new ArrayList(records.size());
-
         // populate the object(s)
         for (int i = 0; i < records.size(); i++)
         {
@@ -724,6 +725,7 @@ public abstract class BaseShieldWordsPeer
         criteria.add(UPDATE_TIME, obj.getUpdateTime());
         criteria.add(CREATE_TIME, obj.getCreateTime());
         criteria.add(MODIFIER, obj.getModifier());
+        criteria.add(RANGES, obj.getRanges());
         return criteria;
     }
 
@@ -748,6 +750,7 @@ public abstract class BaseShieldWordsPeer
             criteria.add(UPDATE_TIME, obj.getUpdateTime());
             criteria.add(CREATE_TIME, obj.getCreateTime());
             criteria.add(MODIFIER, obj.getModifier());
+            criteria.add(RANGES, obj.getRanges());
         return criteria;
     }
  

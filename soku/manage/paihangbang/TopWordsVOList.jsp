@@ -64,6 +64,73 @@ function chooseOne(cb) {
 
 var editable = false;
 
+function checkbetch(obj){
+	var name = obj.value;
+	var keyidobjs = document.getElementsByName(name);
+	for(var j=0;j<keyidobjs.length;j++){
+		var keyid = keyidobjs[j].value;
+		var status = document.getElementById("visibleShow"+keyid).innerHTML;
+		var hidvisible = document.getElementById("hidden"+keyid).value;
+		if(hidvisible == 1){
+			if(obj.checked == true){
+				if(status.indexOf("正常") > -1){
+					document.getElementById("visibleShow"+keyid).innerHTML = "屏蔽";
+					var checkbocobj = document.getElementsByName("new_visible"+keyid);
+					for(var i=0;i<checkbocobj.length;i++){
+						if(checkbocobj[i].value == 0)
+							checkbocobj[i].checked = true;
+					}
+				}
+			}else{
+				if(status.indexOf("屏蔽") > -1){
+					document.getElementById("visibleShow"+keyid).innerHTML = "正常";
+					var checkbocobj = document.getElementsByName("new_visible"+keyid);
+					for(var i=0;i<checkbocobj.length;i++){
+						if(checkbocobj[i].value == 1)
+							checkbocobj[i].checked = true;
+					}
+				}
+			}
+		}
+	}
+}
+
+function betchUpdate(){
+	var betchids = "";
+	var betchobjs = document.getElementsByName("betchupdate");
+	for(var i=0;i<betchobjs.length;i++){
+		if(betchobjs[i].checked == true){
+			var key = betchobjs[i].value;
+			var keyidobjs = document.getElementsByName(key);
+			for(var j=0;j<keyidobjs.length;j++){
+				if(betchids == "")
+					betchids += keyidobjs[j].value;
+				else
+					betchids += "," + keyidobjs[j].value;
+			}
+				
+		}
+	}
+	if(betchids == ""){
+		alert("请选择要屏蔽的节目！");
+		return;
+	}
+	var updateurl = "TopWords_betchUpdate.do";
+	var visible = 0;
+	$.ajax({
+	    url: updateurl,
+	    type: "POST",
+	    data: ({"visible": visible, "updateids" : betchids}),
+	    success: function(msg) {
+		//if("success" == msg){
+			    alert("屏蔽成功");
+		//}else{
+		//	 alert("屏蔽失败");
+		//}
+    	}
+	});
+}
+
 function updateVisible(id){
 	editable = true;
     newVisible = document.getElementsByName('new_visible'+id);
@@ -183,11 +250,12 @@ function searchNames() {
 				if(jsonArr[idx].cate==3){
 					resultStr += encodeURI("/VideoInfo_list.do?searchWord="+jsonArr[idx].name+"&accuratelyMatched=1&statusFilter=1&categoryFilter=3");
 				}else{
-					resultStr += encodeURI("/ProgrammeSite_list.do?programmeId="+jsonArr[idx].id);
+					//resultStr += encodeURI("/ProgrammeSite_list.do?programmeId="+jsonArr[idx].id);
+					resultStr += encodeURI("/VideoInfo_input.do?videoId="+jsonArr[idx].id);
 				}
 				resultStr += '\"a>';
 				resultStr += jsonArr[idx].name + '</a></td></tr>';
-				resultStr += '<input type="hidden" id="names' + jsonArr[idx].id + '" value="' + jsonArr[idx].name + '" />';
+				resultStr += '<input type="hidden" id="names' + jsonArr[idx].id + '" value="' + jsonArr[idx].name + '/' + jsonArr[idx].id + '" />';
 			}
 			
 			$("#diaResult").html(resultStr);
@@ -381,16 +449,19 @@ $(function() {
 
 <input type="hidden" id="operateId" />
 <input type="hidden" id="operateSubjectId" />
+<input type="button" value="批量屏蔽" onclick="betchUpdate()"/>
 <div class="table"><img src="soku/manage/img/bg-th-left.gif" width="8"
 	height="7" alt="" class="left" /> <img src="soku/manage/img/bg-th-right.gif"
 	width="7" height="7" alt="" class="right" />
 	<table class="listing" cellpadding="0" cellspacing="0">
 		
 		<tr>
+		<td></td>
 		<td align="center" width="20%">搜索词</td>
 		<td>
 		<table width="100%" cellpadding="0" cellspacing="0" width="100%">
 		<tr>
+				
 				<td width="10%" align="center">
 				类型
 				</td>
@@ -415,6 +486,9 @@ $(function() {
 		
 		<s:iterator value="pageInfo.results" status="index">
 			<tr <s:if test="#index.odd">class="bg"</s:if>>
+				<td>
+					<input id="thcheck" name="betchupdate" value="<s:property value="keyword" />" type="checkbox" onclick="checkbetch(this)"/>
+				</td>
 				<td align="center" width="20%">
 				<s:property value="keyword" />
 				</td>
@@ -442,10 +516,12 @@ $(function() {
 				<td width="30%" align="center" id="pic<s:property value="id" />" ondblclick="changepic('<s:property value="id" />');"><img src='<s:property value="pic" />' /></td>
 				 -->
 				<td width="30%" align="center" id="pname<s:property value="id" />" ondblclick="changepname('<s:property value="id" />','<s:property value="programmeName" />');">
-					<s:if test="isMulu==1"><Font color="GREEN"/><s:property value="programmeName" /></s:if>
-					<s:else><s:property value="programmeName" /></s:else>
+					<s:if test="isMulu==1"><Font color="GREEN"/><s:property value="programmeName+'/'+programmeId" /></s:if>
+					<s:else><s:property value="programmeName+'/'+programmeId" /></s:else>
 				</td>
 				<td width="20%" align="center" ondblclick="editVisible('<s:property value="id" />')" >
+				<input type="hidden" name="<s:property value="keyword" />" value="<s:property value="id" />"/>
+				<input type="hidden" id="hidden<s:property value="id" />" value="<s:property value="visible" />"/>
 				<div id="visibleRadio<s:property value="id" />"
 					style="display: none"> <input type="radio"
 					name="new_visible<s:property value="id" />" value="0"
